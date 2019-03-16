@@ -2,9 +2,9 @@
   "name": "vj_2.0",
   "version": "1.0.0",
   "description": "Fashion Portal",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -12,5 +12,20 @@
   },
   "author": "Burhan Maseel",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/burhan_maseel/vj_2.0#readme"
+  "homepage": "https://bitbucket.org/burhan_maseel/vj_2.0#readme",
+  "devDependencies": {
+    "nodemon": "^1.18.10"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.5.0",
+    "mongodb": "^3.1.13",
+    "mongoose": "^5.4.19",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
+    "validator": "^10.11.0"
+  }
 }
