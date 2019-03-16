@@ -1,0 +1,16 @@
+{
+  "name": "vj_2.0",
+  "version": "1.0.0",
+  "description": "Fashion Portal",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://burhan_maseel@bitbucket.org/burhan_maseel/vj_2.0.git"
+  },
+  "author": "Burhan Maseel",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/burhan_maseel/vj_2.0#readme"
+}
