@@ -12,17 +12,31 @@ const db = require("./config/mongo.json");
 
 //Connect to the db
 mongoose.set("useCreateIndex", true);
-mongoose.connect(db.url, { useNewUrlParser: true }, function(err, db) {
+mongoose.connect(db.url, { useNewUrlParser: true }, function (err, db) {
   if (!err) {
     console.log("Database Connected");
   }
 });
 
+
+var whitelist = ['http://localhost:3000'];
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
+
+
+
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 //Enabling Cross Server Request acceptance
-app.use(cors());
+app.use(cors(corsOptions));
 
 //All Routes
 const authRoutes = require("./routes/authRoutes");
