@@ -5,6 +5,12 @@ const bcrypt = require("bcryptjs");
 exports.signup = (req, res) => {
   let { password, email, userName } = req.body;
 
+  console.log("in signup " + password);
+  console.log("in signup " + email);
+  console.log("in signup " + userName);
+
+
+
   bcrypt.genSalt(10, function (err, salt) {
     bcrypt.hash(password, salt, function (err, hashedPassword) {
       Users.create({

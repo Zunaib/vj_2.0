@@ -3,6 +3,10 @@ const ContactUs = require("../models/contactUs");
 exports.contactUs = (req, res) => {
     let { name, email, message } = req.body;
 
+    console.log("in contact " +name);
+    console.log("in contact " +email);
+    console.log("in contact " +message);
+
     ContactUs.create({
         name: name,
         email: email,
