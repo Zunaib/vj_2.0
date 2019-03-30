@@ -5,8 +5,8 @@ const bcrypt = require("bcryptjs");
 exports.signup = (req, res) => {
   let { password, email, userName } = req.body;
 
-  bcrypt.genSalt(10, function(err, salt) {
-    bcrypt.hash(password, salt, function(err, hashedPassword) {
+  bcrypt.genSalt(10, function (err, salt) {
+    bcrypt.hash(password, salt, function (err, hashedPassword) {
       Users.create({
         email: email,
         userName: userName,
@@ -27,9 +27,9 @@ exports.signup = (req, res) => {
 };
 
 exports.login = (req, res) => {
-  let { userName, password } = req.body;
-  Users.findOne({ userName: userName }).then(user => {
-    bcrypt.compare(password, user.password, function(err, result) {
+  let { email, password } = req.body;
+  Users.findOne({ email: email }).then(user => {
+    bcrypt.compare(password, user.password, function (err, result) {
       if (result) {
         return res.status(200).json({
           user: user
@@ -38,3 +38,4 @@ exports.login = (req, res) => {
     });
   });
 };
+
