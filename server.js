@@ -31,9 +31,13 @@ app.use(bodyParser.json());
 //All Routes
 const authRoutes = require("./routes/authRoutes");
 const contactUsRoutes = require("./routes/contactUsRoutes");
+const albumRoutes = require("./routes/albumRoutes");
+const productRoutes = require("./routes/productRoutes");
 
 authRoutes(app);
 contactUsRoutes(app);
+albumRoutes(app);
+productRoutes(app);
 
 //Server Connection
 const port = process.env.PORT || 5000;

@@ -5,4 +5,6 @@ module.exports = app => {
 
   app.route("/api/login").post(authControllers.login);
   
+  // app.route("/api/logout").get(authControllers.logout);
+
 };
