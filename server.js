@@ -89,7 +89,6 @@ app.get("/api/testApi", (req, res) => {
 albumRoutes(app);
 productRoutes(app);
 
-
 //Server Connection
 const port = process.env.PORT || 5000;
 
