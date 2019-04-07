@@ -1,14 +1,9 @@
 const Users = require("../models/users");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { secretOrKey } = require("../config/keys");
-
+const { setToken, verifyToken } = require("../config/auth");
 exports.signup = (req, res) => {
   let { password, email, userName } = req.body;
-
-  console.log("in signup " + password);
-  console.log("in signup " + email);
-  console.log("in signup " + userName);
 
   bcrypt.genSalt(10, function(err, salt) {
     bcrypt.hash(password, salt, function(err, hashedPassword) {
@@ -36,19 +31,41 @@ exports.login = (req, res) => {
   Users.findOne({ email: email }).then(user => {
     bcrypt.compare(password, user.password, function(err, isMatch) {
       if (isMatch) {
-        const payload = { id: user.id, name: user.name }; //JWT Payload
+        const payload = {
+          id: user.id,
+          name: user.name
+        }; //JWT Payload. It sets the data in the token
 
-        jwt.sign(payload, secretOrKey, { expiresIn: "1d" }, (err, token) => {
-          res.json({
-            success: true,
-            token: 'Bearer ' + token
-          });
+        setToken(payload, (err, token) => {
+          if (err) {
+            res.status(500).json({
+              success: false,
+              message: "Something went wrong"
+            });
+          } else {
+            res.cookie("access_token", token, { maxAge: 24 * 60 * 60 * 1000 });
+            res.status(200).json({
+              success: true,
+              message: "Logged In",
+              isCustomer: user.isCustomer,
+              isDesigner: user.isDesigner,
+              isBlogger: user.isBlogger,
+              isVlogger: user.isVlogger
+            });
+          }
         });
-
         // return res.status(200).json({
         //   user: user
         // });
       }
     });
+  });
+};
+
+exports.logout = (req, res) => {
+  res.clearCookie("access_token");
+  res.status(200).json({
+    success: true,
+    message: "Logged Out"
   });
 };
