@@ -17,7 +17,7 @@ const albumSchema = new mongoose.Schema(
         }],
         userId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "users",
+            ref: "Users",
             required: true
         },
         createdAt: {

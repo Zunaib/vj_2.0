@@ -35,6 +35,7 @@ const authRoutes = require("./routes/authRoutes");
 const contactUsRoutes = require("./routes/contactUsRoutes");
 const albumRoutes = require("./routes/albumRoutes");
 const productRoutes = require("./routes/productRoutes");
+const useAsRoutes = require("./routes/useAsRoutes");
 
 /**
  * Below this the routes will not require authorization token
@@ -88,6 +89,7 @@ app.get("/api/testApi", (req, res) => {
 
 albumRoutes(app);
 productRoutes(app);
+useAsRoutes(app);
 
 //Server Connection
 const port = process.env.PORT || 5000;

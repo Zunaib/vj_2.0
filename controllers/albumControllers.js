@@ -42,7 +42,7 @@ exports.updateAlbum = (req, res) => {
   const { albumName, year, albumId } = req.body;
   Albums.updateOne(
     { _id: albumId, userId: req.user.id },
-    { albumName: albumName, year: year, userId: req.user.id }
+    { albumName: albumName, year: year, updatedAt: Date.now() }
   )
     .then(album => res.status(200).json({ success: true, album: album }))
     .catch(err => res.status(400).json({ success: false, err: err }));
