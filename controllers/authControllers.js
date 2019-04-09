@@ -5,8 +5,8 @@ const { setToken, verifyToken } = require("../config/auth");
 exports.signup = (req, res) => {
   let { password, email, userName } = req.body;
 
-  bcrypt.genSalt(10, function(err, salt) {
-    bcrypt.hash(password, salt, function(err, hashedPassword) {
+  bcrypt.genSalt(10, function (err, salt) {
+    bcrypt.hash(password, salt, function (err, hashedPassword) {
       Users.create({
         email: email,
         userName: userName,
@@ -29,7 +29,7 @@ exports.signup = (req, res) => {
 exports.login = (req, res) => {
   let { email, password } = req.body;
   Users.findOne({ email: email }).then(user => {
-    bcrypt.compare(password, user.password, function(err, isMatch) {
+    bcrypt.compare(password, user.password, function (err, isMatch) {
       if (isMatch) {
         const payload = {
           id: user.id,
@@ -45,6 +45,7 @@ exports.login = (req, res) => {
           } else {
             res.cookie("access_token", token, { maxAge: 24 * 60 * 60 * 1000 });
             res.status(200).json({
+              token: token,
               success: true,
               message: "Logged In",
               isCustomer: user.isCustomer,

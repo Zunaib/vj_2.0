@@ -14,7 +14,7 @@ const db = require("./config/mongo.json");
 
 //Connect to the db
 mongoose.set("useCreateIndex", true);
-mongoose.connect(db.url, { useNewUrlParser: true }, function(err, db) {
+mongoose.connect(db.url, { useNewUrlParser: true }, function (err, db) {
   if (!err) {
     console.log("Database Connected");
   }
@@ -46,10 +46,13 @@ contactUsRoutes(app);
 
 app.use(
   (req, res, next) => {
+
+    console.log(req);
+
     if (req.method.toLowerCase() == "get") {
-      req.query.access_token = req.cookies.access_token;
+      req.query.access_token = req.query.access_token;
     } else {
-      req.body.access_token = req.cookies.access_token;
+      req.body.access_token = req.query.access_token;
     }
 
     next();
@@ -86,6 +89,8 @@ app.get("/api/testApi", (req, res) => {
     data: req.user
   });
 });
+
+
 
 albumRoutes(app);
 productRoutes(app);
