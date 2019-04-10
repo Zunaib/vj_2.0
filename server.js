@@ -97,7 +97,7 @@ albumRoutes(app);
 productRoutes(app);
 useAsRoutes(app);
 blogRoutes(app);
-uesrSettingsRoutes(app);
+// uesrSettingsRoutes(app);
 
 //Server Connection
 const port = process.env.PORT || 5000;

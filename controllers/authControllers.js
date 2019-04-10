@@ -48,16 +48,26 @@ exports.signup = async (req, res) => {
 
 exports.login = (req, res) => {
   let { email, password } = req.body;
+  // console.log(email);
+  // console.log(password);
+
   Users.findOne({ email: email }).then(user => {
-    bcrypt.compare(password, user.password, function(err, isMatch) {
+
+    // console.log("in users.find");
+    bcrypt.compare(password, user.password).then(function (isMatch) {
+
+      // console.log(err);
+      // console.log("in bcrypt");
       if (isMatch) {
         const payload = {
           id: user.id,
           name: user.name
         }; //JWT Payload. It sets the data in the token
-
         setToken(payload, (err, token) => {
+
+          // console.log("in set token");
           if (err) {
+            console.log(err);
             res.status(500).json({
               success: false,
               message: "Something went wrong"
@@ -80,8 +90,26 @@ exports.login = (req, res) => {
         //   user: user
         // });
       }
-    });
-  });
+    })
+      .catch(err => {
+        // console.log("user pass not match");
+        // console.log('in bcrypt catch');
+        res.status(500).json({
+          success: false,
+          message: "Pass_Mismatch"
+        });
+      });
+  })
+    .catch(err => {
+      // console.log("user email not found");
+      // console.log('in users catch');
+      res.status(500).json({
+        success: false,
+        message: "Email_NotFound"
+      });
+    }
+
+    );
 };
 
 exports.logout = (req, res) => {
