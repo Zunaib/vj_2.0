@@ -51,7 +51,7 @@ exports.updateProduct = (req, res) => {
       updatedAt: Date.now()
     }
   )
-    .then(album => res.status(200).json({ success: true, album: album }))
+    .then(product => res.status(200).json({ success: true, product: product }))
     .catch(err => res.status(400).json({ success: false, err: err }));
 };
 

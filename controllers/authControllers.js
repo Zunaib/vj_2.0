@@ -2,34 +2,54 @@ const Users = require("../models/users");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { setToken, verifyToken } = require("../config/auth");
-exports.signup = (req, res) => {
+exports.signup = async (req, res) => {
   let { password, email, userName } = req.body;
-
-  bcrypt.genSalt(10, function (err, salt) {
-    bcrypt.hash(password, salt, function (err, hashedPassword) {
-      Users.create({
-        email: email,
-        userName: userName,
-        password: hashedPassword
-      })
-        .then(user => {
-          return res.status(200).json({
-            user: user
-          });
-        })
-        .catch(err => {
-          return res.status(400).json({
-            message: err
-          });
-        });
-    });
+  let emailExist = false;
+  let userNameExist = false;
+  await Users.findOne({ email: email }, (err, isMatch) => {
+    if (isMatch) {
+      emailExist = true;
+    }
   });
+  await Users.findOne({ userName: userName }, (err, isMatch) => {
+    if (isMatch) {
+      userNameExist = true;
+    }
+  });
+
+  if (emailExist || userNameExist) {
+    return res
+      .status(400)
+      .json({ userNameExist: userNameExist, emailExist: emailExist });
+  } else {
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(password, salt, (err, hashedPassword) => {
+        Users.create({
+          email: email,
+          userName: userName,
+          password: hashedPassword
+        })
+          .then(user => {
+            return res.status(200).json({
+              success: true,
+              user: user
+            });
+          })
+          .catch(err => {
+            return res.status(400).json({
+              success: false,
+              message: err
+            });
+          });
+      });
+    });
+  }
 };
 
 exports.login = (req, res) => {
   let { email, password } = req.body;
   Users.findOne({ email: email }).then(user => {
-    bcrypt.compare(password, user.password, function (err, isMatch) {
+    bcrypt.compare(password, user.password, function(err, isMatch) {
       if (isMatch) {
         const payload = {
           id: user.id,
@@ -51,7 +71,8 @@ exports.login = (req, res) => {
               isCustomer: user.isCustomer,
               isDesigner: user.isDesigner,
               isBlogger: user.isBlogger,
-              isVlogger: user.isVlogger
+              isVlogger: user.isVlogger,
+              userId: user._id
             });
           }
         });

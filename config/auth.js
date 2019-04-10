@@ -7,7 +7,7 @@ exports.setToken = (payloads, callback) => {
       data: payloads
     },
     secretOrKey,
-    { expiresIn: "1d" },
+    {},
     (err, token) => {
       callback(err, token);
     }
