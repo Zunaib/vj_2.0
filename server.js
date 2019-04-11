@@ -37,7 +37,7 @@ const albumRoutes = require("./routes/albumRoutes");
 const productRoutes = require("./routes/productRoutes");
 const useAsRoutes = require("./routes/useAsRoutes");
 const blogRoutes = require("./routes/blogRoutes");
-const uesrSettingsRoutes = require("./routes/userSettingsRoutes");
+const userSettingsRoutes = require("./routes/userSettingsRoutes");
 /**
  * Below this the routes will not require authorization token
  */
@@ -97,7 +97,7 @@ albumRoutes(app);
 productRoutes(app);
 useAsRoutes(app);
 blogRoutes(app);
-// uesrSettingsRoutes(app);
+userSettingsRoutes(app);
 
 //Server Connection
 const port = process.env.PORT || 5000;

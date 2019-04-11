@@ -26,6 +26,18 @@ const userSchema = new mongoose.Schema(
       unique: true,
       required: true
     },
+    generalBioDesigner: {
+      type: String,
+      default: null
+    },
+    generalBioBlogger: {
+      type: String,
+      default: null
+    },
+    generalBioVlogger: {
+      type: String,
+      default: null
+    },
     dateofbirth: {
       type: Date,
       default: null

@@ -49,16 +49,14 @@ exports.signup = async (req, res) => {
 exports.login = (req, res) => {
   let { email, password } = req.body;
   Users.findOne({ email: email }).then(user => {
-    bcrypt.compare(password, user.password, function (isMatch, err) {
+    bcrypt.compare(password, user.password, function (err, isMatch) {
       if (isMatch) {
-        console.log("in match");
         const payload = {
           id: user.id,
           name: user.name
         }; //JWT Payload. It sets the data in the token
         setToken(payload, (err, token) => {
 
-          console.log("in set token");
           if (err) {
             console.log(err);
           } else {
@@ -76,7 +74,6 @@ exports.login = (req, res) => {
           }
         });
       } else {
-        console.log("in match er");
         res.status(404).send({ message: 'Pass_Mismatch' });
       }
     });
