@@ -23,7 +23,6 @@ exports.useAsCustomer = (req, res) => {
 };
 
 exports.useAsDesigner = (req, res) => {
-  console.log("I am here")
   Users.findByIdAndUpdate(
     req.user.id,
     {
@@ -34,7 +33,6 @@ exports.useAsDesigner = (req, res) => {
     }
   )
     .then(user => {
-      console.log(user)
       if (user.n > 0) {
         res.status(200).json({ success: true, message: "Using as Designer" });
       } else {
@@ -57,7 +55,6 @@ exports.useAsBlogger = (req, res) => {
     }
   )
     .then(user => {
-      console.log(user);
       if (user.isDesigner) {
         res.status(200).json({ success: true, message: "Using as Blogger" });
       } else {

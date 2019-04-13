@@ -48,8 +48,6 @@ contactUsRoutes(app);
 app.use(
   (req, res, next) => {
 
-    console.log(req);
-
     if (req.method.toLowerCase() == "get") {
       req.query.access_token = req.query.access_token;
     } else {

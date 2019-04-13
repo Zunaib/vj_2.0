@@ -8,9 +8,8 @@ exports.createAlbum = (req, res) => {
 };
 
 exports.deleteAlbum = (req, res) => {
-  const { albumId } = req.body;
   Albums.updateOne(
-    { _id: albumId, userId: req.user.id },
+    { _id: req.query.albumId, userId: req.user.id },
     { deletedAt: Date.now() }
   )
     .then(album => {
@@ -39,9 +38,9 @@ exports.fetchAllAlbums = (req, res) => {
 
 //need to be changed and tested
 exports.updateAlbum = (req, res) => {
-  const { albumName, year, albumId } = req.body;
+  const { albumName, year } = req.body;
   Albums.updateOne(
-    { _id: albumId, userId: req.user.id },
+    { _id: req.query.albumId, userId: req.user.id },
     { albumName: albumName, year: year, updatedAt: Date.now() }
   )
     .then(album => res.status(200).json({ success: true, album: album }))

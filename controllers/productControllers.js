@@ -29,9 +29,8 @@ exports.addProduct = (req, res) => {
 };
 
 exports.deleteProduct = (req, res) => {
-  const { productId } = req.body;
   Products.updateOne(
-    { _id: productId, userId: req.user.id },
+    { _id: req.query.productId, userId: req.user.id },
     { deletedAt: Date.now() }
   )
     .then(product =>
@@ -41,9 +40,9 @@ exports.deleteProduct = (req, res) => {
 };
 
 exports.updateProduct = (req, res) => {
-  const { productName, quantity, sizes, price, productId } = req.body;
+  const { productName, quantity, price } = req.body;
   Products.updateOne(
-    { _id: productId, userId: req.user.id },
+    { _id: req.query.productId, userId: req.user.id },
     {
       productName: productName,
       quantity: quantity,
@@ -68,15 +67,14 @@ exports.fetchProductsByUser = (req, res) => {
 };
 
 exports.fetchSingleProductDetails = (req, res) => {
-  const { productId } = req.body;
-  Products.find({ _id: productId })
+  console.log(req.query.productId);
+  Products.findById(req.query.productId)
     .then(product => res.status(200).json({ success: true, products: product }))
     .catch(err => res.status(400).json({ success: false, error: err }));
 };
 
 exports.fetchProductsByAlbums = (req, res) => {
-  const { albumId } = req.body;
-  Products.find({ albumId: albumId })
+  Products.find({ albumId: req.query.albumId, deletedAt: null })
     .then(product => res.status(200).json({ success: true, products: product }))
     .catch(err => res.status(400).json({ success: false, error: err }));
 };
