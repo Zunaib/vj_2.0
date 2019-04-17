@@ -3,6 +3,7 @@ module.exports = app => {
 
 
     app.route("/api/changeSettings").post(userSettingsControllers.changeSettings);
+    app.route("/api/fetchUserSettings").get(userSettingsControllers.fetchUserSettings);
     app.route("/api/changeGeneralBioDesigner").get(userSettingsControllers.changeGeneralBioDesigner);
     app.route("/api/changeGeneralBioBlogger").get(userSettingsControllers.changeGeneralBioBlogger);
     app.route("/api/changeGeneralBioVlogger").get(userSettingsControllers.changeGeneralBioVlogger);
