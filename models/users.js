@@ -46,12 +46,29 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: null
     },
-    addresses: {
-      streetAddress: { type: String, default: null },
-      city: { type: String, default: null },
-      zipCode: { type: String, default: null },
-      province: { type: String, default: null },
-      country: { type: String, default: null }
+    description: {
+      type: String,
+      default: null
+    },
+    province: {
+      type: String,
+      default: null
+    },
+    streetAddress: {
+      type: String,
+      default: null
+    },
+    city: {
+      type: String,
+      default: null
+    },
+    zipcode: {
+      type: String,
+      default: null
+    },
+    country: {
+      type: String,
+      default: null
     },
     titlevideoId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -59,8 +76,8 @@ const userSchema = new mongoose.Schema(
       default: null
     },
     phone: {
-      countryCode: { type: String, default: null },
-      phoneNumber: { type: String, default: null }
+      type: String,
+      default: null
     },
     about: {
       type: String,
