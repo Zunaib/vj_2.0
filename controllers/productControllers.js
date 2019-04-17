@@ -59,7 +59,9 @@ exports.fetchAllProducts = (req, res) => {
     .then(product => res.status(200).json({ success: true, products: product }))
     .catch(err => res.status(400).json({ success: false, error: err }));
 };
-
+/**
+ * Fetches the logged in current user's Products
+ */
 exports.fetchProductsByUser = (req, res) => {
   Products.find({ deletedAt: null, userId: req.user.id })
     .then(product => res.status(200).json({ success: true, products: product }))

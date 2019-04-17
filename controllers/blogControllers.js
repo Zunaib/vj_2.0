@@ -44,7 +44,9 @@ exports.fetchAllBlogs = (req, res) => {
     .then(blogs => res.status(200).json({ success: true, blogs: blogs }))
     .catch(err => res.status(400).json({ success: false, error: err }));
 };
-
+/**
+ * Fetches the logged in current user's blogs
+ */
 exports.fetchBlogsByUser = (req, res) => {
   Blogs.find({ deletedAt: null, userId: req.user.id })
     .then(blogs => res.status(200).json({ success: true, blogs: blogs }))
