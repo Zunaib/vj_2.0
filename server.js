@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const passport = require("./config/passport").passport_http_bearer;
+const fileUpload = require("express-fileupload");
 
 const app = express();
 const bodyParser = require("body-parser");
@@ -29,6 +30,7 @@ app.use(
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(fileUpload());
 
 //All Routes
 const authRoutes = require("./routes/authRoutes");
@@ -38,6 +40,7 @@ const productRoutes = require("./routes/productRoutes");
 const useAsRoutes = require("./routes/useAsRoutes");
 const blogRoutes = require("./routes/blogRoutes");
 const userSettingsRoutes = require("./routes/userSettingsRoutes");
+const fileUploadGFS = require("./routes/fileUploadGFS");
 /**
  * Below this the routes will not require authorization token
  */
@@ -96,6 +99,7 @@ productRoutes(app);
 useAsRoutes(app);
 blogRoutes(app);
 userSettingsRoutes(app);
+fileUploadGFS(app);
 
 //Server Connection
 const port = process.env.PORT || 5000;
