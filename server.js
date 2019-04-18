@@ -47,13 +47,11 @@ contactUsRoutes(app);
 
 app.use(
   (req, res, next) => {
-
     if (req.method.toLowerCase() == "get") {
       req.query.access_token = req.query.access_token;
     } else {
-      req.body.access_token = req.query.access_token;
+      req.query.access_token = req.query.access_token;
     }
-
     next();
   },
   passport.authenticate("bearer", { session: false }),

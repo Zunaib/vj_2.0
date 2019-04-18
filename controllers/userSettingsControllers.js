@@ -27,8 +27,9 @@ exports.changeSettings = (req, res) => {
     city,
     zipcode,
     country,
-    phoneNo
+    phone
   } = req.body;
+
   Users.findByIdAndUpdate(req.user.id, {
     firstName: firstName,
     lastName: lastName,
@@ -40,17 +41,17 @@ exports.changeSettings = (req, res) => {
     city: city,
     zipcode: zipcode,
     country: country,
-    phone: phoneNo
+    phone: phone
   })
     .then(user => {
       return res.status(200).json({
-        success: true,
+        success: 'Updated',
         user: user
       });
     })
     .catch(err => {
       return res.status(400).json({
-        success: false
+        success: 'Update_Failed'
       });
     });
 };
