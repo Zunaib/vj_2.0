@@ -50,7 +50,7 @@ exports.login = (req, res) => {
   let { email, password } = req.body;
   Users.findOne({ email: email })
     .then(user => {
-      bcrypt.compare(password, user.password, function(err, isMatch) {
+      bcrypt.compare(password, user.password, function (err, isMatch) {
         if (isMatch) {
           const payload = {
             id: user.id,
