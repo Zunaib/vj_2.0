@@ -1,4 +1,5 @@
 const Users = require("../models/users");
+const fs = require("fs");
 
 exports.fetchUserSettings = (req, res) => {
   Users.findById(req.user.id)
@@ -45,13 +46,13 @@ exports.changeSettings = (req, res) => {
   })
     .then(user => {
       return res.status(200).json({
-        success: 'Updated',
+        success: "Updated",
         user: user
       });
     })
     .catch(err => {
       return res.status(400).json({
-        success: 'Update_Failed'
+        success: "Update_Failed"
       });
     });
 };
@@ -108,3 +109,45 @@ exports.fetchGeneralBioVlogger = (req, res) => {
     )
     .catch(err => res.status(400).json({ err: err, success: false }));
 };
+
+exports.changeDisplayPicture = async (req, res) => {
+  if (req.files === null) {
+    console.log("No files uploaded");
+  } else {
+    let dir = "assets/uploads/userDP/";
+    let filename = req.user.id + "_" + req.files.file.name;
+
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
+    }
+
+    await req.files.file.mv(dir + filename);
+
+    let fileWebPath = "/assets/uploads/userDP/" + filename;
+    await Users.findOneAndUpdate(req.user.id, { displayPicture: fileWebPath })
+      .then(user => res.status(200).json({ user: user, success: true }))
+      .catch(err => res.status(500).json({ err: err, success: false }));
+
+    // res.json({ success: true });
+  }
+};
+
+exports.fetchDisplayPicture = async (req, res) => {
+  await Users.findById(req.user.id)
+    .then(user => {
+      return res.json({
+        displayPicture: user.displayPicture
+      });
+    })
+    .catch(err => console.log(err));
+};
+
+exports.deleteDisplayPicture = async (req, res) => {
+  await Users.findOneAndUpdate(req.user.id, {displayPicture: null})
+    .then(user => {
+      return res.json({
+        user: user
+      });
+    })
+    .catch(err => console.log(err));
+}

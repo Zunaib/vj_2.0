@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const passport = require("./config/passport").passport_http_bearer;
 const fileUpload = require("express-fileupload");
+const path = require("path");
 
 const app = express();
 const bodyParser = require("body-parser");
@@ -31,6 +32,8 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(fileUpload());
+app.use(`/assets/uploads`, express.static(`assets/uploads`));
+
 
 //All Routes
 const authRoutes = require("./routes/authRoutes");

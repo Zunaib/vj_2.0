@@ -1,8 +1,6 @@
 module.exports = app => {
-  const testGridFs = require("../controllers/testGridFs");
+  const testFs = require("../controllers/testFs");
 
-  
-
-
-  app.route("/api/upload").post( testGridFs.upload);
+  app.route("/api/upload").post( testFs.upload);
+  app.route("/api/uploadToDB").post( testFs.uploadToDB);
 };

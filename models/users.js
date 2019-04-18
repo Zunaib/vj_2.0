@@ -83,7 +83,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: null
     },
-    displayPictureID: {
+    displayPicture: {
       type: String,
       default: null
     },

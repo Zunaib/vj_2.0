@@ -9,12 +9,9 @@ const albumSchema = new mongoose.Schema(
         },
         year: {
             type: String,
-            require: true,
+            required: true,
             default: null
         },
-        products: [{
-            productId: { type: mongoose.Schema.Types.ObjectId, ref: "products", default: null }
-        }],
         userId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Users",

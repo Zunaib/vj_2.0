@@ -3,6 +3,10 @@ module.exports = app => {
 
 
   app.route("/api/changeSettings").post(userSettingsControllers.changeSettings);
+  app.route("/api/changeDisplayPicture").put(userSettingsControllers.changeDisplayPicture);
+  app.route("/api/fetchDisplayPicture").get(userSettingsControllers.fetchDisplayPicture);
+  app.route("/api/deleteDisplayPicture").delete(userSettingsControllers.deleteDisplayPicture);
+  
   app.route("/api/fetchUserSettings").get(userSettingsControllers.fetchUserSettings);
   app.route("/api/changeGeneralBioDesigner").get(userSettingsControllers.changeGeneralBioDesigner);
   app.route("/api/changeGeneralBioBlogger").get(userSettingsControllers.changeGeneralBioBlogger);
