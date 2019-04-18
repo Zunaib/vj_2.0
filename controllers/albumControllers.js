@@ -1,8 +1,27 @@
 const Albums = require("../models/albums");
 
-exports.createAlbum = (req, res) => {
-  const { albumName, year } = req.body;
-  Albums.create({ albumName: albumName, year: year, userId: req.user.id })
+exports.createAlbum = async (req, res) => {
+  const { albumName, year, season, description } = req.body;
+
+  let dir = "assets/uploads/albumThumbnail/";
+  let filename = Date.now() + "_" + req.files.file.name;
+
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir);
+  }
+
+  await req.files.file.mv(dir + filename);
+
+  let fileWebPath = "/assets/uploads/albumThumbnail/" + filename;
+
+  Albums.create({
+    albumName: albumName,
+    year: year,
+    userId: req.user.id,
+    season: season,
+    description: description,
+    thumbnail: fileWebPath
+  })
     .then(album => res.json({ success: true, album: album }))
     .catch(err => res.json({ success: false, err: err }));
 };

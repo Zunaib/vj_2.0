@@ -9,7 +9,6 @@ const productSchema = new mongoose.Schema(
     },
     quantity: {
       type: Number,
-      required: true,
       default: null
     },
     price: {
@@ -21,9 +20,9 @@ const productSchema = new mongoose.Schema(
       type: Number,
       default: null
     },
-    images: {
-      type: Array
-    },
+    images: [
+      String
+    ],
     likes: {
       type: Number,
       default: 0
@@ -33,6 +32,10 @@ const productSchema = new mongoose.Schema(
       default: 0
     },
     views: {
+      type: Number,
+      default: 0
+    },
+    discount:{
       type: Number,
       default: 0
     },
@@ -46,6 +49,9 @@ const productSchema = new mongoose.Schema(
           default: null
         }
       }
+    ],
+    sizes: [
+      String
     ],
     userId: {
       type: mongoose.Schema.Types.ObjectId,

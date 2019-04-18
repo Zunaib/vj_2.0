@@ -9,7 +9,18 @@ const albumSchema = new mongoose.Schema(
         },
         year: {
             type: String,
-            required: true,
+            default: null
+        },
+        season: {
+            type: String,
+            default: null
+        },
+        description: {
+            type: String,
+            default: null
+        },
+        thumbnail: {
+            type: String,
             default: null
         },
         userId: {
