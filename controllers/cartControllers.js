@@ -55,7 +55,7 @@ exports.removeFromCart = async (req, res) => {
 };
 
 exports.fetchCart = async (req, res) => {
-  await Users.findById(req.user.id).lean()
+  await Users.findById(req.user.id).lean().populate('cart.productId')
     .then(user => {
       res.status(200).json({ cart: user.cart, success: true });
     })
