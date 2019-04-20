@@ -1,5 +1,6 @@
 const Users = require("../models/users");
 const fs = require("fs");
+const path = require("path");
 
 exports.fetchUserSettings = (req, res) => {
   Users.findById(req.user.id)
@@ -111,6 +112,18 @@ exports.fetchGeneralBioVlogger = (req, res) => {
 };
 
 exports.changeDisplayPicture = async (req, res) => {
+  // await Users.findById(req.user.id)
+  // .then(user => {
+  //   if (user.displayPicture) {
+  //     fs.unlink(user.displayPicture, (err) => {
+  //       if(err){ 
+  //         console.log(err);
+  //       }
+  //       console.log("file deleted");
+  //     });
+  //   }
+  // });
+
   if (req.files === null) {
     console.log("No files uploaded");
   } else {

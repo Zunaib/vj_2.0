@@ -83,7 +83,7 @@ exports.addProduct = async (req, res) => {
 
 exports.deleteProduct = (req, res) => {
   Products.updateOne(
-    { _id: req.query.productId, userId: req.user.id },
+    { _id: req.body.productId, userId: req.user.id },
     { deletedAt: Date.now() }
   )
     .then(product =>
@@ -95,7 +95,7 @@ exports.deleteProduct = (req, res) => {
 exports.updateProduct = (req, res) => {
   const { productName, quantity, price } = req.body;
   Products.updateOne(
-    { _id: req.query.productId, userId: req.user.id },
+    { _id: req.body.productId, userId: req.user.id },
     {
       productName: productName,
       quantity: quantity,
@@ -122,14 +122,13 @@ exports.fetchProductsByUser = (req, res) => {
 };
 
 exports.fetchSingleProductDetails = (req, res) => {
-  console.log(req.query.productId);
-  Products.findById(req.query.productId)
+  Products.findById(req.body.productId)
     .then(product => res.status(200).json({ success: true, products: product }))
     .catch(err => res.status(400).json({ success: false, error: err }));
 };
 
 exports.fetchProductsByAlbums = (req, res) => {
-  Products.find({ albumId: req.query.albumId, deletedAt: null })
+  Products.find({ albumId: req.body.albumId, deletedAt: null })
     .then(product => res.status(200).json({ success: true, products: product }))
     .catch(err => res.status(400).json({ success: false, error: err }));
 };

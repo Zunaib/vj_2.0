@@ -28,7 +28,7 @@ exports.createAlbum = async (req, res) => {
 
 exports.deleteAlbum = (req, res) => {
   Albums.updateOne(
-    { _id: req.query.albumId, userId: req.user.id },
+    { _id: req.body.albumId, userId: req.user.id },
     { deletedAt: Date.now() }
   )
     .then(album => {
@@ -59,7 +59,7 @@ exports.fetchAllAlbums = (req, res) => {
 exports.updateAlbum = (req, res) => {
   const { albumName, year } = req.body;
   Albums.updateOne(
-    { _id: req.query.albumId, userId: req.user.id },
+    { _id: req.body.albumId, userId: req.user.id },
     { albumName: albumName, year: year, updatedAt: Date.now() }
   )
     .then(album => res.status(200).json({ success: true, album: album }))
