@@ -1,37 +1,53 @@
 const Products = require("../models/products");
+const fs = require("fs");
 
 exports.addProduct = async (req, res) => {
-  const { productName, quantity, sizes, price, albumId, discount } = req.body;
-  
+  const {
+    productName,
+    quantity,
+    sizes,
+    price,
+    albumId,
+    discount,
+    color
+  } = req.body;
   let dir = "assets/uploads/productImages/";
-  let filename1 = Date.now() + "_" + req.files.file1.name;
-  let filename2 = Date.now() + "_" + req.files.file2.name;
-  let filename3 = Date.now() + "_" + req.files.file3.name;
-  let filename4 = Date.now() + "_" + req.files.file4.name;
-  let filename5 = Date.now() + "_" + req.files.file5.name;
+  let productImages = [];
 
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
   }
 
-  await req.files.file1.mv(dir + filename1);
-  await req.files.file2.mv(dir + filename2);
-  await req.files.file3.mv(dir + filename3);
-  await req.files.file4.mv(dir + filename4);
-  await req.files.file5.mv(dir + filename5);
+  req.files.file.map(item => {
+    let filename = Date.now() + "_" + item.name;
+    fileWebPath = "/assets/uploads/productImages/" + filename;
+    item.mv(dir + filename);
+    productImages.push(fileWebPath);
+  });
 
-  let fileWebPath1 = "/assets/uploads/productImages/" + filename1;
-  let fileWebPath2 = "/assets/uploads/productImages/" + filename2;
-  let fileWebPath3 = "/assets/uploads/productImages/" + filename3;
-  let fileWebPath4 = "/assets/uploads/productImages/" + filename4;
-  let fileWebPath5 = "/assets/uploads/productImages/" + filename5;
-  let productImages = [];
-   productImages.push( fileWebPath1);
-   productImages.push (fileWebPath2);
-   productImages.push (fileWebPath3);
-   productImages.push (fileWebPath4);
-   productImages.push (fileWebPath5);
-    
+  // let filename1 = Date.now() + "_" + file1.name || null;
+  // let filename2 = Date.now() + "_" + file2.name || null;
+  // let filename3 = Date.now() + "_" + file3.name || null;
+  // let filename4 = Date.now() + "_" + file4.name || null;
+  // let filename5 = Date.now() + "_" + file5.name || null;
+
+  // await req.files.file1.mv(dir + filename1);
+  // await req.files.file2.mv(dir + filename2);
+  // await req.files.file3.mv(dir + filename3);
+  // await req.files.file4.mv(dir + filename4);
+  // await req.files.file5.mv(dir + filename5);
+
+  // let fileWebPath1 = "/assets/uploads/productImages/" + filename1;
+  // let fileWebPath2 = "/assets/uploads/productImages/" + filename2;
+  // let fileWebPath3 = "/assets/uploads/productImages/" + filename3;
+  // let fileWebPath4 = "/assets/uploads/productImages/" + filename4;
+  // let fileWebPath5 = "/assets/uploads/productImages/" + filename5;
+  // productImages.push(fileWebPath1);
+  // productImages.push(fileWebPath2);
+  // productImages.push(fileWebPath3);
+  // productImages.push(fileWebPath4);
+  // productImages.push(fileWebPath5);
+
   if (albumId) {
     Products.create({
       productName: productName,
