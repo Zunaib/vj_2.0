@@ -44,6 +44,7 @@ const useAsRoutes = require("./routes/useAsRoutes");
 const blogRoutes = require("./routes/blogRoutes");
 const userSettingsRoutes = require("./routes/userSettingsRoutes");
 const fileUploadGFS = require("./routes/fileUploadGFS");
+const cartRoutes = require("./routes/cartRoutes");
 /**
  * Below this the routes will not require authorization token
  */
@@ -101,6 +102,7 @@ useAsRoutes(app);
 blogRoutes(app);
 userSettingsRoutes(app);
 fileUploadGFS(app);
+cartRoutes(app);
 
 //Server Connection
 const port = process.env.PORT || 5000;
