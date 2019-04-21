@@ -3,7 +3,7 @@ module.exports = app => {
 
     app.route("/api/addProduct").post(productControllers.addProduct);
     app.route("/api/fetchAllProducts").get(productControllers.fetchAllProducts);
-    app.route("/api/fetchProducts").get(productControllers.fetchLatestProductsByUser);
+    app.route("/api/fetchProductsByUser").get(productControllers.fetchProductsByUser);
     app.route("/api/fetchSingleProductDetails").post(productControllers.fetchSingleProductDetails);
     app.route("/api/fetchProductsByAlbums").post(productControllers.fetchProductsByAlbums);
     app.route("/api/updateProduct").put(productControllers.updateProduct);

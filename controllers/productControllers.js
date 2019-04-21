@@ -115,7 +115,7 @@ exports.fetchAllProducts = (req, res) => {
 /**
  * Fetches the logged in current user's Products
  */
-exports.fetchLatestProductsByUser = (req, res) => {
+exports.fetchProductsByUser = (req, res) => {
   if (req.query.limit) {
     Products.find({ deletedAt: null, userId: req.user.id })
       .sort({ createdAt: -1 })

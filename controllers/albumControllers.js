@@ -44,7 +44,7 @@ exports.deleteAlbum = (req, res) => {
     .catch(err => res.json({ err: err }));
 };
 
-exports.fetchLatestAlbumsByUser = (req, res) => {
+exports.fetchAlbumsByUser = (req, res) => {
   if (req.query.limit) {
     Albums.find({ deletedAt: null, userId: req.user.id })
       .sort({ createdAt: -1 })
