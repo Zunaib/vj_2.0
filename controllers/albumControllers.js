@@ -79,3 +79,10 @@ exports.updateAlbum = (req, res) => {
     .then(album => res.status(200).json({ success: true, album: album }))
     .catch(err => res.status(400).json({ success: false, err: err }));
 };
+
+exports.fetchSingleAlbum = (req, res) => {
+  Albums.findById(req.body.albumId)
+    .lean()
+    .then(album => res.status(200).json({ success: true, album: album }))
+    .catch(err => res.status(400).json({ success: false, error: err }));
+};
