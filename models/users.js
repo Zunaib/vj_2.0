@@ -26,18 +26,6 @@ const userSchema = new mongoose.Schema(
       unique: true,
       required: true
     },
-    generalBioDesigner: {
-      type: String,
-      default: null
-    },
-    generalBioBlogger: {
-      type: String,
-      default: null
-    },
-    generalBioVlogger: {
-      type: String,
-      default: null
-    },
     dateofbirth: {
       type: Date,
       default: null
@@ -113,6 +101,36 @@ const userSchema = new mongoose.Schema(
         ref: "Products",
       },
     }],
+    designerDescription: {
+      type: String,
+      default: null
+    },
+    bloggerDescription: {
+      type: String,
+      default: null
+    },
+    vloggerDescription: {
+      type: String,
+      default: null
+    },
+    websiteLink: {
+      type: String,
+      default: null
+    },
+    pinterestLink: {
+      type: String,
+      default: null
+    },
+    behanceLink: {
+      type: String,
+      default: null
+    },
+    youtubeLink: {
+      type: String,
+      default: null
+    },
+
+    
     // createdAt: {
     //   type: Date,
     //   default: Date.now()

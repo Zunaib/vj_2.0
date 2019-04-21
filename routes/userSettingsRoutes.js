@@ -8,10 +8,12 @@ module.exports = app => {
   app.route("/api/deleteDisplayPicture").delete(userSettingsControllers.deleteDisplayPicture);
   
   app.route("/api/fetchUserSettings").get(userSettingsControllers.fetchUserSettings);
-  app.route("/api/changeGeneralBioDesigner").get(userSettingsControllers.changeGeneralBioDesigner);
-  app.route("/api/changeGeneralBioBlogger").get(userSettingsControllers.changeGeneralBioBlogger);
-  app.route("/api/changeGeneralBioVlogger").get(userSettingsControllers.changeGeneralBioVlogger);
   app.route("/api/fetchGeneralBioDesigner").get(userSettingsControllers.fetchGeneralBioDesigner);
   app.route("/api/fetchGeneralBioBlogger").get(userSettingsControllers.fetchGeneralBioBlogger);
   app.route("/api/fetchGeneralBioVlogger").get(userSettingsControllers.fetchGeneralBioVlogger);
+
+  app.route("/api/changeDesignerSettings").put(userSettingsControllers.changeDesignerSettings);
+  app.route("/api/changeBloggerSettings").put(userSettingsControllers.changeBloggerSettings);
+  app.route("/api/changeVloggerSettings").put(userSettingsControllers.changeVloggerSettings);
+
 };

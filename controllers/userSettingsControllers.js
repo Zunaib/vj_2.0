@@ -58,25 +58,38 @@ exports.changeSettings = (req, res) => {
     });
 };
 
-exports.changeGeneralBioDesigner = (req, res) => {
-  const { generalBioDesigner } = req.body;
+exports.changeDesignerSettings = (req, res) => {
+  const {
+    designerDescription,
+    websiteLink,
+    pinterestLink,
+    behanceLink
+  } = req.body;
   Users.findByIdAndUpdate(req.user.id, {
-    generalBioDesigner: generalBioDesigner
+    designerDescription: designerDescription,
+    websiteLink: websiteLink,
+    pinterestLink: pinterestLink,
+    behanceLink: behanceLink
   })
     .then(user => res.status(200).json({ user: user, success: true }))
     .catch(err => res.status(400).json({ err: err, success: false }));
 };
 
-exports.changeGeneralBioBlogger = (req, res) => {
-  const { generalBioBlogger } = req.body;
-  Users.findByIdAndUpdate(req.user.id, { generalBioBlogger: generalBioBlogger })
+exports.changeBloggerSettings = (req, res) => {
+  const { bloggerDescription } = req.body;
+  Users.findByIdAndUpdate(req.user.id, {
+    bloggerDescription: bloggerDescription
+  })
     .then(user => res.status(200).json({ user: user, success: true }))
     .catch(err => res.status(400).json({ err: err, success: false }));
 };
 
-exports.changeGeneralBioVlogger = (req, res) => {
-  const { generalBioVlogger } = req.body;
-  Users.findByIdAndUpdate(req.user.id, { generalBioVlogger: generalBioVlogger })
+exports.changeVloggerSettings = (req, res) => {
+  const { vloggerDescription, youtubeLink } = req.body;
+  Users.findByIdAndUpdate(req.user.id, {
+    vloggerDescription: vloggerDescription,
+    youtubeLink: youtubeLink
+  })
     .then(user => res.status(200).json({ user: user, success: true }))
     .catch(err => res.status(400).json({ err: err, success: false }));
 };
@@ -116,7 +129,7 @@ exports.changeDisplayPicture = async (req, res) => {
   // .then(user => {
   //   if (user.displayPicture) {
   //     fs.unlink(user.displayPicture, (err) => {
-  //       if(err){ 
+  //       if(err){
   //         console.log(err);
   //       }
   //       console.log("file deleted");
@@ -156,11 +169,11 @@ exports.fetchDisplayPicture = async (req, res) => {
 };
 
 exports.deleteDisplayPicture = async (req, res) => {
-  await Users.findOneAndUpdate(req.user.id, {displayPicture: null})
+  await Users.findOneAndUpdate(req.user.id, { displayPicture: null })
     .then(user => {
       return res.json({
         user: user
       });
     })
     .catch(err => console.log(err));
-}
+};
