@@ -99,8 +99,7 @@ exports.updateProduct = (req, res) => {
     {
       productName: productName,
       quantity: quantity,
-      price: price,
-      updatedAt: Date.now()
+      price: price
     }
   )
     .then(product => res.status(200).json({ success: true, product: product }))
@@ -109,16 +108,30 @@ exports.updateProduct = (req, res) => {
 
 exports.fetchAllProducts = (req, res) => {
   Products.find({ deletedAt: null })
+    .sort({ createdAt: -1 })
     .then(product => res.status(200).json({ success: true, products: product }))
     .catch(err => res.status(400).json({ success: false, error: err }));
 };
 /**
  * Fetches the logged in current user's Products
  */
-exports.fetchProductsByUser = (req, res) => {
-  Products.find({ deletedAt: null, userId: req.user.id })
-    .then(product => res.status(200).json({ success: true, products: product }))
-    .catch(err => res.status(400).json({ success: false, error: err }));
+exports.fetchLatestProductsByUser = (req, res) => {
+  if (req.query.limit) {
+    Products.find({ deletedAt: null, userId: req.user.id })
+      .sort({ createdAt: -1 })
+      .limit(parseInt(req.query.limit))
+      .then(product =>
+        res.status(200).json({ success: true, products: product })
+      )
+      .catch(err => res.status(400).json({ success: false, error: err }));
+  } else {
+    Products.find({ deletedAt: null, userId: req.user.id })
+      .sort({ createdAt: -1 })
+      .then(product =>
+        res.status(200).json({ success: true, products: product })
+      )
+      .catch(err => res.status(400).json({ success: false, error: err }));
+  }
 };
 
 exports.fetchSingleProductDetails = (req, res) => {
@@ -129,6 +142,7 @@ exports.fetchSingleProductDetails = (req, res) => {
 
 exports.fetchProductsByAlbums = (req, res) => {
   Products.find({ albumId: req.body.albumId, deletedAt: null })
+    .sort({ createdAt: -1 })
     .then(product => res.status(200).json({ success: true, products: product }))
     .catch(err => res.status(400).json({ success: false, error: err }));
 };

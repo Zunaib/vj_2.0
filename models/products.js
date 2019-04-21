@@ -20,9 +20,7 @@ const productSchema = new mongoose.Schema(
       type: Number,
       default: null
     },
-    images: [
-      String
-    ],
+    images: [String],
     likes: {
       type: Number,
       default: 0
@@ -35,7 +33,7 @@ const productSchema = new mongoose.Schema(
       type: Number,
       default: 0
     },
-    discount:{
+    discount: {
       type: Number,
       default: 0
     },
@@ -50,9 +48,7 @@ const productSchema = new mongoose.Schema(
         }
       }
     ],
-    sizes: [
-      String
-    ],
+    sizes: [String],
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Users",
@@ -63,19 +59,20 @@ const productSchema = new mongoose.Schema(
       ref: "Albums",
       default: null
     },
-    createdAt: {
-      type: Date,
-      default: Date.now()
-    },
-    updatedAt: {
-      type: Date,
-      default: Date.now()
-    },
+    // createdAt: {
+    //   type: Date,
+    //   default: Date.now()
+    // },
+    // updatedAt: {
+    //   type: Date,
+    //   default: Date.now()
+    // },
     deletedAt: {
       type: Date,
       default: null
     }
   },
+  { timestamps: true },
   { collection: "Products" }
 );
 

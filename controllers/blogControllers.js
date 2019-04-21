@@ -31,8 +31,7 @@ exports.updateBlog = (req, res) => {
     {
       title: title,
       description: description,
-      content: content,
-      updatedAt: Date.now()
+      content: content
     }
   )
     .then(blog => res.status(200).json({ success: true, blog: blog }))

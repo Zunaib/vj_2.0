@@ -44,19 +44,20 @@ const blogSchema = new mongoose.Schema(
       ref: "Users",
       required: true
     },
-    createdAt: {
-      type: Date,
-      default: Date.now()
-    },
-    updatedAt: {
-      type: Date,
-      default: Date.now()
-    },
+    // createdAt: {
+    //   type: Date,
+    //   default: Date.now()
+    // },
+    // updatedAt: {
+    //   type: Date,
+    //   default: Date.now()
+    // },
     deletedAt: {
       type: Date,
       default: null
     }
   },
+  { timestamps: true },
   { collection: "Blogs" }
 );
 

@@ -113,19 +113,20 @@ const userSchema = new mongoose.Schema(
         ref: "Products",
       },
     }],
-    createdAt: {
-      type: Date,
-      default: Date.now()
-    },
-    updatedAt: {
-      type: Date,
-      default: Date.now()
-    },
+    // createdAt: {
+    //   type: Date,
+    //   default: Date.now()
+    // },
+    // updatedAt: {
+    //   type: Date,
+    //   default: Date.now()
+    // },
     deletedAt: {
       type: Date,
       default: null
     }
   },
+  { timestamps: true },
   { collection: "Users" },
 );
 

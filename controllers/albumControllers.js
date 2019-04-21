@@ -1,4 +1,5 @@
 const Albums = require("../models/albums");
+const fs = require("fs");
 
 exports.createAlbum = async (req, res) => {
   const { albumName, year, season, description } = req.body;
@@ -43,14 +44,27 @@ exports.deleteAlbum = (req, res) => {
     .catch(err => res.json({ err: err }));
 };
 
-exports.fetchAlbumsByUser = (req, res) => {
-  Albums.find({ deletedAt: null, userId: req.user.id })
-    .then(album => res.status(200).json({ success: true, albums: album }))
-    .catch(err => res.status(400).json({ success: false, error: err }));
+exports.fetchLatestAlbumsByUser = (req, res) => {
+  if (req.query.limit) {
+    Albums.find({ deletedAt: null, userId: req.user.id })
+      .sort({ createdAt: -1 })
+      .limit(parseInt(req.query.limit))
+      .then(album => res.status(200).json({ success: true, albums: album }))
+      .catch(err => res.status(400).json({ success: false, error: err }));
+  } else {
+    Albums.find({ deletedAt: null, userId: req.user.id })
+      .sort({ createdAt: -1 })
+      .then(album => res.status(200).json({ success: true, albums: album }))
+      .catch(err => res.status(400).json({ success: false, error: err }));
+  }
 };
 
+/**
+ * This will return All the albums in the App regardless of the designer
+ */
 exports.fetchAllAlbums = (req, res) => {
   Albums.find({ deletedAt: null })
+    .sort({ createdAt: -1 })
     .then(album => res.status(200).json({ success: true, albums: album }))
     .catch(err => res.status(400).json({ success: false, error: err }));
 };
@@ -60,7 +74,7 @@ exports.updateAlbum = (req, res) => {
   const { albumName, year } = req.body;
   Albums.updateOne(
     { _id: req.body.albumId, userId: req.user.id },
-    { albumName: albumName, year: year, updatedAt: Date.now() }
+    { albumName: albumName, year: year }
   )
     .then(album => res.status(200).json({ success: true, album: album }))
     .catch(err => res.status(400).json({ success: false, err: err }));
