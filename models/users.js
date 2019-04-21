@@ -126,8 +126,8 @@ const userSchema = new mongoose.Schema(
       default: null
     }
   },
-  { timestamps: true },
   { collection: "Users" },
+  { timestamps: true },
 );
 
 // userSchema.methods.getHashedPassword = function (password) {

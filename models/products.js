@@ -72,8 +72,8 @@ const productSchema = new mongoose.Schema(
       default: null
     }
   },
-  { timestamps: true },
-  { collection: "Products" }
+  { collection: "Products" },
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("Products", productSchema);

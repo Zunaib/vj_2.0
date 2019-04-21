@@ -31,9 +31,9 @@ const contactUsSchema = new mongoose.Schema(
       default: null
     }
   },
-  { timestamps: true },
+  { collection: "ContactUs" },
+  { timestamps: true }
 
-  { collection: "ContactUs" }
 );
 
 module.exports = mongoose.model("ContactUs", contactUsSchema);

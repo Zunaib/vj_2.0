@@ -47,8 +47,8 @@ const designerOrderSchema = new mongoose.Schema(
       default: null
     }
   },
-  { timestamps: true },
-  { collection: "DesignerOrders" }
+  { collection: "DesignerOrders" },
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("DesignerOrders", designerOrderSchema);
