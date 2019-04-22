@@ -16,7 +16,7 @@ const db = require("./config/mongo.json");
 
 //Connect to the db
 mongoose.set("useCreateIndex", true);
-mongoose.connect(db.url, { useNewUrlParser: true }, function (err, db) {
+mongoose.connect(db.url, { useNewUrlParser: true }, function(err, db) {
   if (!err) {
     console.log("Database Connected");
   }
@@ -35,7 +35,6 @@ app.use(fileUpload());
 app.use(`/assets/uploads`, express.static(`assets/uploads`));
 app.use(express.static(path.join(__dirname, "assets")));
 
-
 //All Routes
 const authRoutes = require("./routes/authRoutes");
 const contactUsRoutes = require("./routes/contactUsRoutes");
@@ -46,6 +45,8 @@ const blogRoutes = require("./routes/blogRoutes");
 const userSettingsRoutes = require("./routes/userSettingsRoutes");
 const fileUploadGFS = require("./routes/fileUploadGFS");
 const cartRoutes = require("./routes/cartRoutes");
+const orderRoutes = require("./routes/orderRoutes");
+
 /**
  * Below this the routes will not require authorization token
  */
@@ -95,8 +96,6 @@ app.get("/api/testApi", (req, res) => {
   });
 });
 
-
-
 albumRoutes(app);
 productRoutes(app);
 useAsRoutes(app);
@@ -104,6 +103,7 @@ blogRoutes(app);
 userSettingsRoutes(app);
 fileUploadGFS(app);
 cartRoutes(app);
+orderRoutes(app);
 
 //Server Connection
 const port = process.env.PORT || 5000;

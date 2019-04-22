@@ -1,5 +1,6 @@
 const Users = require("../models/users");
 const Products = require("../models/products");
+// import { calculateTotal } from "../helpers/calculateTotal";
 
 exports.addToCart = async (req, res) => {
   const { productId } = req.body;
@@ -55,9 +56,20 @@ exports.removeFromCart = async (req, res) => {
 };
 
 exports.fetchCart = async (req, res) => {
-  await Users.findById(req.user.id).lean().populate('cart.productId')
+  await Users.findById(req.user.id)
+    .lean()
+    .populate("cart.productId")
     .then(user => {
-      res.status(200).json({ cart: user.cart, success: true });
+      let total= calculateTotal(user.cart);
+      res.status(200).json({ cart: user.cart, success: true, total: total });
     })
     .catch(err => res.status(400).json({ err: err, success: false }));
+};
+
+calculateTotal = arr => {
+  let totalSum = 0;
+  arr.map(item => {
+    totalSum += item.productId.price;
+  });
+  return totalSum;
 };

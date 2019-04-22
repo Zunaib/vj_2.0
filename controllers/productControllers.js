@@ -18,7 +18,8 @@ exports.addProduct = async (req, res) => {
     fs.mkdirSync(dir);
   }
 
-  req.files.file.map(item => {
+  let arr = [].concat(req.files.file);
+  arr.map(item => {
     let filename = Date.now() + "_" + item.name;
     fileWebPath = "/assets/uploads/productImages/" + filename;
     item.mv(dir + filename);
