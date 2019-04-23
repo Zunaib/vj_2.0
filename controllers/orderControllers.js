@@ -4,7 +4,14 @@ const Users = require("../models/users");
 const Products = require("../models/products");
 
 exports.placeOrder = async (req, res) => {
-  let { orderedProducts } = req.body;
+  let {
+    orderedProducts,
+    total,
+    billingDetails,
+    saveDetails,
+    paymentMethod
+  } = req.body;
+
   //Here we will create the order of the customer
   await CustomerOrders.create({
     products: orderedProducts,
@@ -29,7 +36,19 @@ exports.placeOrder = async (req, res) => {
               status: "Active",
               customer: req.user.id,
               designer: product.userId,
-              customerOrderId: order._id
+              customerOrderId: order._id,
+              "billingDetails.firstName": billingDetails.firstName,
+              "billingDetails.lastName": billingDetails.lastName,
+              "billingDetails.dateofbirth": billingDetails.dateofbirth,
+              "billingDetails.description": billingDetails.description,
+              "billingDetails.province": billingDetails.province,
+              "billingDetails.gender": billingDetails.gender,
+              "billingDetails.streetAddress": billingDetails.streetAddress,
+              "billingDetails.city": billingDetails.city,
+              "billingDetails.zipcode": billingDetails.zipcode,
+              "billingDetails.country": billingDetails.country,
+              "billingDetails.phone": billingDetails.phone,
+              paymentMethod: paymentMethod
             })
               .then(order => console.log("Designer Order Completed"))
               .catch(err => res.status(400).json({ err: err, success: false }));
@@ -44,12 +63,38 @@ exports.placeOrder = async (req, res) => {
     .then(order => console.log("Customer Order Completed"))
     .catch(err => res.status(400).json({ err: err, success: false }));
 
-  Users.findByIdAndUpdate(req.user.id, { cart: [] })
-    .lean()
-    .then(user =>
-      res.status(200).json({ msg: "Order Placed Successfully", success: true })
-    )
-    .catch(err => res.status(400).json({ err: err, success: false }));
+  if (saveDetails) {
+    Users.findByIdAndUpdate(req.user.id, {
+      cart: [],
+      firstName: billingDetails.firstName,
+      lastName: billingDetails.lastName,
+      dateofbirth: billingDetails.dateofbirth,
+      description: billingDetails.description,
+      province: billingDetails.province,
+      gender: billingDetails.gender,
+      streetAddress: billingDetails.streetAddress,
+      city: billingDetails.city,
+      zipcode: billingDetails.zipcode,
+      country: billingDetails.country,
+      phone: billingDetails.phone
+    })
+      .lean()
+      .then(user =>
+        res
+          .status(200)
+          .json({ msg: "Order Placed Successfully", success: true })
+      )
+      .catch(err => res.status(400).json({ err: err, success: false }));
+  } else {
+    Users.findByIdAndUpdate(req.user.id, { cart: [] })
+      .lean()
+      .then(user =>
+        res
+          .status(200)
+          .json({ msg: "Order Placed Successfully", success: true })
+      )
+      .catch(err => res.status(400).json({ err: err, success: false }));
+  }
 };
 
 exports.fetchCustomerOrders = (req, res) => {
@@ -80,7 +125,7 @@ exports.cancelOrderProductByCustomer = (req, res) => {
   })
     .select("products")
     .then(order => {
-      console.log(order.products)
+      console.log(order.products);
     })
     .catch(err => console.log(err));
 };

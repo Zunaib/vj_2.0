@@ -34,9 +34,27 @@ const designerOrderSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Users"
     },
-    customerOrderId:{
+    customerOrderId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "CustomerOrders"
+    },
+    billingDetails: {
+      firstName: String,
+      lastName: String,
+      dateofbirth: String,
+      description: String,
+      province: String,
+      gender: String,
+      streetAddress: String,
+      city: String,
+      zipcode: String,
+      country: String,
+      phone: String
+    },
+    paymentMethod : {
+      type: String,
+      default: "Cash on Delivery",
+      required: true
     },
     // createdAt: {
     //   type: Date,

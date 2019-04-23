@@ -21,6 +21,7 @@ exports.fetchUserSettings = (req, res) => {
  * General User Settings for All the Users
  */
 exports.changeSettings = async (req, res) => {
+  // console.log(req.body);
   let fileWebPath;
   if (req.files === null) {
     console.log("No files uploaded");
@@ -37,7 +38,7 @@ exports.changeSettings = async (req, res) => {
     fileWebPath = "/assets/uploads/userDP/" + filename;
   }
 
-  const {
+  let {
     firstName,
     lastName,
     dateofbirth,
@@ -51,7 +52,7 @@ exports.changeSettings = async (req, res) => {
     phone
   } = req.body;
 
-  Users.findByIdAndUpdate(req.user.id, {
+  await Users.findByIdAndUpdate(req.user.id, {
     firstName: firstName,
     lastName: lastName,
     dateofbirth: dateofbirth,
@@ -72,6 +73,7 @@ exports.changeSettings = async (req, res) => {
       });
     })
     .catch(err => {
+      console.log(err);
       return res.status(400).json({
         success: "Update_Failed"
       });
