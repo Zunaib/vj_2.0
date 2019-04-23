@@ -34,6 +34,10 @@ const designerOrderSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Users"
     },
+    customerOrderId:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "CustomerOrders"
+    },
     // createdAt: {
     //   type: Date,
     //   default: Date.now()
