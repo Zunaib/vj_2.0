@@ -23,8 +23,20 @@ exports.createAlbum = async (req, res) => {
     description: description,
     thumbnail: fileWebPath
   })
-    .then(album => res.json({ success: true, album: album }))
-    .catch(err => res.json({ success: false, err: err }));
+    .then(album =>
+      res.json({
+        success: true,
+        album: album,
+        message: "Album Created Successfully"
+      })
+    )
+    .catch(err =>
+      res.json({
+        success: false,
+        err: err,
+        message: "Error occured while creating Album"
+      })
+    );
 };
 
 exports.deleteAlbum = (req, res) => {
@@ -34,7 +46,9 @@ exports.deleteAlbum = (req, res) => {
   )
     .then(album => {
       if (album.n > 0) {
-        res.status(200).json({ success: true, message: "Album Deleted" });
+        res
+          .status(200)
+          .json({ success: true, message: "Album Deleted Successfully" });
       } else {
         res
           .status(401)
@@ -49,13 +63,27 @@ exports.fetchAlbumsByUser = (req, res) => {
     Albums.find({ deletedAt: null, userId: req.user.id })
       .sort({ createdAt: -1 })
       .limit(parseInt(req.query.limit))
-      .then(album => res.status(200).json({ success: true, albums: album }))
-      .catch(err => res.status(400).json({ success: false, error: err }));
+      .then(album =>
+        res.status(200).json({
+          success: true,
+          albums: album,
+          message: "Albums Fetched Successfully"
+        })
+      )
+      .catch(err =>
+        res
+          .status(400)
+          .json({ success: false, message: "Something went wrong" })
+      );
   } else {
     Albums.find({ deletedAt: null, userId: req.user.id })
       .sort({ createdAt: -1 })
       .then(album => res.status(200).json({ success: true, albums: album }))
-      .catch(err => res.status(400).json({ success: false, error: err }));
+      .catch(err =>
+        res
+          .status(400)
+          .json({ success: false, message: "Something went wrong" })
+      );
   }
 };
 
@@ -65,8 +93,16 @@ exports.fetchAlbumsByUser = (req, res) => {
 exports.fetchAllAlbums = (req, res) => {
   Albums.find({ deletedAt: null })
     .sort({ createdAt: -1 })
-    .then(album => res.status(200).json({ success: true, albums: album }))
-    .catch(err => res.status(400).json({ success: false, error: err }));
+    .then(album =>
+      res.status(200).json({
+        success: true,
+        albums: album,
+        message: "Albums Fetched Successfully"
+      })
+    )
+    .catch(err =>
+      res.status(400).json({ success: false, message: "Something went wrong" })
+    );
 };
 
 //need to be changed and tested
@@ -76,13 +112,29 @@ exports.updateAlbum = (req, res) => {
     { _id: req.body.albumId, userId: req.user.id },
     { albumName: albumName, year: year }
   )
-    .then(album => res.status(200).json({ success: true, album: album }))
-    .catch(err => res.status(400).json({ success: false, err: err }));
+    .then(album =>
+      res.status(200).json({
+        success: true,
+        album: album,
+        message: "Albums Updated Successfully"
+      })
+    )
+    .catch(err =>
+      res.status(400).json({ success: false, message: "Something went wrong" })
+    );
 };
 
 exports.fetchSingleAlbum = (req, res) => {
   Albums.findById(req.body.albumId)
     .lean()
-    .then(album => res.status(200).json({ success: true, album: album }))
-    .catch(err => res.status(400).json({ success: false, error: err }));
+    .then(album =>
+      res.status(200).json({
+        success: true,
+        album: album,
+        message: "Album Fetched Successfully"
+      })
+    )
+    .catch(err =>
+      res.status(400).json({ success: false, message: "Something went wrong" })
+    );
 };

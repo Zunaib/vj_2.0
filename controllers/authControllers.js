@@ -32,13 +32,14 @@ exports.signup = async (req, res) => {
           .then(user => {
             return res.status(200).json({
               success: true,
-              user: user
+              user: user,
+              message: "User Signup Successful "
             });
           })
           .catch(err => {
             return res.status(400).json({
               success: false,
-              message: err
+              message: "Something went wrong"
             });
           });
       });
@@ -50,7 +51,7 @@ exports.login = (req, res) => {
   let { email, password } = req.body;
   Users.findOne({ email: email })
     .then(user => {
-      bcrypt.compare(password, user.password, function (err, isMatch) {
+      bcrypt.compare(password, user.password, function(err, isMatch) {
         if (isMatch) {
           const payload = {
             id: user.id,
@@ -78,12 +79,12 @@ exports.login = (req, res) => {
             }
           });
         } else {
-          res.status(404).send({ message: "Pass_Mismatch" });
+          res.status(404).send({ message: "Password Mismatch" });
         }
       });
     })
     .catch(err => {
-      res.status(404).send({ message: "Email_NotFound" });
+      res.status(404).send({ message: "Email Not Found" });
     });
 };
 

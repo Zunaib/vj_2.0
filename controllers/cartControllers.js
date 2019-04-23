@@ -33,10 +33,15 @@ exports.addToCart = async (req, res) => {
           .then(user => {
             return res.status(200).json({
               cart: cart,
-              success: true
+              success: true,
+              message: "Added to Cart Successfully"
             });
           })
-          .catch(err => res.status(400).json({ err: err, success: false }));
+          .catch(err =>
+            res
+              .status(400)
+              .json({ message: "Something went wrong", success: false })
+          );
       }
     });
 };
@@ -49,10 +54,13 @@ exports.removeFromCart = async (req, res) => {
     .then(user =>
       res.status(200).json({
         cart: user.cart,
-        success: true
+        success: true,
+        message: "Removed from Cart Successfully"
       })
     )
-    .catch(err => res.status(400).json({ err: err, success: false }));
+    .catch(err =>
+      res.status(400).json({ message: "Something went wrong", success: false })
+    );
 };
 
 exports.fetchCart = async (req, res) => {
@@ -60,10 +68,17 @@ exports.fetchCart = async (req, res) => {
     .lean()
     .populate("cart.productId")
     .then(user => {
-      let total= calculateTotal(user.cart);
-      res.status(200).json({ cart: user.cart, success: true, total: total });
+      let total = calculateTotal(user.cart);
+      res.status(200).json({
+        cart: user.cart,
+        success: true,
+        total: total,
+        message: "Cart Fetched Successfully"
+      });
     })
-    .catch(err => res.status(400).json({ err: err, success: false }));
+    .catch(err =>
+      res.status(400).json({ message: "Something went wrong", success: false })
+    );
 };
 
 calculateTotal = arr => {

@@ -26,29 +26,6 @@ exports.addProduct = async (req, res) => {
     productImages.push(fileWebPath);
   });
 
-  // let filename1 = Date.now() + "_" + file1.name || null;
-  // let filename2 = Date.now() + "_" + file2.name || null;
-  // let filename3 = Date.now() + "_" + file3.name || null;
-  // let filename4 = Date.now() + "_" + file4.name || null;
-  // let filename5 = Date.now() + "_" + file5.name || null;
-
-  // await req.files.file1.mv(dir + filename1);
-  // await req.files.file2.mv(dir + filename2);
-  // await req.files.file3.mv(dir + filename3);
-  // await req.files.file4.mv(dir + filename4);
-  // await req.files.file5.mv(dir + filename5);
-
-  // let fileWebPath1 = "/assets/uploads/productImages/" + filename1;
-  // let fileWebPath2 = "/assets/uploads/productImages/" + filename2;
-  // let fileWebPath3 = "/assets/uploads/productImages/" + filename3;
-  // let fileWebPath4 = "/assets/uploads/productImages/" + filename4;
-  // let fileWebPath5 = "/assets/uploads/productImages/" + filename5;
-  // productImages.push(fileWebPath1);
-  // productImages.push(fileWebPath2);
-  // productImages.push(fileWebPath3);
-  // productImages.push(fileWebPath4);
-  // productImages.push(fileWebPath5);
-
   if (albumId) {
     Products.create({
       productName: productName,
@@ -61,9 +38,19 @@ exports.addProduct = async (req, res) => {
       discount: discount
     })
       .then(product =>
-        res.status(200).json({ success: true, product: product })
+        res
+          .status(200)
+          .json({
+            success: true,
+            product: product,
+            message: "Product Added Successfully"
+          })
       )
-      .catch(err => res.status(400).json({ success: false, error: err }));
+      .catch(err =>
+        res
+          .status(400)
+          .json({ success: false, message: "Something went wrong" })
+      );
   } else {
     Products.create({
       productName: productName,
@@ -76,9 +63,19 @@ exports.addProduct = async (req, res) => {
       discount: discount
     })
       .then(product =>
-        res.status(200).json({ success: true, product: product })
+        res
+          .status(200)
+          .json({
+            success: true,
+            product: product,
+            message: "Product Added Successfully"
+          })
       )
-      .catch(err => res.status(400).json({ success: false, error: err }));
+      .catch(err =>
+        res
+          .status(400)
+          .json({ success: false, message: "Something went wrong" })
+      );
   }
 };
 
@@ -88,9 +85,13 @@ exports.deleteProduct = (req, res) => {
     { deletedAt: Date.now() }
   )
     .then(product =>
-      res.status(200).json({ success: true, message: "Product Deleted" })
+      res
+        .status(200)
+        .json({ success: true, message: "Product Deleted Successfully" })
     )
-    .catch(err => res.status(401).json({ success: false, err: err }));
+    .catch(err =>
+      res.status(401).json({ success: false, message: "Something went wrong" })
+    );
 };
 
 exports.updateProduct = (req, res) => {
@@ -103,15 +104,35 @@ exports.updateProduct = (req, res) => {
       price: price
     }
   )
-    .then(product => res.status(200).json({ success: true, product: product }))
-    .catch(err => res.status(400).json({ success: false, err: err }));
+    .then(product =>
+      res
+        .status(200)
+        .json({
+          success: true,
+          product: product,
+          message: "Product Updated Successfully"
+        })
+    )
+    .catch(err =>
+      res.status(400).json({ success: false, message: "Something went wrong" })
+    );
 };
 
 exports.fetchAllProducts = (req, res) => {
   Products.find({ deletedAt: null })
     .sort({ createdAt: -1 })
-    .then(product => res.status(200).json({ success: true, products: product }))
-    .catch(err => res.status(400).json({ success: false, error: err }));
+    .then(product =>
+      res
+        .status(200)
+        .json({
+          success: true,
+          products: product,
+          message: "Products Fetched Successfully"
+        })
+    )
+    .catch(err =>
+      res.status(400).json({ success: false, message: "Something went wrong" })
+    );
 };
 /**
  * Fetches the logged in current user's Products
@@ -122,28 +143,68 @@ exports.fetchProductsByUser = (req, res) => {
       .sort({ createdAt: -1 })
       .limit(parseInt(req.query.limit))
       .then(product =>
-        res.status(200).json({ success: true, products: product })
+        res
+          .status(200)
+          .json({
+            success: true,
+            products: product,
+            message: "Products Fetched Successfully"
+          })
       )
-      .catch(err => res.status(400).json({ success: false, error: err }));
+      .catch(err =>
+        res
+          .status(400)
+          .json({ success: false, message: "Something went wrong" })
+      );
   } else {
     Products.find({ deletedAt: null, userId: req.user.id })
       .sort({ createdAt: -1 })
       .then(product =>
-        res.status(200).json({ success: true, products: product })
+        res
+          .status(200)
+          .json({
+            success: true,
+            products: product,
+            message: "Products Fetched Successfully"
+          })
       )
-      .catch(err => res.status(400).json({ success: false, error: err }));
+      .catch(err =>
+        res
+          .status(400)
+          .json({ success: false, message: "Something went wrong" })
+      );
   }
 };
 
 exports.fetchSingleProductDetails = (req, res) => {
   Products.findById(req.body.productId)
-    .then(product => res.status(200).json({ success: true, products: product }))
-    .catch(err => res.status(400).json({ success: false, error: err }));
+    .then(product =>
+      res
+        .status(200)
+        .json({
+          success: true,
+          products: product,
+          message: "Product Fetched Successfully"
+        })
+    )
+    .catch(err =>
+      res.status(400).json({ success: false, message: "Something went wrong" })
+    );
 };
 
 exports.fetchProductsByAlbums = (req, res) => {
   Products.find({ albumId: req.body.albumId, deletedAt: null })
     .sort({ createdAt: -1 })
-    .then(product => res.status(200).json({ success: true, products: product }))
-    .catch(err => res.status(400).json({ success: false, error: err }));
+    .then(product =>
+      res
+        .status(200)
+        .json({
+          success: true,
+          products: product,
+          message: "Products Fetched Successfully"
+        })
+    )
+    .catch(err =>
+      res.status(400).json({ success: false, message: "Something went wrong" })
+    );
 };

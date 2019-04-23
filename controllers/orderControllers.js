@@ -19,8 +19,6 @@ exports.placeOrder = async (req, res) => {
     total: orderedProducts.total
   })
     .then(order => {
-      console.log("Customer Order Completed");
-
       //Here orders are created to individual designer for each product of their product
       orderedProducts.map(orderProduct => {
         // console.log(orderProduct);
@@ -47,18 +45,44 @@ exports.placeOrder = async (req, res) => {
               "billingDetails.phone": billingDetails.phone,
               paymentMethod: paymentMethod
             })
-              .then(order => console.log("Designer Order Completed"))
-              .catch(err => res.status(400).json({ err: err, success: false }));
+              .then(order =>
+                res
+                  .status(200)
+                  .json({
+                    message: "Designer's Orders Created Successfully",
+                    success: true
+                  })
+              )
+              .catch(err =>
+                res
+                  .status(400)
+                  .json({ message: "Something went wrong", success: false })
+              );
           })
-          .catch(err => res.status(400).json({ err: err, success: false }));
+          .catch(err =>
+            res
+              .status(400)
+              .json({ message: "Something went wrong", success: false })
+          );
       });
     })
-    .catch(err => res.status(400).json({ err: err, success: false }));
+    .catch(err =>
+      res.status(400).json({ message: "Something went wrong", success: false })
+    );
 
   //Here we will create the order of the customer
   CustomerOrders.create({ products: orderedProducts, customerId: req.user.id })
-    .then(order => console.log("Customer Order Completed"))
-    .catch(err => res.status(400).json({ err: err, success: false }));
+    .then(order =>
+      res
+        .status(200)
+        .json({
+          message: "Customer's Orders Created Successfully",
+          success: true
+        })
+    )
+    .catch(err =>
+      res.status(400).json({ message: "Something went wrong", success: false })
+    );
 
   if (saveDetails) {
     Users.findByIdAndUpdate(req.user.id, {
@@ -76,18 +100,26 @@ exports.placeOrder = async (req, res) => {
       .then(user =>
         res
           .status(200)
-          .json({ msg: "Order Placed Successfully", success: true })
+          .json({ message: "Order Placed Successfully", success: true })
       )
-      .catch(err => res.status(400).json({ err: err, success: false }));
+      .catch(err =>
+        res
+          .status(400)
+          .json({ message: "Something went wrong", success: false })
+      );
   } else {
     Users.findByIdAndUpdate(req.user.id, { cart: [] })
       .lean()
       .then(user =>
         res
           .status(200)
-          .json({ msg: "Order Placed Successfully", success: true })
+          .json({ message: "Order Placed Successfully", success: true })
       )
-      .catch(err => res.status(400).json({ err: err, success: false }));
+      .catch(err =>
+        res
+          .status(400)
+          .json({ message: "Something went wrong", success: false })
+      );
   }
 };
 
@@ -95,16 +127,36 @@ exports.fetchCustomerOrders = (req, res) => {
   CustomerOrders.find({ customerId: req.user.id })
     .select("products")
     .lean()
-    .then(orders => res.status(200).json({ orders: orders, success: true }))
-    .catch(err => res.status(400).json({ err: err, success: false }));
+    .then(orders =>
+      res
+        .status(200)
+        .json({
+          orders: orders,
+          success: true,
+          message: "Customer Orders Fetched Successfully"
+        })
+    )
+    .catch(err =>
+      res.status(400).json({ message: "Something went wrong", success: false })
+    );
 };
 
 exports.fetchDesignerOrders = (req, res) => {
   DesignerOrders.find({ designer: req.user.id })
     .lean()
     .sort({ status: "asc" })
-    .then(orders => res.status(200).json({ orders: orders, success: true }))
-    .catch(err => res.status(400).json({ err: err, success: false }));
+    .then(orders =>
+      res
+        .status(200)
+        .json({
+          orders: orders,
+          success: true,
+          message: "Customer Orders Fetched Successfully"
+        })
+    )
+    .catch(err =>
+      res.status(400).json({ message: "Something went wrong", success: false })
+    );
 };
 
 /**

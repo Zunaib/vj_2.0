@@ -7,12 +7,14 @@ exports.fetchUserSettings = (req, res) => {
     .then(user => {
       return res.status(200).json({
         success: true,
-        user: user
+        user: user,
+        message: "User Settings Fetched Successfully"
       });
     })
     .catch(err => {
       return res.status(400).json({
-        success: false
+        success: false,
+        message: "Something went wrong"
       });
     });
 };
@@ -68,14 +70,15 @@ exports.changeSettings = async (req, res) => {
   })
     .then(user => {
       return res.status(200).json({
-        success: "Updated",
-        user: user
+        success: true,
+        user: user,
+        message: "General Settings Changed Successfully"
       });
     })
     .catch(err => {
-      console.log(err);
       return res.status(400).json({
-        success: "Update_Failed"
+        success: false,
+        message: "Something went wrong"
       });
     });
 };
@@ -93,8 +96,20 @@ exports.changeDesignerSettings = (req, res) => {
     pinterestLink: pinterestLink,
     behanceLink: behanceLink
   })
-    .then(user => res.status(200).json({ user: user, success: true }))
-    .catch(err => res.status(400).json({ err: err, success: false }));
+    .then(user =>
+      res
+        .status(200)
+        .json({
+          user: user,
+          success: true,
+          message: "Designer Settings Changed Successfully"
+        })
+    )
+    .catch(err =>
+      res
+        .status(400)
+        .json({ err: err, success: false, message: "Something went wrong" })
+    );
 };
 
 exports.changeBloggerSettings = (req, res) => {
@@ -102,8 +117,20 @@ exports.changeBloggerSettings = (req, res) => {
   Users.findByIdAndUpdate(req.user.id, {
     bloggerDescription: bloggerDescription
   })
-    .then(user => res.status(200).json({ user: user, success: true }))
-    .catch(err => res.status(400).json({ err: err, success: false }));
+    .then(user =>
+      res
+        .status(200)
+        .json({
+          user: user,
+          success: true,
+          message: "Blogger Settings Changed Successfully"
+        })
+    )
+    .catch(err =>
+      res
+        .status(400)
+        .json({ err: err, success: false, message: "Something went wrong" })
+    );
 };
 
 exports.changeVloggerSettings = (req, res) => {
@@ -112,8 +139,20 @@ exports.changeVloggerSettings = (req, res) => {
     vloggerDescription: vloggerDescription,
     youtubeLink: youtubeLink
   })
-    .then(user => res.status(200).json({ user: user, success: true }))
-    .catch(err => res.status(400).json({ err: err, success: false }));
+    .then(user =>
+      res
+        .status(200)
+        .json({
+          user: user,
+          success: true,
+          message: "Vlogger Settings Changed Successfully"
+        })
+    )
+    .catch(err =>
+      res
+        .status(400)
+        .json({ err: err, success: false, message: "Something went wrong" })
+    );
 };
 
 exports.fetchGeneralBioDesigner = (req, res) => {
@@ -121,9 +160,17 @@ exports.fetchGeneralBioDesigner = (req, res) => {
     .then(user =>
       res
         .status(200)
-        .json({ generalBioDesigner: user.generalBioDesigner, success: true })
+        .json({
+          generalBioDesigner: user.generalBioDesigner,
+          success: true,
+          message: "General Bio Designer Fetched Successfully"
+        })
     )
-    .catch(err => res.status(400).json({ err: err, success: false }));
+    .catch(err =>
+      res
+        .status(400)
+        .json({ err: err, success: false, message: "Something went wrong" })
+    );
 };
 
 exports.fetchGeneralBioBlogger = (req, res) => {
@@ -131,9 +178,17 @@ exports.fetchGeneralBioBlogger = (req, res) => {
     .then(user =>
       res
         .status(200)
-        .json({ generalBioBlogger: user.generalBioBlogger, success: true })
+        .json({
+          generalBioBlogger: user.generalBioBlogger,
+          success: true,
+          message: "General Bio Blogger Fetched Successfully"
+        })
     )
-    .catch(err => res.status(400).json({ err: err, success: false }));
+    .catch(err =>
+      res
+        .status(400)
+        .json({ err: err, success: false, message: "Something went wrong" })
+    );
 };
 
 exports.fetchGeneralBioVlogger = (req, res) => {
@@ -141,24 +196,18 @@ exports.fetchGeneralBioVlogger = (req, res) => {
     .then(user =>
       res
         .status(200)
-        .json({ generalBioVlogger: user.generalBioVlogger, success: true })
+        .json({
+          generalBioVlogger: user.generalBioVlogger,
+          success: true,
+          message: "General Bio Vlogger Fetched Successfully"
+        })
     )
-    .catch(err => res.status(400).json({ err: err, success: false }));
+    .catch(err =>
+      res.status(400).json({ message: "Something went wrong", success: false })
+    );
 };
 
 exports.changeDisplayPicture = async (req, res) => {
-  // await Users.findById(req.user.id)
-  // .then(user => {
-  //   if (user.displayPicture) {
-  //     fs.unlink(user.displayPicture, (err) => {
-  //       if(err){
-  //         console.log(err);
-  //       }
-  //       console.log("file deleted");
-  //     });
-  //   }
-  // });
-
   if (req.files === null) {
     console.log("No files uploaded");
   } else {
@@ -173,10 +222,20 @@ exports.changeDisplayPicture = async (req, res) => {
 
     let fileWebPath = "/assets/uploads/userDP/" + filename;
     await Users.findOneAndUpdate(req.user.id, { displayPicture: fileWebPath })
-      .then(user => res.status(200).json({ user: user, success: true }))
-      .catch(err => res.status(500).json({ err: err, success: false }));
-
-    // res.json({ success: true });
+      .then(user =>
+        res
+          .status(200)
+          .json({
+            user: user,
+            success: true,
+            message: "Display Picture Changed Successfully"
+          })
+      )
+      .catch(err =>
+        res
+          .status(400)
+          .json({ err: err, success: false, message: "Something went wrong" })
+      );
   }
 };
 
@@ -184,18 +243,24 @@ exports.fetchDisplayPicture = async (req, res) => {
   await Users.findById(req.user.id)
     .then(user => {
       return res.json({
-        displayPicture: user.displayPicture
+        displayPicture: user.displayPicture,
+        message: "Display Picture Fetched Successfully"
       });
     })
-    .catch(err => console.log(err));
+    .catch(err =>
+      res.status(400).json({ message: "Something went wrong", success: false })
+    );
 };
 
 exports.deleteDisplayPicture = async (req, res) => {
   await Users.findOneAndUpdate(req.user.id, { displayPicture: null })
     .then(user => {
       return res.json({
-        user: user
+        user: user,
+        message: "Display Picture Deleted Successfully"
       });
     })
-    .catch(err => console.log(err));
+    .catch(err =>
+      res.status(400).json({ message: "Something went wrong", success: false })
+    );
 };
