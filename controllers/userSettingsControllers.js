@@ -17,7 +17,26 @@ exports.fetchUserSettings = (req, res) => {
     });
 };
 
+/**
+ * General User Settings for All the Users
+ */
 exports.changeSettings = (req, res) => {
+  let fileWebPath;
+  if (req.files === null) {
+    console.log("No files uploaded");
+  } else {
+    let dir = "assets/uploads/userDP/";
+    let filename = req.user.id + "_" + req.files.file.name;
+
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
+    }
+
+    await req.files.file.mv(dir + filename);
+
+    fileWebPath = "/assets/uploads/userDP/" + filename;
+  }
+
   const {
     firstName,
     lastName,
@@ -43,7 +62,8 @@ exports.changeSettings = (req, res) => {
     city: city,
     zipcode: zipcode,
     country: country,
-    phone: phone
+    phone: phone,
+    displayPicture: fileWebPath
   })
     .then(user => {
       return res.status(200).json({
