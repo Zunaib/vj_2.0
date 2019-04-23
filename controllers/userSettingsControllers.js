@@ -20,7 +20,7 @@ exports.fetchUserSettings = (req, res) => {
 /**
  * General User Settings for All the Users
  */
-exports.changeSettings = (req, res) => {
+exports.changeSettings = async (req, res) => {
   let fileWebPath;
   if (req.files === null) {
     console.log("No files uploaded");
