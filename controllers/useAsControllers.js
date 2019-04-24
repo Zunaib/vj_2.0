@@ -1,8 +1,8 @@
 const Users = require("../models/users");
 
 exports.useAsCustomer = (req, res) => {
-  Users.updateOne(
-    { userId: req.user.id },
+  Users.findOneAndUpdate(
+    { _id: req.user.id },
     {
       isCustomer: true,
       isDesigner: false,
@@ -11,20 +11,16 @@ exports.useAsCustomer = (req, res) => {
     }
   )
     .then(user => {
-      if (user.n > 0) {
-        res.status(200).json({ success: true, message: "Using as Customer" });
-      } else {
-        res
-          .status(401)
-          .json({ success: false, message: "Something went wrong" });
-      }
+      res.status(200).json({ success: true, message: "Using as Customer" });
     })
-    .catch(err => res.json({ err: err }));
+    .catch(err =>
+      res.status(401).json({ success: false, message: "Something went wrong" })
+    );
 };
 
 exports.useAsDesigner = (req, res) => {
-  Users.findByIdAndUpdate(
-    req.user.id,
+  Users.findOneAndUpdate(
+    { _id: req.user.id },
     {
       isCustomer: false,
       isDesigner: true,
@@ -33,20 +29,16 @@ exports.useAsDesigner = (req, res) => {
     }
   )
     .then(user => {
-      if (user.n > 0) {
-        res.status(200).json({ success: true, message: "Using as Designer" });
-      } else {
-        res
-          .status(401)
-          .json({ success: false, message: "Something went wrong" });
-      }
+      res.status(200).json({ success: true, message: "Using as Designer" });
     })
-    .catch(err => res.json({ err: err }));
+    .catch(err =>
+      res.status(401).json({ success: false, message: "Something went wrong" })
+    );
 };
 
 exports.useAsBlogger = (req, res) => {
-  Users.updateOne(
-    { userId: req.user.id },
+  Users.findOneAndUpdate(
+    { _id: req.user.id },
     {
       isCustomer: false,
       isDesigner: false,
@@ -55,20 +47,16 @@ exports.useAsBlogger = (req, res) => {
     }
   )
     .then(user => {
-      if (user.isDesigner) {
-        res.status(200).json({ success: true, message: "Using as Blogger" });
-      } else {
-        res
-          .status(401)
-          .json({ success: false, message: "Something went wrong" });
-      }
+      res.status(200).json({ success: true, message: "Using as Blogger" });
     })
-    .catch(err => res.json({ err: err }));
+    .catch(err =>
+      res.status(401).json({ success: false, message: "Something went wrong" })
+    );
 };
 
 exports.useAsVlogger = (req, res) => {
-  Users.updateOne(
-    { userId: req.user.id },
+  Users.findOneAndUpdate(
+    { _id: req.user.id },
     {
       isCustomer: false,
       isDesigner: false,
@@ -77,13 +65,17 @@ exports.useAsVlogger = (req, res) => {
     }
   )
     .then(user => {
-      if (user.n > 0) {
-        res.status(200).json({ success: true, message: "Using as Vlogger" });
-      } else {
-        res
-          .status(401)
-          .json({ success: false, message: "Something went wrong" });
-      }
+      res.status(200).json({ success: true, message: "Using as Vlogger" });
     })
-    .catch(err => res.json({ err: err }));
+    .catch(err =>
+      res.status(401).json({ success: false, message: "Something went wrong" })
+    );
+};
+
+exports.fetchUserTypeFlags = (req, res) => {
+  Users.findById(req.user.id)
+    .select("isCustomer isDesigner isBlogger isVlogger")
+    .lean()
+    .then(user => res.status(200).json({ userFlags: user, message: "User flags fetched Successfully" }))
+    .catch(err => res.status(400).json({ err: err, message: "Something went wrong" }));
 };

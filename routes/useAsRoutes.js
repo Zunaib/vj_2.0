@@ -5,4 +5,6 @@ module.exports = app => {
   app.route("/api/useAsDesigner").get(useAsControllers.useAsDesigner);
   app.route("/api/useAsBlogger").get(useAsControllers.useAsBlogger);
   app.route("/api/useAsVlogger").get(useAsControllers.useAsVlogger);
+  app.route("/api/fetchUserTypeFlags").get(useAsControllers.fetchUserTypeFlags);
+  
 };
