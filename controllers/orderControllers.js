@@ -21,24 +21,24 @@ exports.placeOrder = async (req, res) => {
   })
     .then(order => {
       customerOrderId = order._id;
-
+      console.log("Customer Order Created Successfully");
     })
     .catch(err =>
       console.log(err)
     );
 
   orderedProducts.map(orderProduct => {
-    // console.log(orderProduct);
+    console.log(orderProduct);
 
     DesignerOrders.create({
-      product: orderProduct.productId._id,
+      product: orderProduct.productId,
       price: orderProduct.price,
       color: orderProduct.color,
       size: orderProduct.size,
       discount: orderProduct.discount,
       status: "Active",
       customer: req.user.id,
-      designer: orderProduct.productId.userId,
+      designer: orderProduct.userId,
       customerOrderId: customerOrderId,
       "billingDetails.firstName": billingDetails.firstName,
       "billingDetails.lastName": billingDetails.lastName,
@@ -99,7 +99,6 @@ exports.placeOrder = async (req, res) => {
 
 exports.fetchCustomerOrders = (req, res) => {
   CustomerOrders.find({ customerId: req.user.id })
-    .select("products")
     .lean()
     .then(orders =>
       res.status(200).json({
@@ -116,12 +115,11 @@ exports.fetchCustomerOrders = (req, res) => {
 exports.fetchDesignerOrders = (req, res) => {
   DesignerOrders.find({ designer: req.user.id })
     .lean()
-    .sort({ status: "asc" })
     .then(orders =>
       res.status(200).json({
         orders: orders,
         success: true,
-        message: "Customer Orders Fetched Successfully"
+        message: "Designer Orders Fetched Successfully"
       })
     )
     .catch(err =>
