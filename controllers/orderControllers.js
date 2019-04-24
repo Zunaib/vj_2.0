@@ -12,77 +12,51 @@ exports.placeOrder = async (req, res) => {
     paymentMethod
   } = req.body;
 
+  let customerOrderId;
   //Here we will create the order of the customer
   await CustomerOrders.create({
     products: orderedProducts,
     customerId: req.user.id,
-    total: orderedProducts.total
+    total: total
   })
     .then(order => {
-      //Here orders are created to individual designer for each product of their product
-      orderedProducts.map(orderProduct => {
-        // console.log(orderProduct);
-        Products.findById(orderProduct.productId)
-          .lean()
-          .then(product => {
-            DesignerOrders.create({
-              product: product._id,
-              price: product.price,
-              color: orderProduct.color,
-              size: orderProduct.size,
-              discount: product.discount,
-              status: "Active",
-              customer: req.user.id,
-              designer: product.userId,
-              customerOrderId: order._id,
-              "billingDetails.firstName": billingDetails.firstName,
-              "billingDetails.lastName": billingDetails.lastName,
-              "billingDetails.province": billingDetails.province,
-              "billingDetails.streetAddress": billingDetails.streetAddress,
-              "billingDetails.city": billingDetails.city,
-              "billingDetails.zipcode": billingDetails.zipcode,
-              "billingDetails.country": billingDetails.country,
-              "billingDetails.phone": billingDetails.phone,
-              paymentMethod: paymentMethod
-            })
-              .then(order =>
-                res
-                  .status(200)
-                  .json({
-                    message: "Designer's Orders Created Successfully",
-                    success: true
-                  })
-              )
-              .catch(err =>
-                res
-                  .status(400)
-                  .json({ message: "Something went wrong", success: false })
-              );
-          })
-          .catch(err =>
-            res
-              .status(400)
-              .json({ message: "Something went wrong", success: false })
-          );
-      });
+      customerOrderId = order._id;
+
     })
     .catch(err =>
-      res.status(400).json({ message: "Something went wrong", success: false })
+      console.log(err)
     );
 
-  //Here we will create the order of the customer
-  CustomerOrders.create({ products: orderedProducts, customerId: req.user.id })
-    .then(order =>
-      res
-        .status(200)
-        .json({
-          message: "Customer's Orders Created Successfully",
-          success: true
-        })
-    )
-    .catch(err =>
-      res.status(400).json({ message: "Something went wrong", success: false })
-    );
+  orderedProducts.map(orderProduct => {
+    // console.log(orderProduct);
+
+    DesignerOrders.create({
+      product: orderProduct.productId._id,
+      price: orderProduct.price,
+      color: orderProduct.color,
+      size: orderProduct.size,
+      discount: orderProduct.discount,
+      status: "Active",
+      customer: req.user.id,
+      designer: orderProduct.productId.userId,
+      customerOrderId: customerOrderId,
+      "billingDetails.firstName": billingDetails.firstName,
+      "billingDetails.lastName": billingDetails.lastName,
+      "billingDetails.province": billingDetails.province,
+      "billingDetails.streetAddress": billingDetails.streetAddress,
+      "billingDetails.city": billingDetails.city,
+      "billingDetails.zipcode": billingDetails.zipcode,
+      "billingDetails.country": billingDetails.country,
+      "billingDetails.phone": billingDetails.phone,
+      paymentMethod: paymentMethod
+    })
+      .then(order =>
+        console.log("Designer Order created successfully")
+      )
+      .catch(err =>
+        console.log(err)
+      );
+  });
 
   if (saveDetails) {
     Users.findByIdAndUpdate(req.user.id, {
@@ -128,13 +102,11 @@ exports.fetchCustomerOrders = (req, res) => {
     .select("products")
     .lean()
     .then(orders =>
-      res
-        .status(200)
-        .json({
-          orders: orders,
-          success: true,
-          message: "Customer Orders Fetched Successfully"
-        })
+      res.status(200).json({
+        orders: orders,
+        success: true,
+        message: "Customer Orders Fetched Successfully"
+      })
     )
     .catch(err =>
       res.status(400).json({ message: "Something went wrong", success: false })
@@ -146,13 +118,11 @@ exports.fetchDesignerOrders = (req, res) => {
     .lean()
     .sort({ status: "asc" })
     .then(orders =>
-      res
-        .status(200)
-        .json({
-          orders: orders,
-          success: true,
-          message: "Customer Orders Fetched Successfully"
-        })
+      res.status(200).json({
+        orders: orders,
+        success: true,
+        message: "Customer Orders Fetched Successfully"
+      })
     )
     .catch(err =>
       res.status(400).json({ message: "Something went wrong", success: false })
