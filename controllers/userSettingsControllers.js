@@ -32,6 +32,7 @@ exports.changeSettings = async (req, res) => {
     province,
     gender,
     streetAddress,
+    displayPicture,
     city,
     zipcode,
     country,
