@@ -56,7 +56,6 @@ exports.changeSettings = async (req, res) => {
   }
 
 
-
   await Users.findByIdAndUpdate(req.user.id, {
     firstName: firstName,
     lastName: lastName,
