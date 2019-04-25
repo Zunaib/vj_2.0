@@ -18,7 +18,6 @@ exports.placeOrder = async (req, res) => {
 
   //Here we create designer orders
   orderedProducts.map(orderProduct => {
-
     DesignerOrders.create({
       product: orderProduct.productId._id,
       price: orderProduct.productId.price,
@@ -44,15 +43,13 @@ exports.placeOrder = async (req, res) => {
       })
       .catch(err => console.log(err));
 
-
-      C_Order.push({
-        product: orderProduct.productId._id,
-        price: orderProduct.productId.price,
-        discount: orderProduct.productId.discount,
-        color: orderProduct.productId.color,
-        size: orderProduct.productId.size
-      });
-
+    C_Order.push({
+      product: orderProduct.productId._id,
+      price: orderProduct.productId.price,
+      discount: orderProduct.productId.discount,
+      color: orderProduct.productId.color,
+      size: orderProduct.productId.size
+    });
   });
 
   //Here we will create the order of the customer
@@ -67,8 +64,7 @@ exports.placeOrder = async (req, res) => {
     })
     .catch(err => console.log(err));
 
-
-    //saveDetails defines that whether to save the delivery settings to user profile or not
+  //saveDetails defines that whether to save the delivery settings to user profile or not
   if (saveDetails) {
     Users.findByIdAndUpdate(req.user.id, {
       cart: [],
@@ -110,6 +106,7 @@ exports.placeOrder = async (req, res) => {
 
 exports.fetchCustomerOrders = (req, res) => {
   CustomerOrders.find({ customerId: req.user.id })
+    .populate({ path: "products.product", populate: { path: "userId" } })
     .lean()
     .then(orders =>
       res.status(200).json({
