@@ -7,6 +7,10 @@ const productSchema = new mongoose.Schema(
       required: true,
       default: null
     },
+    description: {
+      type: String,
+      default: null
+    },
     quantity: {
       type: Number,
       default: null

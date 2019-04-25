@@ -1,7 +1,7 @@
-const Products = require("../models/products");
+const Vlogs = require("../models/vlogs");
 const fs = require("fs");
 
-exports.addProduct = async (req, res) => {
+exports.addVlog = async (req, res) => {
   const {
     productName,
     quantity,
@@ -9,8 +9,7 @@ exports.addProduct = async (req, res) => {
     price,
     albumId,
     discount,
-    color,
-    description
+    color
   } = req.body;
   let dir = "assets/uploads/productImages/";
   let productImages = [];
@@ -36,8 +35,7 @@ exports.addProduct = async (req, res) => {
       userId: req.user.id,
       images: productImages,
       sizes: sizes,
-      discount: discount,
-      description: description
+      discount: discount
     })
       .then(product =>
         res
@@ -62,8 +60,7 @@ exports.addProduct = async (req, res) => {
       userId: req.user.id,
       images: productImages,
       sizes: sizes,
-      discount: discount,
-      description: description
+      discount: discount
     })
       .then(product =>
         res
@@ -82,22 +79,22 @@ exports.addProduct = async (req, res) => {
   }
 };
 
-exports.deleteProduct = (req, res) => {
-  Products.updateOne(
-    { _id: req.body.productId, userId: req.user.id },
+exports.deleteVlog = (req, res) => {
+  Vlogs.updateOne(
+    { _id: req.body.vlogId, userId: req.user.id },
     { deletedAt: Date.now() }
   )
-    .then(product =>
+    .then(vlog =>
       res
         .status(200)
-        .json({ success: true, message: "Product Deleted Successfully" })
+        .json({ success: true, message: "Vlog Deleted Successfully" })
     )
     .catch(err =>
       res.status(401).json({ success: false, message: "Something went wrong" })
     );
 };
 
-exports.updateProduct = (req, res) => {
+exports.updateVlog = (req, res) => {
   const { productName, quantity, price } = req.body;
   Products.updateOne(
     { _id: req.body.productId, userId: req.user.id },
@@ -121,7 +118,7 @@ exports.updateProduct = (req, res) => {
     );
 };
 
-exports.fetchAllProducts = (req, res) => {
+exports.fetchAllVlogs = (req, res) => {
   Products.find({ deletedAt: null })
     .sort({ createdAt: -1 })
     .then(product =>
@@ -140,7 +137,7 @@ exports.fetchAllProducts = (req, res) => {
 /**
  * Fetches the logged in current user's Products
  */
-exports.fetchProductsByUser = (req, res) => {
+exports.fetchVlogsByUser = (req, res) => {
   if (req.query.limit) {
     Products.find({ deletedAt: null, userId: req.user.id })
       .sort({ createdAt: -1 })
@@ -179,7 +176,7 @@ exports.fetchProductsByUser = (req, res) => {
   }
 };
 
-exports.fetchSingleProductDetails = (req, res) => {
+exports.fetchSingleVlogDetails = (req, res) => {
   Products.findById(req.body.productId)
     .then(product =>
       res
@@ -188,23 +185,6 @@ exports.fetchSingleProductDetails = (req, res) => {
           success: true,
           products: product,
           message: "Product Fetched Successfully"
-        })
-    )
-    .catch(err =>
-      res.status(400).json({ success: false, message: "Something went wrong" })
-    );
-};
-
-exports.fetchProductsByAlbums = (req, res) => {
-  Products.find({ albumId: req.body.albumId, deletedAt: null })
-    .sort({ createdAt: -1 })
-    .then(product =>
-      res
-        .status(200)
-        .json({
-          success: true,
-          products: product,
-          message: "Products Fetched Successfully"
         })
     )
     .catch(err =>
