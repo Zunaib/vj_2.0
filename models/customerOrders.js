@@ -47,8 +47,9 @@ const customerOrderSchema = new mongoose.Schema(
       default: null
     }
   },
-  { collection: "CustomerOrders" },
-  { timestamps: true }
+  { collection: "CustomerOrders" }
 );
+
+customerOrderSchema.set("timestamps", true);
 
 module.exports = mongoose.model("CustomerOrders", customerOrderSchema);

@@ -41,8 +41,9 @@ const albumSchema = new mongoose.Schema(
       default: null
     }
   },
-  { collection: "Albums" },
-  { timestamps: true }
+  { collection: "Albums" }
 );
+
+albumSchema.set("timestamps", true);
 
 module.exports = mongoose.model("Albums", albumSchema);

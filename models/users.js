@@ -95,12 +95,14 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false
     },
-    cart: [{
-      productId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Products",
-      },
-    }],
+    cart: [
+      {
+        productId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Products"
+        }
+      }
+    ],
     designerDescription: {
       type: String,
       default: null
@@ -130,7 +132,6 @@ const userSchema = new mongoose.Schema(
       default: null
     },
 
-    
     // createdAt: {
     //   type: Date,
     //   default: Date.now()
@@ -144,9 +145,10 @@ const userSchema = new mongoose.Schema(
       default: null
     }
   },
-  { collection: "Users" },
-  { timestamps: true },
+  { collection: "Users" }
 );
+
+userSchema.set("timestamps", true);
 
 // userSchema.methods.getHashedPassword = function (password) {
 //   return crypto

@@ -57,8 +57,9 @@ const blogSchema = new mongoose.Schema(
       default: null
     }
   },
-  { collection: "Blogs" },
-  { timestamps: true }
+  { collection: "Blogs" }
 );
+
+blogSchema.set("timestamps", true);
 
 module.exports = mongoose.model("Blogs", blogSchema);
