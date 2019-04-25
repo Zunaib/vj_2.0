@@ -24,8 +24,23 @@ exports.fetchUserSettings = (req, res) => {
  */
 exports.changeSettings = async (req, res) => {
   // console.log(req.body);
+  let {
+    firstName,
+    lastName,
+    dateofbirth,
+    description,
+    province,
+    gender,
+    streetAddress,
+    city,
+    zipcode,
+    country,
+    phone
+  } = req.body;
+
   let fileWebPath;
   if (req.files === null) {
+    fileWebPath = displayPicture;
     console.log("No files uploaded");
   } else {
     let dir = "assets/uploads/userDP/";
@@ -40,19 +55,7 @@ exports.changeSettings = async (req, res) => {
     fileWebPath = "/assets/uploads/userDP/" + filename;
   }
 
-  let {
-    firstName,
-    lastName,
-    dateofbirth,
-    description,
-    province,
-    gender,
-    streetAddress,
-    city,
-    zipcode,
-    country,
-    phone
-  } = req.body;
+
 
   await Users.findByIdAndUpdate(req.user.id, {
     firstName: firstName,

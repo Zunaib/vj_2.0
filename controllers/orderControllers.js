@@ -12,10 +12,12 @@ exports.placeOrder = async (req, res) => {
     paymentMethod
   } = req.body;
 
+
   let customerOrderId;
+  console.log(orderedProducts[0].productId);
   //Here we will create the order of the customer
   await CustomerOrders.create({
-    products: orderedProducts,
+    product: orderedProducts,
     customerId: req.user.id,
     total: total
   })
@@ -28,10 +30,8 @@ exports.placeOrder = async (req, res) => {
     );
 
   orderedProducts.map(orderProduct => {
-    console.log(orderProduct);
-
     DesignerOrders.create({
-      product: orderProduct.productId,
+      product: orderProduct._id,
       price: orderProduct.price,
       color: orderProduct.color,
       size: orderProduct.size,
