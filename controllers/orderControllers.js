@@ -14,31 +14,20 @@ exports.placeOrder = async (req, res) => {
 
 
   let customerOrderId;
-  console.log(orderedProducts[0].productId);
-  //Here we will create the order of the customer
-  await CustomerOrders.create({
-    product: orderedProducts,
-    customerId: req.user.id,
-    total: total
-  })
-    .then(order => {
-      customerOrderId = order._id;
-      console.log("Customer Order Created Successfully");
-    })
-    .catch(err =>
-      console.log(err)
-    );
+  let C_Order = []; //C_Order = Customer Order
 
+  //Here we create designer orders
   orderedProducts.map(orderProduct => {
+
     DesignerOrders.create({
-      product: orderProduct._id,
-      price: orderProduct.price,
-      color: orderProduct.color,
-      size: orderProduct.size,
-      discount: orderProduct.discount,
+      product: orderProduct.productId._id,
+      price: orderProduct.productId.price,
+      color: orderProduct.productId.color,
+      size: orderProduct.productId.size,
+      discount: orderProduct.productId.discount,
       status: "Active",
       customer: req.user.id,
-      designer: orderProduct.userId,
+      designer: orderProduct.productId.userId,
       customerOrderId: customerOrderId,
       "billingDetails.firstName": billingDetails.firstName,
       "billingDetails.lastName": billingDetails.lastName,
@@ -50,14 +39,36 @@ exports.placeOrder = async (req, res) => {
       "billingDetails.phone": billingDetails.phone,
       paymentMethod: paymentMethod
     })
-      .then(order =>
-        console.log("Designer Order created successfully")
-      )
-      .catch(err =>
-        console.log(err)
-      );
+      .then(order => {
+        console.log("Designer Order created successfully");
+      })
+      .catch(err => console.log(err));
+
+
+      C_Order.push({
+        product: orderProduct.productId._id,
+        price: orderProduct.productId.price,
+        discount: orderProduct.productId.discount,
+        color: orderProduct.productId.color,
+        size: orderProduct.productId.size
+      });
+
   });
 
+  //Here we will create the order of the customer
+  await CustomerOrders.create({
+    products: C_Order,
+    customerId: req.user.id,
+    total: total
+  })
+    .then(order => {
+      customerOrderId = order._id;
+      console.log("Customer Order Created Successfully");
+    })
+    .catch(err => console.log(err));
+
+
+    //saveDetails defines that whether to save the delivery settings to user profile or not
   if (saveDetails) {
     Users.findByIdAndUpdate(req.user.id, {
       cart: [],
