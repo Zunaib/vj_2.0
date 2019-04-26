@@ -38,7 +38,7 @@ exports.deleteBlog = (req, res) => {
 
 exports.updateBlog = (req, res) => {
   const { title, description, content, blogId } = req.body;
-  Products.updateOne(
+  Blogs.updateOne(
     { _id: blogId, userId: req.user.id },
     {
       title: title,
@@ -91,7 +91,7 @@ exports.fetchBlogsByUser = (req, res) => {
 exports.fetchSingleBlogDetails = (req, res) => {
   const { blogId } = req.body;
   Blogs.find({ _id: blogId })
-    .then(product =>
+    .then(blog =>
       res.status(200).json({
         success: true,
         blog: blog,

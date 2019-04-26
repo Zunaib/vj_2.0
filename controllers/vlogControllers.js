@@ -2,81 +2,38 @@ const Vlogs = require("../models/vlogs");
 const fs = require("fs");
 
 exports.addVlog = async (req, res) => {
-  const {
-    productName,
-    quantity,
-    sizes,
-    price,
-    albumId,
-    discount,
-    color
-  } = req.body;
-  let dir = "assets/uploads/productImages/";
-  let productImages = [];
+  const { title, description } = req.body;
+  let dir = "assets/uploads/vlogs/";
+  let filename = Date.now() + "_" + req.files.file.name;
 
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
   }
 
-  let arr = [].concat(req.files.file);
-  arr.map(item => {
-    let filename = Date.now() + "_" + item.name;
-    fileWebPath = "/assets/uploads/productImages/" + filename;
-    item.mv(dir + filename);
-    productImages.push(fileWebPath);
-  });
+  await req.files.file.mv(dir + filename);
 
-  if (albumId) {
-    Products.create({
-      productName: productName,
-      quantity: quantity,
-      price: price,
-      albumId: albumId,
-      userId: req.user.id,
-      images: productImages,
-      sizes: sizes,
-      discount: discount
-    })
-      .then(product =>
-        res
-          .status(200)
-          .json({
-            success: true,
-            product: product,
-            message: "Product Added Successfully"
-          })
-      )
-      .catch(err =>
-        res
-          .status(400)
-          .json({ success: false, message: "Something went wrong" })
-      );
-  } else {
-    Products.create({
-      productName: productName,
-      color: color,
-      quantity: quantity,
-      price: price,
-      userId: req.user.id,
-      images: productImages,
-      sizes: sizes,
-      discount: discount
-    })
-      .then(product =>
-        res
-          .status(200)
-          .json({
-            success: true,
-            product: product,
-            message: "Product Added Successfully"
-          })
-      )
-      .catch(err =>
-        res
-          .status(400)
-          .json({ success: false, message: "Something went wrong" })
-      );
-  }
+  let fileWebPath = "/assets/uploads/vlogs/" + filename;
+
+  Vlogs.create({
+    title: title,
+    description: description,
+    userId: req.user.id,
+    videoLink: fileWebPath
+  })
+    .then(vlog =>
+      res.json({
+        success: true,
+        vlog: vlog,
+        message: "Vlog Created Successfully"
+      })
+    )
+    .catch(err =>
+      res.json({
+        success: false,
+        err: err,
+        message: "Error occured while creating Vlog"
+      })
+    );
 };
 
 exports.deleteVlog = (req, res) => {
@@ -95,23 +52,20 @@ exports.deleteVlog = (req, res) => {
 };
 
 exports.updateVlog = (req, res) => {
-  const { productName, quantity, price } = req.body;
-  Products.updateOne(
-    { _id: req.body.productId, userId: req.user.id },
+  const { title, description } = req.body;
+  Vlogs.updateOne(
+    { _id: req.body.vlogId, userId: req.user.id },
     {
-      productName: productName,
-      quantity: quantity,
-      price: price
+      title: title,
+      description: description
     }
   )
-    .then(product =>
-      res
-        .status(200)
-        .json({
-          success: true,
-          product: product,
-          message: "Product Updated Successfully"
-        })
+    .then(vlog =>
+      res.status(200).json({
+        success: true,
+        vlog: vlog,
+        message: "Vlog Updated Successfully"
+      })
     )
     .catch(err =>
       res.status(400).json({ success: false, message: "Something went wrong" })
@@ -119,37 +73,33 @@ exports.updateVlog = (req, res) => {
 };
 
 exports.fetchAllVlogs = (req, res) => {
-  Products.find({ deletedAt: null })
+  Vlogs.find({ deletedAt: null })
     .sort({ createdAt: -1 })
-    .then(product =>
-      res
-        .status(200)
-        .json({
-          success: true,
-          products: product,
-          message: "Products Fetched Successfully"
-        })
+    .then(vlogs =>
+      res.status(200).json({
+        success: true,
+        vlogs: vlogs,
+        message: "Vlogs Fetched Successfully"
+      })
     )
     .catch(err =>
       res.status(400).json({ success: false, message: "Something went wrong" })
     );
 };
 /**
- * Fetches the logged in current user's Products
+ * Fetches the logged in current user's Vlogs
  */
 exports.fetchVlogsByUser = (req, res) => {
   if (req.query.limit) {
-    Products.find({ deletedAt: null, userId: req.user.id })
+    Vlogs.find({ deletedAt: null, userId: req.user.id })
       .sort({ createdAt: -1 })
       .limit(parseInt(req.query.limit))
-      .then(product =>
-        res
-          .status(200)
-          .json({
-            success: true,
-            products: product,
-            message: "Products Fetched Successfully"
-          })
+      .then(vlogs =>
+        res.status(200).json({
+          success: true,
+          vlogs: vlogs,
+          message: "Vlogs Fetched Successfully"
+        })
       )
       .catch(err =>
         res
@@ -157,16 +107,14 @@ exports.fetchVlogsByUser = (req, res) => {
           .json({ success: false, message: "Something went wrong" })
       );
   } else {
-    Products.find({ deletedAt: null, userId: req.user.id })
+    Vlogs.find({ deletedAt: null, userId: req.user.id })
       .sort({ createdAt: -1 })
-      .then(product =>
-        res
-          .status(200)
-          .json({
-            success: true,
-            products: product,
-            message: "Products Fetched Successfully"
-          })
+      .then(vlogs =>
+        res.status(200).json({
+          success: true,
+          vlogs: vlogs,
+          message: "Vlogs Fetched Successfully"
+        })
       )
       .catch(err =>
         res
@@ -177,15 +125,13 @@ exports.fetchVlogsByUser = (req, res) => {
 };
 
 exports.fetchSingleVlogDetails = (req, res) => {
-  Products.findById(req.body.productId)
-    .then(product =>
-      res
-        .status(200)
-        .json({
-          success: true,
-          products: product,
-          message: "Product Fetched Successfully"
-        })
+  Vlogs.findById(req.body.vlogId)
+    .then(vlog =>
+      res.status(200).json({
+        success: true,
+        vlog: vlog,
+        message: "Vlog Fetched Successfully"
+      })
     )
     .catch(err =>
       res.status(400).json({ success: false, message: "Something went wrong" })

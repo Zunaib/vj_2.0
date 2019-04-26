@@ -63,21 +63,14 @@ const productSchema = new mongoose.Schema(
       ref: "Albums",
       default: null
     },
-    // createdAt: {
-    //   type: Date,
-    //   default: Date.now()
-    // },
-    // updatedAt: {
-    //   type: Date,
-    //   default: Date.now()
-    // },
     deletedAt: {
       type: Date,
       default: null
     }
   },
-  { collection: "Products" },
-  { timestamps: true }
+  { collection: "Products" }
 );
+
+productSchema.set("timestamps", true);
 
 module.exports = mongoose.model("Products", productSchema);

@@ -51,26 +51,19 @@ const designerOrderSchema = new mongoose.Schema(
       country: String,
       phone: String
     },
-    paymentMethod : {
+    paymentMethod: {
       type: String,
       default: "Cash on Delivery",
       required: true
     },
-    // createdAt: {
-    //   type: Date,
-    //   default: Date.now()
-    // },
-    // updatedAt: {
-    //   type: Date,
-    //   default: Date.now()
-    // },
     deletedAt: {
       type: Date,
       default: null
     }
   },
-  { collection: "DesignerOrders" },
-  { timestamps: true }
+  { collection: "DesignerOrders" }
 );
+
+designerOrderSchema.set("timestamps", true);
 
 module.exports = mongoose.model("DesignerOrders", designerOrderSchema);
