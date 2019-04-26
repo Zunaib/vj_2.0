@@ -107,7 +107,7 @@ exports.fetchVlogsByUser = (req, res) => {
           .json({ success: false, message: "Something went wrong" })
       );
   } else {
-    Products.find({ deletedAt: null, userId: req.user.id })
+    Vlogs.find({ deletedAt: null, userId: req.user.id })
       .sort({ createdAt: -1 })
       .then(vlogs =>
         res.status(200).json({
