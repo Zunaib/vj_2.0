@@ -122,6 +122,7 @@ exports.fetchCustomerOrders = (req, res) => {
 
 exports.fetchDesignerOrders = (req, res) => {
   DesignerOrders.find({ designer: req.user.id })
+    .populate("product")
     .sort({ createdAt: -1 })
     .lean()
     .then(orders =>
