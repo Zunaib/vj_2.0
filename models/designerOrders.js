@@ -56,14 +56,6 @@ const designerOrderSchema = new mongoose.Schema(
       default: "Cash on Delivery",
       required: true
     },
-    // createdAt: {
-    //   type: Date,
-    //   default: Date.now()
-    // },
-    // updatedAt: {
-    //   type: Date,
-    //   default: Date.now()
-    // },
     deletedAt: {
       type: Date,
       default: null

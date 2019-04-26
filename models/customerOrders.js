@@ -34,14 +34,6 @@ const customerOrderSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Users"
     },
-    // createdAt: {
-    //   type: Date,
-    //   default: Date.now()
-    // },
-    // updatedAt: {
-    //   type: Date,
-    //   default: Date.now()
-    // },
     deletedAt: {
       type: Date,
       default: null

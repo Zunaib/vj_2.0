@@ -43,20 +43,12 @@ const vlogSchema = new mongoose.Schema(
       ref: "Users",
       required: true
     },
-    // createdAt: {
-    //   type: Date,
-    //   default: Date.now()
-    // },
-    // updatedAt: {
-    //   type: Date,
-    //   default: Date.now()
-    // },
     deletedAt: {
       type: Date,
       default: null
     }
   },
-  { collection: "Blogs" }
+  { collection: "Vlogs" }
 );
 
 vlogSchema.set("timestamps", true);

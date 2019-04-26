@@ -6,4 +6,6 @@ module.exports = app => {
   app.route("/api/fetchVlogsByUser").get(vlogControllers.fetchVlogsByUser);
   app.route("/api/fetchSingleVlogDetails").post(vlogControllers.fetchSingleVlogDetails);
   app.route("/api/updateVlog").put(vlogControllers.updateVlog);
-  app.route("/api/deleteVlog").delete(vlogControllers.deleteVlog);};
+  app.route("/api/deleteVlog").delete(vlogControllers.deleteVlog);
+  
+};
