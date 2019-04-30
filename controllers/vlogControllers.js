@@ -2,6 +2,7 @@ const Vlogs = require("../models/vlogs");
 const fs = require("fs");
 
 exports.addVlog = async (req, res) => {
+  console.log('api hit')
   const { title, description } = req.body;
   let dir = "assets/uploads/vlogs/";
   let filename = Date.now() + "_" + req.files.file.name;

@@ -84,7 +84,7 @@ exports.addProduct = async (req, res) => {
 
 exports.deleteProduct = (req, res) => {
   Products.updateOne(
-    { _id: req.body.productId, userId: req.user.id },
+    { _id: req.query.productId, userId: req.user.id },
     { deletedAt: Date.now() }
   )
     .then(product =>

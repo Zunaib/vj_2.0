@@ -16,7 +16,7 @@ const db = require("./config/mongo.json");
 
 //Connect to the db
 mongoose.set("useCreateIndex", true);
-mongoose.connect(db.url, { useNewUrlParser: true }, function(err, db) {
+mongoose.connect(db.url, { useNewUrlParser: true }, function (err, db) {
   if (!err) {
     console.log("Database Connected");
   }
@@ -42,6 +42,7 @@ const albumRoutes = require("./routes/albumRoutes");
 const productRoutes = require("./routes/productRoutes");
 const useAsRoutes = require("./routes/useAsRoutes");
 const blogRoutes = require("./routes/blogRoutes");
+const vlogRoutes = require("./routes/vlogRoutes");
 const userSettingsRoutes = require("./routes/userSettingsRoutes");
 const fileUploadGFS = require("./routes/fileUploadGFS");
 const cartRoutes = require("./routes/cartRoutes");
@@ -100,6 +101,7 @@ albumRoutes(app);
 productRoutes(app);
 useAsRoutes(app);
 blogRoutes(app);
+vlogRoutes(app);
 userSettingsRoutes(app);
 fileUploadGFS(app);
 cartRoutes(app);
