@@ -40,13 +40,11 @@ exports.addProduct = async (req, res) => {
       description: description
     })
       .then(product =>
-        res
-          .status(200)
-          .json({
-            success: true,
-            product: product,
-            message: "Product Added Successfully"
-          })
+        res.status(200).json({
+          success: true,
+          product: product,
+          message: "Product Added Successfully"
+        })
       )
       .catch(err =>
         res
@@ -66,13 +64,11 @@ exports.addProduct = async (req, res) => {
       description: description
     })
       .then(product =>
-        res
-          .status(200)
-          .json({
-            success: true,
-            product: product,
-            message: "Product Added Successfully"
-          })
+        res.status(200).json({
+          success: true,
+          product: product,
+          message: "Product Added Successfully"
+        })
       )
       .catch(err =>
         res
@@ -98,23 +94,66 @@ exports.deleteProduct = (req, res) => {
 };
 
 exports.updateProduct = (req, res) => {
-  const { productName, quantity, price } = req.body;
+  const {
+    productName,
+    quantity,
+    price,
+    sizes,
+    discount,
+    color,
+    description,
+    productImages
+  } = req.body;
+
+  let fileWebPath;
+  let newProductImages = [];
+
+
+  if (req.files === null) {
+    newProductImages = productImages;
+    console.log("No files uploaded");
+  } else {
+    let dir = "assets/uploads/productImages/";
+
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
+    }
+
+    let arr = [].concat(req.files.file);
+    arr.map(item => {
+      let filename = Date.now() + "_" + item.name;
+      fileWebPath = "/assets/uploads/productImages/" + filename;
+      item.mv(dir + filename);
+      newProductImages.push(fileWebPath);
+    });
+
+  }
+
+  console.log(newProductImages);
+
+
   Products.updateOne(
     { _id: req.body.productId, userId: req.user.id },
     {
       productName: productName,
       quantity: quantity,
-      price: price
+      price: price,
+      sizes: sizes,
+      discount: discount,
+      color: color,
+      description: description,
+      images: newProductImages
+      // $set : {
+      //   "images.$[]": newProductImages
+      // }
     }
   )
     .then(product =>
-      res
-        .status(200)
-        .json({
-          success: true,
-          product: product,
-          message: "Product Updated Successfully"
-        })
+      res.status(200).json({
+        success: true,
+        product: product,
+        message: "Product Updated Successfully"
+      })
     )
     .catch(err =>
       res.status(400).json({ success: false, message: "Something went wrong" })
@@ -125,13 +164,11 @@ exports.fetchAllProducts = (req, res) => {
   Products.find({ deletedAt: null })
     .sort({ createdAt: -1 })
     .then(product =>
-      res
-        .status(200)
-        .json({
-          success: true,
-          products: product,
-          message: "Products Fetched Successfully"
-        })
+      res.status(200).json({
+        success: true,
+        products: product,
+        message: "Products Fetched Successfully"
+      })
     )
     .catch(err =>
       res.status(400).json({ success: false, message: "Something went wrong" })
@@ -146,13 +183,11 @@ exports.fetchProductsByUser = (req, res) => {
       .sort({ createdAt: -1 })
       .limit(parseInt(req.query.limit))
       .then(product =>
-        res
-          .status(200)
-          .json({
-            success: true,
-            products: product,
-            message: "Products Fetched Successfully"
-          })
+        res.status(200).json({
+          success: true,
+          products: product,
+          message: "Products Fetched Successfully"
+        })
       )
       .catch(err =>
         res
@@ -163,13 +198,11 @@ exports.fetchProductsByUser = (req, res) => {
     Products.find({ deletedAt: null, userId: req.user.id })
       .sort({ createdAt: -1 })
       .then(product =>
-        res
-          .status(200)
-          .json({
-            success: true,
-            products: product,
-            message: "Products Fetched Successfully"
-          })
+        res.status(200).json({
+          success: true,
+          products: product,
+          message: "Products Fetched Successfully"
+        })
       )
       .catch(err =>
         res
@@ -182,13 +215,11 @@ exports.fetchProductsByUser = (req, res) => {
 exports.fetchSingleProductDetails = (req, res) => {
   Products.findById(req.body.productId)
     .then(product =>
-      res
-        .status(200)
-        .json({
-          success: true,
-          products: product,
-          message: "Product Fetched Successfully"
-        })
+      res.status(200).json({
+        success: true,
+        products: product,
+        message: "Product Fetched Successfully"
+      })
     )
     .catch(err =>
       res.status(400).json({ success: false, message: "Something went wrong" })
@@ -199,13 +230,11 @@ exports.fetchProductsByAlbums = (req, res) => {
   Products.find({ albumId: req.body.albumId, deletedAt: null })
     .sort({ createdAt: -1 })
     .then(product =>
-      res
-        .status(200)
-        .json({
-          success: true,
-          products: product,
-          message: "Products Fetched Successfully"
-        })
+      res.status(200).json({
+        success: true,
+        products: product,
+        message: "Products Fetched Successfully"
+      })
     )
     .catch(err =>
       res.status(400).json({ success: false, message: "Something went wrong" })

@@ -40,7 +40,6 @@ exports.createAlbum = async (req, res) => {
 };
 
 exports.deleteAlbum = (req, res) => {
-
   Albums.updateOne(
     { _id: req.query.albumId, userId: req.user.id },
     { deletedAt: Date.now() }
@@ -107,11 +106,35 @@ exports.fetchAllAlbums = (req, res) => {
 };
 
 //need to be changed and tested
-exports.updateAlbum = (req, res) => {
-  const { albumName, year } = req.body;
-  Albums.updateOne(
+exports.updateAlbum = async (req, res) => {
+  const { albumName, year, season, description, thumbnail } = req.body;
+
+  let fileWebPath;
+  if (req.files === null) {
+    fileWebPath = thumbnail;
+    console.log("No files uploaded");
+  } else {
+    let dir = "assets/uploads/albumThumbnail/";
+    let filename = req.user.id + "_" + req.files.file.name;
+
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
+    }
+
+    await req.files.file.mv(dir + filename);
+
+    fileWebPath = "/assets/uploads/albumThumbnail/" + filename;
+  }
+
+  await Albums.updateOne(
     { _id: req.body.albumId, userId: req.user.id },
-    { albumName: albumName, year: year, description: description, season: season }
+    {
+      albumName: albumName,
+      year: year,
+      description: description,
+      season: season,
+      thumbnail: fileWebPath
+    }
   )
     .then(album =>
       res.status(200).json({
