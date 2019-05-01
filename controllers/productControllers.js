@@ -129,9 +129,6 @@ exports.updateProduct = (req, res) => {
 
   }
 
-  console.log(newProductImages);
-
-
   Products.updateOne(
     { _id: req.body.productId, userId: req.user.id },
     {
