@@ -1,12 +1,26 @@
 const Blogs = require("../models/blogs");
 
-exports.createBlog = (req, res) => {
+exports.createBlog = async (req, res) => {
   const { title, description, content } = req.body;
+
+  let dir = "assets/uploads/blogThumbnail/";
+  let filename = Date.now() + "_" + req.files.file.name;
+
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir);
+  }
+
+  await req.files.file.mv(dir + filename);
+
+  let fileWebPath = "/assets/uploads/blogThumbnail/" + filename;
+
+
   Blogs.create({
     title: title,
     description: description,
     content: content,
-    userId: req.user.id
+    userId: req.user.id,
+    thumbnail: fileWebPath
   })
     .then(blog =>
       res.status(200).json({
@@ -36,14 +50,33 @@ exports.deleteBlog = (req, res) => {
     );
 };
 
-exports.updateBlog = (req, res) => {
+exports.updateBlog = async (req, res) => {
   const { title, description, content, blogId } = req.body;
+
+  let fileWebPath;
+  if (req.files === null) {
+    fileWebPath = thumbnail;
+    console.log("No files uploaded");
+  } else {
+    let dir = "assets/uploads/blogThumbnail/";
+    let filename = req.user.id + "_" + req.files.file.name;
+
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
+    }
+
+    await req.files.file.mv(dir + filename);
+
+    fileWebPath = "/assets/uploads/blogThumbnail/" + filename;
+  }
+
   Blogs.updateOne(
     { _id: blogId, userId: req.user.id },
     {
       title: title,
       description: description,
-      content: content
+      content: content,
+      thumbnail: fileWebPath
     }
   )
     .then(blog =>

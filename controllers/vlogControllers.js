@@ -2,7 +2,6 @@ const Vlogs = require("../models/vlogs");
 const fs = require("fs");
 
 exports.addVlog = async (req, res) => {
-  console.log('api hit')
   const { title, description } = req.body;
   let dir = "assets/uploads/vlogs/";
   let filename = Date.now() + "_" + req.files.file.name;
@@ -52,13 +51,32 @@ exports.deleteVlog = (req, res) => {
     );
 };
 
-exports.updateVlog = (req, res) => {
-  const { title, description } = req.body;
+exports.updateVlog = async (req, res) => {
+  const { title, description, video, vlogId } = req.body;
+  
+  let fileWebPath;
+  if (req.files === null) {
+    fileWebPath = video;
+    console.log("No files uploaded");
+  } else {
+    let dir = "assets/uploads/vlogs/";
+    let filename = Date.now() + "_" + req.files.file.name;
+
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
+    }
+
+    await req.files.file.mv(dir + filename);
+
+    fileWebPath = "/assets/uploads/vlogs/" + filename;
+  }
+  
   Vlogs.updateOne(
-    { _id: req.body.vlogId, userId: req.user.id },
+    { _id: vlogId, userId: req.user.id },
     {
       title: title,
-      description: description
+      description: description,
+      videoLink: fileWebPath
     }
   )
     .then(vlog =>

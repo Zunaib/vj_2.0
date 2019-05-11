@@ -107,7 +107,7 @@ exports.fetchAllAlbums = (req, res) => {
 
 //need to be changed and tested
 exports.updateAlbum = async (req, res) => {
-  const { albumName, year, season, description, thumbnail } = req.body;
+  const { albumName, year, season, description, thumbnail, albumId } = req.body;
 
   let fileWebPath;
   if (req.files === null) {
@@ -127,7 +127,7 @@ exports.updateAlbum = async (req, res) => {
   }
 
   await Albums.updateOne(
-    { _id: req.body.albumId, userId: req.user.id },
+    { _id: albumId, userId: req.user.id },
     {
       albumName: albumName,
       year: year,

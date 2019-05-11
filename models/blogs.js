@@ -28,6 +28,10 @@ const blogSchema = new mongoose.Schema(
       type: Number,
       default: 0
     },
+    thumbnail: {
+      type: String,
+      default: null
+    },
     comments: [
       {
         comment: { type: String, default: null },
