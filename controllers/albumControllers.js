@@ -2,7 +2,7 @@ const Albums = require("../models/albums");
 const fs = require("fs");
 
 exports.createAlbum = async (req, res) => {
-  const { albumName, year, season, description } = req.body;
+  const { title, year, season, description } = req.body;
 
   let dir = "assets/uploads/albumThumbnail/";
   let filename = Date.now() + "_" + req.files.file.name;
@@ -16,7 +16,7 @@ exports.createAlbum = async (req, res) => {
   let fileWebPath = "/assets/uploads/albumThumbnail/" + filename;
 
   Albums.create({
-    albumName: albumName,
+    title: title,
     year: year,
     userId: req.user.id,
     season: season,
@@ -107,7 +107,7 @@ exports.fetchAllAlbums = (req, res) => {
 
 //need to be changed and tested
 exports.updateAlbum = async (req, res) => {
-  const { albumName, year, season, description, thumbnail, albumId } = req.body;
+  const { title, year, season, description, thumbnail, albumId } = req.body;
 
   let fileWebPath;
   if (req.files === null) {
@@ -129,7 +129,7 @@ exports.updateAlbum = async (req, res) => {
   await Albums.updateOne(
     { _id: albumId, userId: req.user.id },
     {
-      albumName: albumName,
+      title: title,
       year: year,
       description: description,
       season: season,
