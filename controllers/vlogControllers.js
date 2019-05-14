@@ -38,7 +38,7 @@ exports.addVlog = async (req, res) => {
 
 exports.deleteVlog = (req, res) => {
   Vlogs.updateOne(
-    { _id: req.body.vlogId, userId: req.user.id },
+    { _id: req.query.vlogId, userId: req.user.id },
     { deletedAt: Date.now() }
   )
     .then(vlog =>
@@ -53,7 +53,7 @@ exports.deleteVlog = (req, res) => {
 
 exports.updateVlog = async (req, res) => {
   const { title, description, video, vlogId } = req.body;
-  
+
   let fileWebPath;
   if (req.files === null) {
     fileWebPath = video;
@@ -70,7 +70,7 @@ exports.updateVlog = async (req, res) => {
 
     fileWebPath = "/assets/uploads/vlogs/" + filename;
   }
-  
+
   Vlogs.updateOne(
     { _id: vlogId, userId: req.user.id },
     {
