@@ -108,7 +108,6 @@ exports.updateProduct = (req, res) => {
   let fileWebPath;
   let newProductImages = [];
 
-
   if (req.files === null) {
     newProductImages = productImages;
     console.log("No files uploaded");
@@ -126,7 +125,6 @@ exports.updateProduct = (req, res) => {
       item.mv(dir + filename);
       newProductImages.push(fileWebPath);
     });
-
   }
 
   Products.updateOne(
@@ -209,15 +207,24 @@ exports.fetchProductsByUser = (req, res) => {
   }
 };
 
-exports.fetchSingleProductDetails = (req, res) => {
-  Products.findById(req.body.productId)
-    .then(product =>
-      res.status(200).json({
-        success: true,
-        products: product,
-        message: "Product Fetched Successfully"
-      })
-    )
+//similarProducts are the latest 4 products from the same designer whose product is currently fetched
+exports.fetchSingleProductDetails = async (req, res) => {
+  await Products.findById(req.body.productId)
+    .then(product => {
+      Products.find({ userId: product.userId, _id: { $ne: product._id }, deletedAt: null })
+        .sort({ createdAt: -1 })
+        .limit(4)
+        .lean()
+        .then(similarLatestProducts => {
+          res.status(200).json({
+            success: true,
+            product: product,
+            similarProducts: similarLatestProducts,
+            message: "Product Fetched Successfully"
+          });
+        })
+        .catch(err => console.log(err));
+    })
     .catch(err =>
       res.status(400).json({ success: false, message: "Something went wrong" })
     );
@@ -237,3 +244,4 @@ exports.fetchProductsByAlbums = (req, res) => {
       res.status(400).json({ success: false, message: "Something went wrong" })
     );
 };
+

@@ -38,6 +38,10 @@ exports.getUserStats = async (req, res) => {
     .then(product => (totalProducts = product.length))
     .catch(err => console.log(err));
 
+  await DesignerOrders.find({ designer : userId})
+    .then(orders => (totalOrders = orders.length))
+    .catch(err => console.log(err));
+
   return res.status(200).json({
     success: true,
     totalOrders: totalOrders,
@@ -45,3 +49,4 @@ exports.getUserStats = async (req, res) => {
     totalProducts: totalProducts
   });
 };
+
