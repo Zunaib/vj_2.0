@@ -99,6 +99,7 @@ exports.updateProduct = (req, res) => {
     quantity,
     price,
     sizes,
+    albumId,
     discount,
     color,
     description,
@@ -109,7 +110,8 @@ exports.updateProduct = (req, res) => {
   let newProductImages = [];
 
   if (req.files === null) {
-    newProductImages = productImages;
+    let imagesarray = productImages.split(',');
+    newProductImages = imagesarray;
     console.log("No files uploaded");
   } else {
     let dir = "assets/uploads/productImages/";
@@ -127,32 +129,63 @@ exports.updateProduct = (req, res) => {
     });
   }
 
-  Products.updateOne(
-    { _id: req.body.productId, userId: req.user.id },
-    {
-      productName: productName,
-      quantity: quantity,
-      price: price,
-      sizes: sizes,
-      discount: discount,
-      color: color,
-      description: description,
-      images: newProductImages
-      // $set : {
-      //   "images.$[]": newProductImages
-      // }
-    }
-  )
-    .then(product =>
-      res.status(200).json({
-        success: true,
-        product: product,
-        message: "Product Updated Successfully"
-      })
+  if (albumId) {
+    Products.updateOne(
+      { _id: req.body.productId, userId: req.user.id },
+      {
+        productName: productName,
+        quantity: quantity,
+        albumId: albumId,
+        price: price,
+        sizes: sizes,
+        discount: discount,
+        color: color,
+        description: description,
+        images: newProductImages
+        // $set : {
+        //   "images.$[]": newProductImages
+        // }
+      }
     )
-    .catch(err =>
-      res.status(400).json({ success: false, message: "Something went wrong" })
-    );
+      .then(product =>
+        res.status(200).json({
+          success: true,
+          product: product,
+          message: "Product Updated Successfully"
+        })
+      )
+      .catch(err =>
+        res.status(400).json({ success: false, message: "Something went wrong" })
+      );
+  } else {
+    Products.updateOne(
+      { _id: req.body.productId, userId: req.user.id },
+      {
+        productName: productName,
+        quantity: quantity,
+        price: price,
+        sizes: sizes,
+        discount: discount,
+        color: color,
+        description: description,
+        images: newProductImages
+        // $set : {
+        //   "images.$[]": newProductImages
+        // }
+      }
+    )
+      .then(product =>
+        res.status(200).json({
+          success: true,
+          product: product,
+          message: "Product Updated Successfully"
+        })
+      )
+      .catch(err =>
+        res.status(400).json({ success: false, message: "Something went wrong" })
+      );
+  }
+
 };
 
 exports.fetchAllProducts = (req, res) => {

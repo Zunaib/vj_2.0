@@ -1,4 +1,5 @@
 const Blogs = require("../models/blogs");
+const fs = require("fs");
 
 exports.createBlog = async (req, res) => {
   const { title, description, content } = req.body;
@@ -35,7 +36,7 @@ exports.createBlog = async (req, res) => {
 };
 
 exports.deleteBlog = (req, res) => {
-  const { blogId } = req.body;
+  const { blogId } = req.query;
   Blogs.updateOne(
     { _id: blogId, userId: req.user.id },
     { deletedAt: Date.now() }
@@ -51,7 +52,7 @@ exports.deleteBlog = (req, res) => {
 };
 
 exports.updateBlog = async (req, res) => {
-  const { title, description, content, blogId } = req.body;
+  const { title, description, content, blogId, thumbnail } = req.body;
 
   let fileWebPath;
   if (req.files === null) {
