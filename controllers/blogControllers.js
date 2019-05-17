@@ -52,7 +52,7 @@ exports.deleteBlog = (req, res) => {
 };
 
 exports.updateBlog = async (req, res) => {
-  const { title, description, content, blogId } = req.body;
+  const { title, description, content, blogId, thumbnail } = req.body;
 
   let fileWebPath;
   if (req.files === null) {
