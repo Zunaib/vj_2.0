@@ -79,21 +79,13 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false
     },
-    isCustomer: {
+    isCreator: {
+      type: Boolean,
+      default: false
+    },
+    firstTimeLogin: {
       type: Boolean,
       default: true
-    },
-    isDesigner: {
-      type: Boolean,
-      default: false
-    },
-    isBlogger: {
-      type: Boolean,
-      default: false
-    },
-    isVlogger: {
-      type: Boolean,
-      default: false
     },
     cart: [
       {

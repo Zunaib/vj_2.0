@@ -49,7 +49,7 @@ exports.signup = async (req, res) => {
 
 exports.login = (req, res) => {
   let { email, password } = req.body;
-  Users.findOne({ email: email })
+  Users.findOne({ $or : [{'email': email}, {'userName': email}] })
     .then(user => {
       bcrypt.compare(password, user.password, function(err, isMatch) {
         if (isMatch) {
@@ -69,10 +69,8 @@ exports.login = (req, res) => {
                 success: true,
                 message: "Logged In",
                 userflags: {
-                  isCustomer: user.isCustomer,
-                  isDesigner: user.isDesigner,
-                  isBlogger: user.isBlogger,
-                  isVlogger: user.isVlogger
+                  isCreator: user.isCreator,
+                  firstTimeLogin: user.firstTimeLogin
                 },
                 userId: user._id
               });
