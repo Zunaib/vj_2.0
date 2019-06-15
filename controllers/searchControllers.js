@@ -7,16 +7,43 @@ exports.search = (req, res) => {
   let { queryString } = req.body;
   if (req.body.queryString) {
     const regex = new RegExp(escapeRegex(queryString), "gi");
-    Users.find({ deletedAt: null, $or: [{ firstName: regex }, { lastName: regex }] })
-      .then(users => console.log(users))
-      .catch(err => console.log(err));
+    Users.find({
+      deletedAt: null,
+      $or: [{ firstName: regex }, { lastName: regex }]
+    })
+      .select("firstName lastName email displayPicture")
+      .lean()
+      .then(users =>
+        res.status(200).json({
+          success: true,
+          users: users,
+          message: "Users Searched Successfully"
+        })
+      )
+      .catch(err =>
+        res
+          .status(400)
+          .json({ success: false, message: "Something went wrong" })
+      );
   } else {
     Users.find({ deletedAt: null })
-      .then(users => console.log(users))
-      .catch(err => console.log(err));
+      .select("firstName lastName email displayPicture")
+      .lean()
+      .then(users =>
+        res.status(200).json({
+          success: true,
+          users: users,
+          message: "Users Searched Successfully"
+        })
+      )
+      .catch(err =>
+        res
+          .status(400)
+          .json({ success: false, message: "Something went wrong" })
+      );
   }
 };
 
-escapeRegex = (text) => {
+escapeRegex = text => {
   return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 };
