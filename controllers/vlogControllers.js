@@ -156,3 +156,67 @@ exports.fetchSingleVlogDetails = (req, res) => {
       res.status(400).json({ success: false, message: "Something went wrong" })
     );
 };
+
+exports.addVlogComment = (req, res) => {
+  if (!req.body.comment) {
+    console.log("err");
+  } else {
+    Vlogs.findByIdAndUpdate(req.body.vlogId, {
+      $push: { comments: { comment: req.body.comment, userId: req.user.id } }
+    })
+      .then(vlog =>
+        res.status(200).json({
+          success: true,
+          vlogs: vlog,
+          message: "Comment Added Successfully"
+        })
+      )
+      .catch(err =>
+        res
+          .status(400)
+          .json({ success: false, message: "Something went wrong" })
+      );
+  }
+};
+
+exports.deleteVlogComment = (req, res) => {
+  Vlogs.findByIdAndUpdate(req.body.vlogId, {
+    $pull: { comments: { _id: req.body.commentId, userId: req.user.id } }
+  })
+    .then(vlog =>
+      res.status(200).json({
+        success: true,
+        vlogs: vlog,
+        message: "Comment Deleted Successfully"
+      })
+    )
+    .catch(err =>
+      res.status(400).json({ success: false, message: "Something went wrong" })
+    );
+};
+
+exports.likeVlog = (req, res) => {
+  Vlogs.findById(req.body.vlogId)
+    .then(vlog => {
+      if (vlog.likes.indexOf(req.user.id) > -1) {
+        vlog.likes.pull(req.user.id);
+        vlog.save();
+        res.status(200).json({
+          success: true,
+          vlogs: vlog,
+          message: "Vlog Unliked Successfully"
+        });
+      } else {
+        vlog.likes.push(req.user.id);
+        vlog.save();
+        res.status(200).json({
+          success: true,
+          vlogs: vlog,
+          message: "Vlog Liked Successfully"
+        });
+      }
+    })
+    .catch(err =>
+      res.status(400).json({ success: false, message: "Something went wrong" })
+    );
+};

@@ -48,6 +48,7 @@ const fileUploadGFS = require("./routes/fileUploadGFS");
 const cartRoutes = require("./routes/cartRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const profileRoutes = require("./routes/profileRoutes");
+const dropdownRoutes = require("./routes/dropdownRoutes");
 
 /**
  * Below this the routes will not require authorization token
@@ -55,6 +56,7 @@ const profileRoutes = require("./routes/profileRoutes");
 
 authRoutes(app);
 contactUsRoutes(app);
+dropdownRoutes(app);
 
 app.use(
   (req, res, next) => {

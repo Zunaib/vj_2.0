@@ -15,7 +15,6 @@ exports.createBlog = async (req, res) => {
 
   let fileWebPath = "/assets/uploads/blogThumbnail/" + filename;
 
-
   Blogs.create({
     title: title,
     description: description,
@@ -132,6 +131,70 @@ exports.fetchSingleBlogDetails = (req, res) => {
         message: "Blogs Fetched Successfully"
       })
     )
+    .catch(err =>
+      res.status(400).json({ success: false, message: "Something went wrong" })
+    );
+};
+
+exports.addBlogComment = (req, res) => {
+  if (!req.body.comment) {
+    console.log("err");
+  } else {
+    Blogs.findByIdAndUpdate(req.body.blogId, {
+      $push: { comments: { comment: req.body.comment, userId: req.user.id } }
+    })
+      .then(blog =>
+        res.status(200).json({
+          success: true,
+          blogs: blog,
+          message: "Comment Added Successfully"
+        })
+      )
+      .catch(err =>
+        res
+          .status(400)
+          .json({ success: false, message: "Something went wrong" })
+      );
+  }
+};
+
+exports.deleteBlogComment = (req, res) => {
+  Blogs.findByIdAndUpdate(req.body.blogId, {
+    $pull: { comments: { _id: req.body.commentId, userId: req.user.id } }
+  })
+    .then(blog =>
+      res.status(200).json({
+        success: true,
+        blogs: blog,
+        message: "Comment Deleted Successfully"
+      })
+    )
+    .catch(err =>
+      res.status(400).json({ success: false, message: "Something went wrong" })
+    );
+};
+
+exports.likeBlog = (req, res) => {
+  Blogs.findById(req.body.blogId)
+    .then(blog => {
+      if (blog.likes.indexOf(req.user.id) > -1) {
+        blog.likes.pull(req.user.id);
+        blog.save();
+        res.status(200).json({
+          success: true,
+          blogs: blog,
+          message: "Blog Unliked Successfully"
+        });
+      } else {
+        blog.likes.push(req.user.id);
+        blog.save();
+        res.status(200).json({
+          success: true,
+          blogs: blog,
+          message: "Blog Liked Successfully"
+        });
+      }
+    })
     .catch(err =>
       res.status(400).json({ success: false, message: "Something went wrong" })
     );

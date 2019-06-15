@@ -16,18 +16,16 @@ const blogSchema = new mongoose.Schema(
       required: true,
       default: null
     },
-    likes: {
-      type: Number,
-      default: 0
-    },
-    dislikes: {
-      type: Number,
-      default: 0
-    },
-    views: {
-      type: Number,
-      default: 0
-    },
+    likes: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Users",
+      unique: true
+    }],
+    views: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Users",
+      unique: true
+    }],
     thumbnail: {
       type: String,
       default: null

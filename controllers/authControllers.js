@@ -49,37 +49,41 @@ exports.signup = async (req, res) => {
 
 exports.login = (req, res) => {
   let { email, password } = req.body;
-  Users.findOne({ $or : [{'email': email}, {'userName': email}] })
+  Users.findOne({ $or: [{ email: email }, { userName: email }] })
     .then(user => {
-      bcrypt.compare(password, user.password, function(err, isMatch) {
-        if (isMatch) {
-          const payload = {
-            id: user.id,
-            name: user.name
-          }; //JWT Payload. It sets the data in the token
-          setToken(payload, (err, token) => {
-            if (err) {
-              console.log(err);
-            } else {
-              res.cookie("access_token", token, {
-                maxAge: 24 * 60 * 60 * 1000
-              });
-              res.status(200).json({
-                token: token,
-                success: true,
-                message: "Logged In",
-                userflags: {
-                  isCreator: user.isCreator,
-                  firstTimeLogin: user.firstTimeLogin
-                },
-                userId: user._id
-              });
-            }
-          });
-        } else {
-          res.status(404).send({ message: "Password Mismatch" });
-        }
-      });
+      if (!user.deletedAt) {
+        bcrypt.compare(password, user.password, function(err, isMatch) {
+          if (isMatch) {
+            const payload = {
+              id: user.id,
+              name: user.name
+            }; //JWT Payload. It sets the data in the token
+            setToken(payload, (err, token) => {
+              if (err) {
+                console.log(err);
+              } else {
+                res.cookie("access_token", token, {
+                  maxAge: 24 * 60 * 60 * 1000
+                });
+                res.status(200).json({
+                  token: token,
+                  success: true,
+                  message: "Logged In",
+                  userflags: {
+                    isCreator: user.isCreator,
+                    firstTimeLogin: user.firstTimeLogin
+                  },
+                  userId: user._id
+                });
+              }
+            });
+          } else {
+            res.status(404).send({ message: "Password Mismatch" });
+          }
+        });
+      } else {
+        res.status(400).send({ message: "User is Blocked" });
+      }
     })
     .catch(err => {
       res.status(404).send({ message: "Email Not Found" });

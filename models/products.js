@@ -25,18 +25,16 @@ const productSchema = new mongoose.Schema(
       default: null
     },
     images: [String],
-    likes: {
-      type: Number,
-      default: 0
-    },
-    dislikes: {
-      type: Number,
-      default: 0
-    },
-    views: {
-      type: Number,
-      default: 0
-    },
+    likes: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Users",
+      unique: true
+    }],
+    views: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Users",
+      unique: true
+    }],
     comments: [
       {
         comment: { type: String, default: null },
@@ -49,6 +47,7 @@ const productSchema = new mongoose.Schema(
       }
     ],
     sizes: [String],
+    colors: [String],
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Users",

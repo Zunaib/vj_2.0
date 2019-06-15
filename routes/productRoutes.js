@@ -8,5 +8,9 @@ module.exports = app => {
     app.route("/api/fetchProductsByAlbums").post(productControllers.fetchProductsByAlbums);
     app.route("/api/updateProduct").put(productControllers.updateProduct);
     app.route("/api/deleteProduct").delete(productControllers.deleteProduct);
+    app.route("/api/addProductComment").post(productControllers.addProductComment);
+    app.route("/api/deleteProductComment").delete(productControllers.deleteProductComment);
+    app.route("/api/likeProduct").post(productControllers.likeProduct);
+    // app.route("/api/dislikeProduct").post(productControllers.dislikeProduct);
 
 };

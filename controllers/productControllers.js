@@ -2,14 +2,14 @@ const Products = require("../models/products");
 const fs = require("fs");
 
 exports.addProduct = async (req, res) => {
-  const {
+  let {
     productName,
     quantity,
     sizes,
     price,
     albumId,
     discount,
-    color,
+    colors,
     description
   } = req.body;
   let dir = "assets/uploads/productImages/";
@@ -36,6 +36,7 @@ exports.addProduct = async (req, res) => {
       userId: req.user.id,
       images: productImages,
       sizes: sizes,
+      colors: colors,
       discount: discount,
       description: description
     })
@@ -54,12 +55,13 @@ exports.addProduct = async (req, res) => {
   } else {
     Products.create({
       productName: productName,
-      color: color,
+      color: colors,
       quantity: quantity,
       price: price,
       userId: req.user.id,
       images: productImages,
       sizes: sizes,
+      colors: colors,
       discount: discount,
       description: description
     })
@@ -101,7 +103,7 @@ exports.updateProduct = (req, res) => {
     sizes,
     albumId,
     discount,
-    color,
+    colors,
     description,
     productImages
   } = req.body;
@@ -110,7 +112,7 @@ exports.updateProduct = (req, res) => {
   let newProductImages = [];
 
   if (req.files === null) {
-    let imagesarray = productImages.split(',');
+    let imagesarray = productImages.split(",");
     newProductImages = imagesarray;
     console.log("No files uploaded");
   } else {
@@ -139,7 +141,7 @@ exports.updateProduct = (req, res) => {
         price: price,
         sizes: sizes,
         discount: discount,
-        color: color,
+        color: colors,
         description: description,
         images: newProductImages
         // $set : {
@@ -155,7 +157,9 @@ exports.updateProduct = (req, res) => {
         })
       )
       .catch(err =>
-        res.status(400).json({ success: false, message: "Something went wrong" })
+        res
+          .status(400)
+          .json({ success: false, message: "Something went wrong" })
       );
   } else {
     Products.updateOne(
@@ -166,7 +170,7 @@ exports.updateProduct = (req, res) => {
         price: price,
         sizes: sizes,
         discount: discount,
-        color: color,
+        color: colors,
         description: description,
         images: newProductImages
         // $set : {
@@ -182,10 +186,11 @@ exports.updateProduct = (req, res) => {
         })
       )
       .catch(err =>
-        res.status(400).json({ success: false, message: "Something went wrong" })
+        res
+          .status(400)
+          .json({ success: false, message: "Something went wrong" })
       );
   }
-
 };
 
 exports.fetchAllProducts = (req, res) => {
@@ -244,7 +249,11 @@ exports.fetchProductsByUser = (req, res) => {
 exports.fetchSingleProductDetails = async (req, res) => {
   await Products.findById(req.body.productId)
     .then(product => {
-      Products.find({ userId: product.userId, _id: { $ne: product._id }, deletedAt: null })
+      Products.find({
+        userId: product.userId,
+        _id: { $ne: product._id },
+        deletedAt: null
+      })
         .sort({ createdAt: -1 })
         .limit(4)
         .lean()
@@ -278,3 +287,86 @@ exports.fetchProductsByAlbums = (req, res) => {
     );
 };
 
+exports.addProductComment = (req, res) => {
+  if (!req.body.comment) {
+    console.log("err");
+  } else {
+    Products.findByIdAndUpdate(req.body.productId, {
+      $push: { comments: { comment: req.body.comment, userId: req.user.id } }
+    })
+      .then(product =>
+        res.status(200).json({
+          success: true,
+          products: product,
+          message: "Comment Added Successfully"
+        })
+      )
+      .catch(err =>
+        res
+          .status(400)
+          .json({ success: false, message: "Something went wrong" })
+      );
+  }
+};
+
+exports.deleteProductComment = (req, res) => {
+  Products.findByIdAndUpdate(req.body.productId, {
+    $pull: { comments: { _id: req.body.commentId, userId: req.user.id } }
+  })
+    .then(product =>
+      res.status(200).json({
+        success: true,
+        products: product,
+        message: "Comment Deleted Successfully"
+      })
+    )
+    .catch(err =>
+      res.status(400).json({ success: false, message: "Something went wrong" })
+    );
+};
+
+exports.likeProduct = (req, res) => {
+  Products.findById(req.body.productId)
+    .then(product => {
+      if (product.likes.indexOf(req.user.id) > -1) {
+        product.likes.pull(req.user.id);
+        product.save();
+        res.status(200).json({
+          success: true,
+          products: product,
+          message: "Product Unliked Successfully"
+        });
+      } else {
+        product.likes.push(req.user.id);
+        product.save();
+        res.status(200).json({
+          success: true,
+          products: product,
+          message: "Product Liked Successfully"
+        });
+      }
+    })
+    .catch(err =>
+      res.status(400).json({ success: false, message: "Something went wrong" })
+    );
+};
+
+// exports.dislikeProduct = (req, res) => {
+//   Products.findById(req.body.productId)
+//     .then(product => {
+//       if (product.dislikes.indexOf(req.user.id) > -1) {
+//         res.status(400).json({ success: false, message: "Already Disliked" });
+//       } else {
+//         product.dislikes.push(req.user.id);
+//         product.save();
+//         res.status(200).json({
+//           success: true,
+//           products: product,
+//           message: "Product Disliked Successfully"
+//         });
+//       }
+//     })
+//     .catch(err =>
+//       res.status(400).json({ success: false, message: "Something went wrong" })
+//     );
+// };
