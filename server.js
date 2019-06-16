@@ -35,7 +35,7 @@ app.use(fileUpload());
 app.use(`/assets/uploads`, express.static(`assets/uploads`));
 app.use(express.static(path.join(__dirname, "assets")));
 
-//All Routes
+//All Application Routes
 const authRoutes = require("./routes/authRoutes");
 const contactUsRoutes = require("./routes/admin/contactUsRoutes");
 const albumRoutes = require("./routes/albumRoutes");
@@ -52,13 +52,22 @@ const dropdownRoutes = require("./routes/dropdownRoutes");
 const searchRoutes = require("./routes/searchRoutes");
 const messengerRoutes = require("./routes/messengerRoutes");
 
+//All Admin Routes
+const adminAuthRoutes = require("./routes/admin/authRoutes");
+const adminUserDashboardRoutes = require("./routes/admin/userDashboardRoutes");
+
 /**
  * Below this the routes will not require authorization token
  */
 
+//Application Routes
 authRoutes(app);
 contactUsRoutes(app);
 dropdownRoutes(app);
+
+//Admin Routes
+adminAuthRoutes(app);
+adminUserDashboardRoutes(app);
 
 app.use(
   (req, res, next) => {
@@ -102,6 +111,7 @@ app.get("/api/testApi", (req, res) => {
   });
 });
 
+//Application Routes
 albumRoutes(app);
 productRoutes(app);
 useAsRoutes(app);
@@ -114,6 +124,9 @@ orderRoutes(app);
 profileRoutes(app);
 searchRoutes(app);
 messengerRoutes(app);
+
+
+//Admin Routes
 
 //Server Connection
 const port = process.env.PORT || 5000;

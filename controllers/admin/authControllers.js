@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const { setToken, verifyToken } = require("../../config/auth");
 
 exports.signup = async (req, res) => {
-  let { password, email, userName } = req.body;
+  let { password, email, userName, firstName, lastName } = req.body;
   let emailExist = false;
   let userNameExist = false;
   await Admins.findOne({ email: email }, (err, isMatch) => {
@@ -27,7 +27,9 @@ exports.signup = async (req, res) => {
         Admins.create({
           email: email,
           userName: userName,
-          password: hashedPassword
+          password: hashedPassword,
+          firstName: firstName,
+          lastName, lastName
         })
           .then(user => {
             return res.status(200).json({

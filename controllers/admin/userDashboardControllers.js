@@ -4,11 +4,11 @@ const Users = require("../../models/users");
  * API returns all the users of the system
  * Every User which have deletedAt != NULL is the blocked user
  */
-exports.allUsers = (req, res) => {
+exports.fetchAllUsers = (req, res) => {
   Users.find()
     .lean()
     .sort({ createdAt: -1 })
-    .select("firstName lastName email createdAt deletedAt")
+    // .select("firstName lastName email userName createdAt deletedAt dateofbirth gender")
     .then(users => {
       return res.status(200).json({
         success: true,
