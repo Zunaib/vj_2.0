@@ -59,8 +59,9 @@ exports.deleteAlbum = (req, res) => {
 };
 
 exports.fetchAlbumsByUser = (req, res) => {
+  let userId = req.query.userId || req.user.id;
   if (req.query.limit) {
-    Albums.find({ deletedAt: null, userId: req.user.id })
+    Albums.find({ deletedAt: null, userId: userId })
       .sort({ createdAt: -1 })
       .limit(parseInt(req.query.limit))
       .then(album =>
@@ -76,7 +77,7 @@ exports.fetchAlbumsByUser = (req, res) => {
           .json({ success: false, message: "Something went wrong" })
       );
   } else {
-    Albums.find({ deletedAt: null, userId: req.user.id })
+    Albums.find({ deletedAt: null, userId: userId })
       .sort({ createdAt: -1 })
       .then(album => res.status(200).json({ success: true, albums: album }))
       .catch(err =>

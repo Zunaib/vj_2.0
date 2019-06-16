@@ -211,8 +211,9 @@ exports.fetchAllProducts = (req, res) => {
  * Fetches the logged in current user's Products
  */
 exports.fetchProductsByUser = (req, res) => {
+  let userId = req.query.userId || req.user.id;
   if (req.query.limit) {
-    Products.find({ deletedAt: null, userId: req.user.id })
+    Products.find({ deletedAt: null, userId: userId })
       .sort({ createdAt: -1 })
       .limit(parseInt(req.query.limit))
       .then(product =>
@@ -228,7 +229,7 @@ exports.fetchProductsByUser = (req, res) => {
           .json({ success: false, message: "Something went wrong" })
       );
   } else {
-    Products.find({ deletedAt: null, userId: req.user.id })
+    Products.find({ deletedAt: null, userId: userId })
       .sort({ createdAt: -1 })
       .then(product =>
         res.status(200).json({

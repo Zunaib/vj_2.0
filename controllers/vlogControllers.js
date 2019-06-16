@@ -109,8 +109,10 @@ exports.fetchAllVlogs = (req, res) => {
  * Fetches the logged in current user's Vlogs
  */
 exports.fetchVlogsByUser = (req, res) => {
+  let userId = req.query.userId || req.user.id;
+
   if (req.query.limit) {
-    Vlogs.find({ deletedAt: null, userId: req.user.id })
+    Vlogs.find({ deletedAt: null, userId: userId })
       .sort({ createdAt: -1 })
       .limit(parseInt(req.query.limit))
       .then(vlogs =>
@@ -126,7 +128,7 @@ exports.fetchVlogsByUser = (req, res) => {
           .json({ success: false, message: "Something went wrong" })
       );
   } else {
-    Vlogs.find({ deletedAt: null, userId: req.user.id })
+    Vlogs.find({ deletedAt: null, userId: userId })
       .sort({ createdAt: -1 })
       .then(vlogs =>
         res.status(200).json({

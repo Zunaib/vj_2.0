@@ -3,7 +3,9 @@ const fs = require("fs");
 const path = require("path");
 
 exports.fetchUserSettings = (req, res) => {
-  Users.findById(req.user.id)
+  let userId = req.query.userId || req.user.id;
+
+  Users.findById(userId)
     .then(user => {
       return res.status(200).json({
         success: true,
