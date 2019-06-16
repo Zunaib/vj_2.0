@@ -30,17 +30,22 @@ exports.fetchAllUsers = (req, res) => {
  *  API mathches it with email, firstName, lastName
  *
  */
-exports.searchUser = (req, res) => {
+exports.searchUsers = (req, res) => {
   let { queryString } = req.body;
-  Users.findOne({
+
+  const regex = new RegExp(escapeRegex(queryString), "gi");
+
+  Users.find({
     $or: [
-      { email: queryString },
-      { firstName: queryString },
-      { lastName: queryString }
+      { firstName: regex },
+      { lastName: regex },
+      { email: regex },
+      { userName: regex }
     ]
   })
+    // .select("firstName lastName email displayPicture createdAt deletedAt")
+    .sort({ createdAt: -1 })
     .lean()
-    .select("firstName lastName email createdAt deletedAt")
     .then(users => {
       return res.status(200).json({
         success: true,
@@ -61,13 +66,13 @@ exports.searchUser = (req, res) => {
  * API returns recent 10 users joined
  * IF limit is sent along with the request API returns that amount of users
  */
-exports.recentUsersJoined = (req, res) => {
-  let userLimit = req.body.limit || 10;
+exports.fetchRecentUsersJoined = (req, res) => {
+  let userLimit = parseInt(req.query.limit) || 10;
   Users.find()
     .lean()
     .sort({ createdAt: -1 })
     .limit(userLimit)
-    .select("firstName lastName email createdAt deletedAt")
+    // .select("firstName lastName email displayPicture createdAt deletedAt")
     .then(users => {
       return res.status(200).json({
         success: true,
@@ -84,3 +89,49 @@ exports.recentUsersJoined = (req, res) => {
     });
 };
 
+exports.fetchBlockedUsers = (req, res) => {
+  Users.find({ deletedAt: { $ne: null } })
+    .lean()
+    .sort({ createdAt: -1 })
+    // .select("firstName lastName email displayPicture createdAt deletedAt")
+    .then(users => {
+      return res.status(200).json({
+        success: true,
+        users: users,
+        message: "Blocked users fetched successfully"
+      });
+    })
+    .catch(err => {
+      return res.status(400).json({
+        success: false,
+        error: err,
+        message: "Something went wrong"
+      });
+    });
+};
+
+exports.blockUser = (req, res) => {
+  Users.findById(req.query.userId)
+    .then(user => {
+      if (!user.deletedAt) {
+        user.deletedAt = Date.now();
+        user.save();
+        res.status(200).json({
+          success: true,
+          user: user,
+          message: "User Blocked Successfully"
+        });
+      } else {
+        user.deletedAt = null;
+        user.save();
+        res.status(200).json({
+          success: true,
+          user: user,
+          message: "User Unblocked Successfully"
+        });
+      }
+    })
+    .catch(err =>
+      res.status(400).json({ success: false, message: "Something went wrong" })
+    );
+};
