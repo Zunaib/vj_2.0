@@ -14,9 +14,10 @@ exports.search = async (req, res) => {
 
   await Users.find({
     deletedAt: null,
-    $or: [{ firstName: regex }, { lastName: regex }]
+    $or: [{ firstName: regex }, { lastName: regex }],
+    _id: { $ne : req.user.id}
   })
-    .select("firstName lastName email displayPicture")
+    .select("firstName lastName email displayPicture createdAt")
     .lean()
     .then(foundUsers => (users = foundUsers))
     .catch(err =>
@@ -27,7 +28,7 @@ exports.search = async (req, res) => {
     deletedAt: null,
     $or: [{ title: regex }, { content: regex }]
   })
-    .select("title description content likes comments")
+    .select("title description content likes comments createdAt thumbnail")
     .lean()
     .then(foundBlogs => (blogs = foundBlogs))
     .catch(err =>
@@ -38,7 +39,7 @@ exports.search = async (req, res) => {
     deletedAt: null,
     $or: [{ title: regex }, { description: regex }]
   })
-    .select("title description videoLink likes comments")
+    .select("title description videoLink likes comments createdAt")
     .lean()
     .then(foundVlogs => (vlogs = foundVlogs))
     .catch(err =>
@@ -49,7 +50,7 @@ exports.search = async (req, res) => {
     deletedAt: null,
     $or: [{ productName: regex }, { description: regex }]
   })
-    .select("productName description price discount likes comments")
+    .select("productName description price discount likes comments createdAt images")
     .lean()
     .then(foundProducts => (products = foundProducts))
     .catch(err =>

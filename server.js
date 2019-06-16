@@ -50,6 +50,7 @@ const orderRoutes = require("./routes/orderRoutes");
 const profileRoutes = require("./routes/profileRoutes");
 const dropdownRoutes = require("./routes/dropdownRoutes");
 const searchRoutes = require("./routes/searchRoutes");
+const messengerRoutes = require("./routes/messengerRoutes");
 
 /**
  * Below this the routes will not require authorization token
@@ -112,6 +113,7 @@ cartRoutes(app);
 orderRoutes(app);
 profileRoutes(app);
 searchRoutes(app);
+messengerRoutes(app);
 
 //Server Connection
 const port = process.env.PORT || 5000;
