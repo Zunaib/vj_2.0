@@ -37,7 +37,7 @@ app.use(express.static(path.join(__dirname, "assets")));
 
 //All Routes
 const authRoutes = require("./routes/authRoutes");
-const contactUsRoutes = require("./routes/contactUsRoutes");
+const contactUsRoutes = require("./routes/admin/contactUsRoutes");
 const albumRoutes = require("./routes/albumRoutes");
 const productRoutes = require("./routes/productRoutes");
 const useAsRoutes = require("./routes/useAsRoutes");
