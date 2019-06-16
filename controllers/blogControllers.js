@@ -138,7 +138,9 @@ exports.fetchSingleBlogDetails = (req, res) => {
 
 exports.addBlogComment = (req, res) => {
   if (!req.body.comment) {
-    console.log("err");
+    res
+      .status(400)
+      .json({ success: false, message: "Cannot Comment with Empty Body" });
   } else {
     Blogs.findByIdAndUpdate(req.body.blogId, {
       $push: { comments: { comment: req.body.comment, userId: req.user.id } }
