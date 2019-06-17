@@ -37,7 +37,6 @@ app.use(express.static(path.join(__dirname, "assets")));
 
 //All Application Routes
 const authRoutes = require("./routes/authRoutes");
-const contactUsRoutes = require("./routes/admin/contactUsRoutes");
 const albumRoutes = require("./routes/albumRoutes");
 const productRoutes = require("./routes/productRoutes");
 const useAsRoutes = require("./routes/useAsRoutes");
@@ -53,8 +52,12 @@ const searchRoutes = require("./routes/searchRoutes");
 const messengerRoutes = require("./routes/messengerRoutes");
 
 //All Admin Routes
+const contactUsRoutes = require("./routes/admin/contactUsRoutes");
 const adminAuthRoutes = require("./routes/admin/authRoutes");
 const adminUserDashboardRoutes = require("./routes/admin/userDashboardRoutes");
+const orderDashboardRoutes = require("./routes/admin/orderDashboardRoutes");
+const generalDashboardRoutes = require("./routes/admin/generalDashboardRoutes");
+const productDashboardRoutes = require("./routes/admin/productDashboardRoutes");
 
 /**
  * Below this the routes will not require authorization token
@@ -62,12 +65,15 @@ const adminUserDashboardRoutes = require("./routes/admin/userDashboardRoutes");
 
 //Application Routes
 authRoutes(app);
-contactUsRoutes(app);
 dropdownRoutes(app);
 
 //Admin Routes
+contactUsRoutes(app);
 adminAuthRoutes(app);
 adminUserDashboardRoutes(app);
+orderDashboardRoutes(app);
+generalDashboardRoutes(app);
+productDashboardRoutes(app);
 
 app.use(
   (req, res, next) => {
