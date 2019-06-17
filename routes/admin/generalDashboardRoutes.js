@@ -10,4 +10,7 @@ module.exports = app => {
   app
     .route("/api/admin/fetchRevenues")
     .get(generalDashboardControllers.fetchRevenuesAndLastWeekOrders);
+  app
+    .route("/api/admin/fetchSignupsThisWeek")
+    .get(generalDashboardControllers.fetchSignupsThisWeek);
 };

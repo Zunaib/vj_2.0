@@ -117,3 +117,27 @@ exports.fetchRevenuesAndLastWeekOrders = async (req, res) => {
     message: "Orders and Revenue fetched successfully"
   });
 };
+
+exports.fetchSignupsThisWeek = (req, res) => {
+  Users.find({
+    createdAt: {
+      $gte: new Date(new Date() - 7 * 60 * 60 * 24 * 1000)
+    }
+  })
+    .sort({ createdAt: -1 })
+    .lean()
+    .then(users =>
+      res.status(200).json({
+        success: true,
+        usersThisWeek: users,
+        message: "Users of this week fetched successfully"
+      })
+    )
+    .catch(err =>
+      res.status(400).json({
+        success: false,
+        error: err,
+        message: "Something went wrong"
+      })
+    );
+};
