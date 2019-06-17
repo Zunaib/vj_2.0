@@ -194,7 +194,7 @@ exports.updateProduct = (req, res) => {
 };
 
 exports.fetchAllProducts = (req, res) => {
-  Products.find({ deletedAt: null })
+  Products.find({ deletedAt: null, userId: { $ne: req.user.id } })
     .sort({ createdAt: -1 })
     .then(product =>
       res.status(200).json({
