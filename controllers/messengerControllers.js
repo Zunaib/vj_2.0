@@ -7,18 +7,43 @@ const Conversations = require("../models/conversations");
 exports.createConversation = (req, res) => {
   let firstUser = req.user.id;
   let secondUser = req.query.userId;
-
-  Conversations.create({
-    firstUser: firstUser,
-    secondUser: secondUser
+  Conversations.findOne({
+    deletedAt: null,
+    $or: [
+      { $and: [{ firstUser: firstUser }, { secondUser: secondUser }] },
+      { $and: [{ firstUser: secondUser }, { secondUser: firstUser }] }
+    ]
   })
-    .then(conversation =>
-      res.status(200).json({
-        success: true,
-        conversation: conversation,
-        message: "Conversation Started Successfully"
-      })
-    )
+    .populate("firstUser", "firstName lastName")
+    .populate("secondUser", "firstName lastName")
+    // .select("firstUser secondUser createdAt")
+    .lean()
+    .then(conversation => {
+      if (!conversation) {
+        Conversations.create({
+          firstUser: firstUser,
+          secondUser: secondUser
+        })
+          .then(conversation =>
+            res.status(200).json({
+              success: true,
+              conversation: conversation,
+              message: "Conversation Started Successfully"
+            })
+          )
+          .catch(err =>
+            res
+              .status(400)
+              .json({ success: false, message: "Something went wrong" })
+          );
+      } else {
+        res.status(200).json({
+          success: true,
+          conversation: conversation,
+          message: "Conversation Already Exist"
+        });
+      }
+    })
     .catch(err =>
       res.status(400).json({ success: false, message: "Something went wrong" })
     );
