@@ -24,7 +24,8 @@ mongoose.connect(db.url, { useNewUrlParser: true }, function (err, db) {
 
 app.use(
   cors({
-    origin: "http://localhost:3000"
+    // origin: "http://localhost:3000"
+    origin: "*"
   })
 );
 

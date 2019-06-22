@@ -3,6 +3,7 @@ module.exports = app => {
 
 
   app.route("/api/changeSettings").post(userSettingsControllers.changeSettings);
+  app.route("/api/changePassword").post(userSettingsControllers.changePassword);
   app.route("/api/changeDisplayPicture").put(userSettingsControllers.changeDisplayPicture);
   app.route("/api/fetchDisplayPicture").get(userSettingsControllers.fetchDisplayPicture);
   app.route("/api/deleteDisplayPicture").delete(userSettingsControllers.deleteDisplayPicture);
