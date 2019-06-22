@@ -315,13 +315,31 @@ exports.addProductComment = (req, res) => {
           lastName: 1
         }
       })
-      .then(product =>
-        res.status(200).json({
-          success: true,
-          products: product,
-          message: "Comment Added Successfully"
+      .then(product => {
+        Products.find({
+          userId: product.userId,
+          _id: { $ne: product._id },
+          deletedAt: null
         })
-      )
+          .sort({ createdAt: -1 })
+          .limit(4)
+          .lean()
+          .then(similarLatestProducts => {
+            res.status(200).json({
+              success: true,
+              product: product,
+              similarProducts: similarLatestProducts,
+              message: "Product Fetched Successfully"
+            });
+          })
+          .catch(err => console.log(err));
+      })
+      //   res.status(200).json({
+      //     success: true,
+      //     products: product,
+      //     message: "Comment Added Successfully"
+      //   })
+      // )
       .catch(err =>
         res
           .status(400)
