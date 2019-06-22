@@ -249,6 +249,13 @@ exports.fetchProductsByUser = (req, res) => {
 //similarProducts are the latest 4 products from the same designer whose product is currently fetched
 exports.fetchSingleProductDetails = async (req, res) => {
   await Products.findById(req.body.productId)
+    .populate({
+      path: "comments.userId",
+      select: {
+        firstName: 1,
+        lastName: 1
+      }
+    })
     .then(product => {
       Products.find({
         userId: product.userId,
@@ -294,9 +301,20 @@ exports.addProductComment = (req, res) => {
       .status(400)
       .json({ success: false, message: "Cannot Comment with Empty Body" });
   } else {
-    Products.findByIdAndUpdate(req.body.productId, {
-      $push: { comments: { comment: req.body.comment, userId: req.user.id } }
-    })
+    Products.findByIdAndUpdate(
+      req.body.productId,
+      {
+        $push: { comments: { comment: req.body.comment, userId: req.user.id } }
+      },
+      { new: true }
+    )
+      .populate({
+        path: "comments.userId",
+        select: {
+          firstName: 1,
+          lastName: 1
+        }
+      })
       .then(product =>
         res.status(200).json({
           success: true,

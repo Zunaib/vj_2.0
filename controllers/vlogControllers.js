@@ -147,6 +147,13 @@ exports.fetchVlogsByUser = (req, res) => {
 
 exports.fetchSingleVlogDetails = (req, res) => {
   Vlogs.findById(req.body.vlogId)
+    .populate({
+      path: "comments.userId",
+      select: {
+        firstName: 1,
+        lastName: 1
+      }
+    })
     .then(vlog =>
       res.status(200).json({
         success: true,
@@ -165,9 +172,20 @@ exports.addVlogComment = (req, res) => {
       .status(400)
       .json({ success: false, message: "Cannot Comment with Empty Body" });
   } else {
-    Vlogs.findByIdAndUpdate(req.body.vlogId, {
-      $push: { comments: { comment: req.body.comment, userId: req.user.id } }
-    })
+    Vlogs.findByIdAndUpdate(
+      req.body.vlogId,
+      {
+        $push: { comments: { comment: req.body.comment, userId: req.user.id } }
+      },
+      { new: true }
+    )
+      .populate({
+        path: "comments.userId",
+        select: {
+          firstName: 1,
+          lastName: 1
+        }
+      })
       .then(vlog =>
         res.status(200).json({
           success: true,
