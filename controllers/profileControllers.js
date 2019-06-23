@@ -1,6 +1,9 @@
 const DesignerOrders = require("../models/designerOrders");
 const Users = require("../models/users");
 const Products = require("../models/products");
+const Blogs = require("../models/blogs");
+const Vlogs = require("../models/vlogs");
+
 exports.followUser = (req, res) => {
   const { userId } = req.body;
 
@@ -26,7 +29,7 @@ exports.unFollowUser = (req, res) => {
 };
 
 exports.getUserStats = async (req, res) => {
-  let totalOrders, totalProducts, totalFollowers, userSince;
+  let totalProducts, totalBlogs, totalVlogs, totalFollowers;
   const { userId } = req.body;
 
   await Users.findById(userId).then(user => {
@@ -35,18 +38,25 @@ exports.getUserStats = async (req, res) => {
   });
 
   await Products.find({ userId: userId })
+    .lean()
     .then(product => (totalProducts = product.length))
     .catch(err => console.log(err));
 
-  await DesignerOrders.find({ designer : userId})
-    .then(orders => (totalOrders = orders.length))
+  await Blogs.find({ userId: userId })
+    .lean()
+    .then(blogs => (totalBlogs = blogs.length))
+    .catch(err => console.log(err));
+
+  await Vlogs.find({ userId: userId })
+    .lean()
+    .then(vlogs => (totalVlogs = vlogs.length))
     .catch(err => console.log(err));
 
   return res.status(200).json({
     success: true,
-    totalOrders: totalOrders,
     totalFollowers: totalFollowers,
-    totalProducts: totalProducts
+    totalProducts: totalProducts,
+    totalBlogs: totalBlogs,
+    totalVlogs: totalVlogs
   });
 };
-
