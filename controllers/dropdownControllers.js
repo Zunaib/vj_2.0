@@ -22,7 +22,8 @@ exports.addValueToDropdown = async (req, res) => {
   } else {
     await Dropdowns.findOneAndUpdate(
       { dropdownName: key },
-      { $push: { values: value } }
+      { $push: { values: value } },
+      { new: true }
     )
       .then(async dropdown => {
         await res.status(200).json({

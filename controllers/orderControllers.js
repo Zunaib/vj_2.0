@@ -106,7 +106,7 @@ exports.placeOrder = async (req, res) => {
 
 exports.fetchCustomerOrders = (req, res) => {
   CustomerOrders.find({ customerId: req.user.id })
-    .populate({ path: "products.product", populate: { path: "userId" } })
+    .populate({ path: "products.product", populate: { path: "userId", select: "firstName lastName" } })
     .sort({ createdAt: -1 })
     .lean()
     .then(orders =>

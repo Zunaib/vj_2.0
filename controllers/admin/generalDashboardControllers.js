@@ -2,9 +2,9 @@ const DesignerOrders = require("../../models/designerOrders");
 const Users = require("../../models/users");
 const Products = require("../../models/products");
 
-exports.fetchOverallStatistics = (req, res) => {
+exports.fetchOverallStatistics = async (req, res) => {
   let orderCount, userCount, productCount;
-  DesignerOrders.find({})
+  await DesignerOrders.find({})
     .lean()
     .then(orders => (orderCount = orders.length))
     .catch(err =>
@@ -14,7 +14,7 @@ exports.fetchOverallStatistics = (req, res) => {
         message: "Something went wrong"
       })
     );
-  Users.find({})
+  await Users.find({})
     .lean()
     .then(users => (userCount = users.length))
     .catch(err =>
@@ -24,7 +24,7 @@ exports.fetchOverallStatistics = (req, res) => {
         message: "Something went wrong"
       })
     );
-  Products.find({})
+  await Products.find({})
     .lean()
     .then(products => (productCount = products.length))
     .catch(err =>
@@ -44,9 +44,9 @@ exports.fetchOverallStatistics = (req, res) => {
   });
 };
 
-exports.fetchRecentOrders = (req, res) => {
+exports.fetchRecentOrders = async (req, res) => {
   let limit = req.query.limit || 10;
-  DesignerOrders.find({})
+  await DesignerOrders.find({})
     .sort({ createdAt: -1 })
     .limit(limit)
     .lean()
