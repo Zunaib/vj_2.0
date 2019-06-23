@@ -55,3 +55,18 @@ exports.fetchDropdownValues = (req, res) => {
       res.status(400).json({ success: false, message: "Something went wrong" })
     );
 };
+
+exports.fetchAllDropdowns = (req, res) => {
+  Dropdowns.find()
+    .lean()
+    .then(dropdowns =>
+      res.status(200).json({
+        success: true,
+        dropdown: dropdowns,
+        message: "Dropdown Fetched Successfully"
+      })
+    )
+    .catch(err =>
+      res.status(400).json({ success: false, message: "Something went wrong" })
+    );
+};
