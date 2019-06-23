@@ -55,7 +55,6 @@ exports.addProduct = async (req, res) => {
           .json({ success: false, message: "Something went wrong" })
       );
   } else {
-    console.log('here')
   
     Products.create({
       productName: productName,
@@ -77,10 +76,10 @@ exports.addProduct = async (req, res) => {
           message: "Product Added Successfully"
         })
       )
-      .catch(err => console.log(err)
-        // res
-        //   .status(400)
-        //   .json({ success: false, message: "Something went wrong" })
+      .catch(err =>
+        res
+          .status(400)
+          .json({ success: false, message: "Something went wrong" })
       );
   }
 };
