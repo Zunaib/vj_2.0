@@ -28,12 +28,12 @@ const productSchema = new mongoose.Schema(
     likes: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: "Users",
-      unique: true
+      // unique: true
     }],
     views: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: "Users",
-      unique: true
+      // unique: true
     }],
     comments: [
       {
