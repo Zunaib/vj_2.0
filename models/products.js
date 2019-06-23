@@ -24,6 +24,10 @@ const productSchema = new mongoose.Schema(
       type: Number,
       default: null
     },
+    productType: {
+      type: String,
+      default: null
+    },
     images: [String],
     likes: [{
       type: mongoose.Schema.Types.ObjectId,

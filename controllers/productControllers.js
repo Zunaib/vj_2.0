@@ -10,6 +10,7 @@ exports.addProduct = async (req, res) => {
     albumId,
     discount,
     colors,
+    type,
     description
   } = req.body;
   let dir = "assets/uploads/productImages/";
@@ -36,6 +37,7 @@ exports.addProduct = async (req, res) => {
       userId: req.user.id,
       images: productImages,
       sizes: sizes,
+      productType: type,
       colors: colors,
       discount: discount,
       description: description
@@ -63,6 +65,7 @@ exports.addProduct = async (req, res) => {
       userId: req.user.id,
       images: productImages,
       sizes: sizes,
+      productType: type,
       colors: colors,
       discount: discount,
       description: description
