@@ -161,7 +161,8 @@ exports.cancelOrderByCustomer = (req, res) => {
         DesignerOrders.findByIdAndUpdate(
           product.designerOrder,
           {
-            status: "Cancelled"
+            status: "Cancelled",
+            deletedAt: Date.now()
           },
           { new: true }
         )
@@ -193,23 +194,34 @@ exports.cancelOrderByCustomer = (req, res) => {
 exports.changeOrderStatus = (req, res) => {
   let { designerOrderId, status } = req.body;
   CustomerOrders.findOne({
-        "products.designerOrder": designerOrderId
+    "products.designerOrder": designerOrderId
   })
     .then(customerOrder => {
       customerOrder.products.map(product => {
-        if(product.designerOrder == designerOrderId){
+        if (product.designerOrder == designerOrderId) {
           product.status = status;
         }
       });
       customerOrder.save();
-      DesignerOrders.findByIdAndUpdate(designerOrderId, { status: status}, {new: true})
+      DesignerOrders.findByIdAndUpdate(
+        designerOrderId,
+        { status: status, deletedAt: Date.now() },
+        { new: true }
+      )
         .lean()
-        .then(designerOrder => res.status(200).json({
-          designerOrder: designerOrder,
-          CustomerOrder: customerOrder,
-          success: true,
-          message: "Order " + status + " Successfully"
-        }))
+        .then(
+          designerOrder => {
+            this.fetchDesignerOrders();
+          }
+          // res.status(200).json({
+          //   designerOrder: designerOrder,
+          //   CustomerOrder: customerOrder,
+          //   success: true,
+          //   message: "Order " + status + " Successfully"
+          // })
+        );
     })
-    .catch(err => console.log(err));
+    .catch(err =>
+      res.status(400).json({ message: "Something went wrong", success: false })
+    );
 };
