@@ -156,7 +156,7 @@ exports.cancelOrderByCustomer = (req, res) => {
     _id: orderId
   })
     .select("products")
-    .then(order => {
+    .then(async order => {
       order.products.map(product => {
         DesignerOrders.findByIdAndUpdate(
           product.designerOrder,
@@ -175,12 +175,15 @@ exports.cancelOrderByCustomer = (req, res) => {
         product.status = "Cancelled";
       });
       order.deletedAt = Date.now();
-      order.save();
-      return res.status(200).json({
-        order: order,
-        success: true,
-        message: "Order Cancelled Successfully"
-      });
+      await order.save();
+
+      this.fetchCustomerOrders(req, res);
+
+      // return res.status(200).json({
+      //   order: order,
+      //   success: true,
+      //   message: "Order Cancelled Successfully"
+      // });
     })
     .catch(err =>
       res.status(400).json({ message: "Something went wrong", success: false })
