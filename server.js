@@ -37,20 +37,20 @@ app.use(`/assets/uploads`, express.static(`assets/uploads`));
 app.use(express.static(path.join(__dirname, "assets")));
 
 //All Application Routes
-const authRoutes = require("./routes/authRoutes");
-const albumRoutes = require("./routes/albumRoutes");
-const productRoutes = require("./routes/productRoutes");
-const useAsRoutes = require("./routes/useAsRoutes");
-const blogRoutes = require("./routes/blogRoutes");
-const vlogRoutes = require("./routes/vlogRoutes");
-const userSettingsRoutes = require("./routes/userSettingsRoutes");
-const fileUploadGFS = require("./routes/fileUploadGFS");
-const cartRoutes = require("./routes/cartRoutes");
-const orderRoutes = require("./routes/orderRoutes");
-const profileRoutes = require("./routes/profileRoutes");
-const dropdownRoutes = require("./routes/dropdownRoutes");
-const searchRoutes = require("./routes/searchRoutes");
-const messengerRoutes = require("./routes/messengerRoutes");
+const authRoutes = require("./routes/app/authRoutes");
+const albumRoutes = require("./routes/app/albumRoutes");
+const productRoutes = require("./routes/app/productRoutes");
+const useAsRoutes = require("./routes/app/useAsRoutes");
+const blogRoutes = require("./routes/app/blogRoutes");
+const vlogRoutes = require("./routes/app/vlogRoutes");
+const userSettingsRoutes = require("./routes/app/userSettingsRoutes");
+const fileUploadGFS = require("./routes/app/fileUploadGFS");
+const cartRoutes = require("./routes/app/cartRoutes");
+const orderRoutes = require("./routes/app/orderRoutes");
+const profileRoutes = require("./routes/app/profileRoutes");
+const dropdownRoutes = require("./routes/app/dropdownRoutes");
+const searchRoutes = require("./routes/app/searchRoutes");
+const messengerRoutes = require("./routes/app/messengerRoutes");
 
 //All Admin Routes
 const contactUsRoutes = require("./routes/admin/contactUsRoutes");
