@@ -6,27 +6,68 @@ const Vlogs = require("../../models/vlogs");
 
 exports.followUser = (req, res) => {
   const { userId } = req.query;
-
-  Users.findByIdAndUpdate(req.user.id, { $push: { followings: userId } })
-    .then(user => console.log("Successfully Following"))
-    .catch(err => console.log(err));
-
-  Users.findByIdAndUpdate(userId, { $push: { followers: req.user.id } })
-    .then(user => console.log("New Follower"))
-    .catch(err => console.log(err));
+  Users.findById(req.user.id)
+    .select("firstName lastName followings")
+    .then(loggedInUser => {
+      if (loggedInUser.followings.indexOf(userId) > -1) {
+        // return res.status(200).json({
+        //   success: false,
+        //   message: "User Already Followed"
+        // });
+        loggedInUser.followings.pull(userId);
+        loggedInUser.save();
+        Users.findByIdAndUpdate(
+          userId,
+          { $pull: { followers: req.user.id } },
+          { new: true }
+        )
+          .select("firstName lastName followers")
+          .then(currentProfileUser => res.status(200).json({
+            success: true,
+            currentProfileUser: currentProfileUser,
+            loggedInUser: loggedInUser,
+            message: "Successfully Unfollowed User"
+          }))
+          .catch(err =>
+            res
+              .status(400)
+              .json({ success: false, message: "Something went wrong" })
+          );
+      } else {
+        loggedInUser.followings.push(userId);
+        loggedInUser.save();
+        Users.findByIdAndUpdate(
+          userId,
+          { $push: { followers: req.user.id } },
+          { new: true }
+        )
+          .select("firstName lastName followers")
+          .then(currentProfileUser => res.status(200).json({
+            success: true,
+            currentProfileUser: currentProfileUser,
+            loggedInUser: loggedInUser,
+            message: "Successfully Followed User"
+          }))
+          .catch(err =>
+            res
+              .status(400)
+              .json({ success: false, message: "Something went wrong" })
+          );
+      }
+    });
 };
 
-exports.unFollowUser = (req, res) => {
-  const { userId } = req.query;
+// exports.unFollowUser = (req, res) => {
+//   const { userId } = req.query;
 
-  Users.findByIdAndUpdate(req.user.id, { $pull: { followings: userId } })
-    .then(user => console.log("Successfully Unfollowed"))
-    .catch(err => console.log(err));
+//   Users.findByIdAndUpdate(req.user.id, { $pull: { followings: userId } })
+//     .then(user => console.log("Successfully Unfollowed"))
+//     .catch(err => console.log(err));
 
-  Users.findByIdAndUpdate(userId, { $pull: { followers: req.user.id } })
-    .then(user => console.log("Follower Left"))
-    .catch(err => console.log(err));
-};
+//   Users.findByIdAndUpdate(userId, { $pull: { followers: req.user.id } })
+//     .then(user => console.log("Follower Left"))
+//     .catch(err => console.log(err));
+// };
 
 exports.getUserStats = async (req, res) => {
   let totalProducts, totalBlogs, totalVlogs, totalFollowers;

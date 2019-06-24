@@ -155,6 +155,3 @@ exports.changeOrderStatus = (req, res) => {
     })
     .catch(err => console.log(err));
 };
-body: {
-  userId: 132138
-}
