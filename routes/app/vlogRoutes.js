@@ -1,5 +1,5 @@
 module.exports = app => {
-  const vlogControllers = require("../controllers/vlogControllers");
+  const vlogControllers = require("../../controllers/app/vlogControllers");
 
   app.route("/api/addVlog").post(vlogControllers.addVlog);
   app.route("/api/fetchAllVlogs").get(vlogControllers.fetchAllVlogs);

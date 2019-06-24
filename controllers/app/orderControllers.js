@@ -1,7 +1,7 @@
-const CustomerOrders = require("../models/customerOrders");
-const DesignerOrders = require("../models/designerOrders");
-const Users = require("../models/users");
-const Products = require("../models/products");
+const CustomerOrders = require("../../models/customerOrders");
+const DesignerOrders = require("../../models/designerOrders");
+const Users = require("../../models/users");
+const Products = require("../../models/products");
 
 exports.placeOrder = async (req, res) => {
   let {

@@ -1,5 +1,5 @@
 module.exports = app => {
-  const albumControllers = require("../controllers/albumControllers");
+  const albumControllers = require("../../controllers/app/albumControllers");
 
   app.route("/api/createAlbum").post(albumControllers.createAlbum);
   app.route("/api/fetchAlbumsByUser").get(albumControllers.fetchAlbumsByUser);

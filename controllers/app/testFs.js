@@ -52,7 +52,7 @@ const GridFsStorage = require("multer-gridfs-storage");
 const Grid = require("gridfs-stream");
 const methodOverride = require("method-override");
 const fs = require("fs");
-const File = require("../models/files");
+const File = require("../../models/files");
 
 /**
  * Brad Traversy Code

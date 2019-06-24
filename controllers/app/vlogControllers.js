@@ -1,4 +1,4 @@
-const Vlogs = require("../models/vlogs");
+const Vlogs = require("../../models/vlogs");
 const fs = require("fs");
 
 exports.addVlog = async (req, res) => {

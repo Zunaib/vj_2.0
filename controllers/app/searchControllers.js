@@ -1,7 +1,7 @@
-const Users = require("../models/users");
-const Vlogs = require("../models/vlogs");
-const Products = require("../models/products");
-const Blogs = require("../models/blogs");
+const Users = require("../../models/users");
+const Vlogs = require("../../models/vlogs");
+const Products = require("../../models/products");
+const Blogs = require("../../models/blogs");
 
 exports.search = async (req, res) => {
   let { queryString } = req.body;

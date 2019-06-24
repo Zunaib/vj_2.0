@@ -1,5 +1,5 @@
 module.exports = app => {
-  const orderControllers = require("../controllers/orderControllers");
+  const orderControllers = require("../../controllers/app/orderControllers");
 
   app.route("/api/placeOrder").post(orderControllers.placeOrder);
   app.route("/api/fetchCustomerOrders").get(orderControllers.fetchCustomerOrders);

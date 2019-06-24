@@ -1,4 +1,4 @@
-const Dropdowns = require("../models/dropdowns");
+const Dropdowns = require("../../models/dropdowns");
 
 exports.createDropdown = (req, res) => {
   let { key } = req.body;

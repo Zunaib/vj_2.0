@@ -1,8 +1,8 @@
-const DesignerOrders = require("../models/designerOrders");
-const Users = require("../models/users");
-const Products = require("../models/products");
-const Blogs = require("../models/blogs");
-const Vlogs = require("../models/vlogs");
+const DesignerOrders = require("../../models/designerOrders");
+const Users = require("../../models/users");
+const Products = require("../../models/products");
+const Blogs = require("../../models/blogs");
+const Vlogs = require("../../models/vlogs");
 
 exports.followUser = (req, res) => {
   const { userId } = req.body;

@@ -1,5 +1,5 @@
-const Users = require("../models/users");
-const Products = require("../models/products");
+const Users = require("../../models/users");
+const Products = require("../../models/products");
 // import { calculateTotal } from "../helpers/calculateTotal";
 
 exports.addToCart = async (req, res) => {

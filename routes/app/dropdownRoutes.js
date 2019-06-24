@@ -1,5 +1,5 @@
 module.exports = app => {
-    const dropdownControllers = require("../controllers/dropdownControllers");
+    const dropdownControllers = require("../../controllers/app/dropdownControllers");
 
     app.route("/api/createDropdown").post(dropdownControllers.createDropdown);
     app.route("/api/addValueToDropdown").post(dropdownControllers.addValueToDropdown);

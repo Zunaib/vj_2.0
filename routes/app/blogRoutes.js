@@ -1,5 +1,5 @@
 module.exports = app => {
-    const blogControllers = require("../controllers/blogControllers");
+    const blogControllers = require("../../controllers/app/blogControllers");
 
     app.route("/api/createBlog").post(blogControllers.createBlog);
     app.route("/api/fetchAllBlogs").get(blogControllers.fetchAllBlogs);

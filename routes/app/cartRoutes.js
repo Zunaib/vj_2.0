@@ -1,5 +1,5 @@
 module.exports = app => {
-    const cartControllers = require("../controllers/cartControllers");
+    const cartControllers = require("../../controllers/app/cartControllers");
   
   
     app.route("/api/addToCart").post(cartControllers.addToCart);

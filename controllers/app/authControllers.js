@@ -1,7 +1,7 @@
-const Users = require("../models/users");
+const Users = require("../../models/users");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { setToken, verifyToken } = require("../config/auth");
+const { setToken, verifyToken } = require("../../config/auth");
 exports.signup = async (req, res) => {
   let { password, email, userName } = req.body;
   let emailExist = false;

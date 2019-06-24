@@ -1,4 +1,4 @@
-const Conversations = require("../models/conversations");
+const Conversations = require("../../models/conversations");
 
 /**
  * firstUser is the user who is logged in

@@ -1,5 +1,5 @@
 module.exports = app => {
-  const userSettingsControllers = require("../controllers/userSettingsControllers");
+  const userSettingsControllers = require("../../controllers/app/userSettingsControllers");
 
 
   app.route("/api/changeSettings").post(userSettingsControllers.changeSettings);

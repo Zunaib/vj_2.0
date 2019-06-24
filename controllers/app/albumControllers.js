@@ -1,4 +1,4 @@
-const Albums = require("../models/albums");
+const Albums = require("../../models/albums");
 const fs = require("fs");
 
 exports.createAlbum = async (req, res) => {
