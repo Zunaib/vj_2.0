@@ -5,7 +5,7 @@ const Blogs = require("../../models/blogs");
 const Vlogs = require("../../models/vlogs");
 
 exports.followUser = (req, res) => {
-  const { userId } = req.body;
+  const { userId } = req.query;
 
   Users.findByIdAndUpdate(req.user.id, { $push: { followings: userId } })
     .then(user => console.log("Successfully Following"))
@@ -17,7 +17,7 @@ exports.followUser = (req, res) => {
 };
 
 exports.unFollowUser = (req, res) => {
-  const { userId } = req.body;
+  const { userId } = req.query;
 
   Users.findByIdAndUpdate(req.user.id, { $pull: { followings: userId } })
     .then(user => console.log("Successfully Unfollowed"))
