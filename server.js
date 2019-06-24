@@ -51,6 +51,7 @@ const profileRoutes = require("./routes/app/profileRoutes");
 const dropdownRoutes = require("./routes/app/dropdownRoutes");
 const searchRoutes = require("./routes/app/searchRoutes");
 const messengerRoutes = require("./routes/app/messengerRoutes");
+const checkoutStripeRoutes = require("./routes/app/checkoutStripeRoutes");
 
 //All Admin Routes
 const contactUsRoutes = require("./routes/admin/contactUsRoutes");
