@@ -13,6 +13,8 @@ exports.addProduct = async (req, res) => {
     type,
     description
   } = req.body;
+  sizes = sizes.split(",");
+  colors = colors.split(",");
   let dir = "assets/uploads/productImages/";
   let productImages = [];
 
