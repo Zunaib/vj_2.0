@@ -27,6 +27,10 @@ const customerOrderSchema = new mongoose.Schema(
         status: {
           type: String,
           default: "Active"
+        },
+        designerOrder: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "DesignerOrders"
         }
       }
     ],
