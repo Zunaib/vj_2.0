@@ -37,23 +37,6 @@ app.use(`/assets/uploads`, express.static(`assets/uploads`));
 app.use(express.static(path.join(__dirname, "assets")));
 
 //All Application Routes
-<<<<<<< HEAD
-const authRoutes = require("./routes/authRoutes");
-const albumRoutes = require("./routes/albumRoutes");
-const productRoutes = require("./routes/productRoutes");
-const useAsRoutes = require("./routes/useAsRoutes");
-const blogRoutes = require("./routes/blogRoutes");
-const vlogRoutes = require("./routes/vlogRoutes");
-const userSettingsRoutes = require("./routes/userSettingsRoutes");
-const fileUploadGFS = require("./routes/fileUploadGFS");
-const cartRoutes = require("./routes/cartRoutes");
-const orderRoutes = require("./routes/orderRoutes");
-const profileRoutes = require("./routes/profileRoutes");
-const dropdownRoutes = require("./routes/dropdownRoutes");
-const searchRoutes = require("./routes/searchRoutes");
-const messengerRoutes = require("./routes/messengerRoutes");
-const checkoutStripeRoutes = require("./routes/checkoutStripeRoutes");
-=======
 const authRoutes = require("./routes/app/authRoutes");
 const albumRoutes = require("./routes/app/albumRoutes");
 const productRoutes = require("./routes/app/productRoutes");
@@ -68,7 +51,6 @@ const profileRoutes = require("./routes/app/profileRoutes");
 const dropdownRoutes = require("./routes/app/dropdownRoutes");
 const searchRoutes = require("./routes/app/searchRoutes");
 const messengerRoutes = require("./routes/app/messengerRoutes");
->>>>>>> a72ded600c2a84510147ba4842fc0f9e6f1383fc
 
 //All Admin Routes
 const contactUsRoutes = require("./routes/admin/contactUsRoutes");
