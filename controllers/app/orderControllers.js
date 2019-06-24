@@ -203,23 +203,43 @@ exports.changeOrderStatus = (req, res) => {
         }
       });
       customerOrder.save();
-      DesignerOrders.findByIdAndUpdate(
-        designerOrderId,
-        { status: status, deletedAt: Date.now() },
-        { new: true }
-      )
-        .lean()
-        .then(
-          designerOrder => {
-            this.fetchDesignerOrders();
-          }
-          // res.status(200).json({
-          //   designerOrder: designerOrder,
-          //   CustomerOrder: customerOrder,
-          //   success: true,
-          //   message: "Order " + status + " Successfully"
-          // })
-        );
+      if (status == "Cancelled") {
+        DesignerOrders.findByIdAndUpdate(
+          designerOrderId,
+          { status: status, deletedAt: Date.now() },
+          { new: true }
+        )
+          .lean()
+          .then(
+            designerOrder => {
+              this.fetchDesignerOrders();
+            }
+            // res.status(200).json({
+            //   designerOrder: designerOrder,
+            //   CustomerOrder: customerOrder,
+            //   success: true,
+            //   message: "Order " + status + " Successfully"
+            // })
+          );
+      } else if (status == "Completed") {
+        DesignerOrders.findByIdAndUpdate(
+          designerOrderId,
+          { status: status },
+          { new: true }
+        )
+          .lean()
+          .then(
+            designerOrder => {
+              this.fetchDesignerOrders();
+            }
+            // res.status(200).json({
+            //   designerOrder: designerOrder,
+            //   CustomerOrder: customerOrder,
+            //   success: true,
+            //   message: "Order " + status + " Successfully"
+            // })
+          );
+      }
     })
     .catch(err =>
       res.status(400).json({ message: "Something went wrong", success: false })
