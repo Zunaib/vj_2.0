@@ -174,6 +174,7 @@ exports.cancelOrderByCustomer = (req, res) => {
           );
         product.status = "Cancelled";
       });
+      order.deletedAt = Date.now();
       order.save();
       return res.status(200).json({
         order: order,
