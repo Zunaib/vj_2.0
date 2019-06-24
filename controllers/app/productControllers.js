@@ -2,87 +2,86 @@ const Products = require("../../models/products");
 const fs = require("fs");
 
 exports.addProduct = async (req, res) => {
-  console.log(req.body)
-  // let {
-  //   productName,
-  //   quantity,
-  //   sizes,
-  //   price,
-  //   albumId,
-  //   discount,
-  //   colors,
-  //   type,
-  //   description
-  // } = req.body;
-  // let dir = "assets/uploads/productImages/";
-  // let productImages = [];
+  let {
+    productName,
+    quantity,
+    sizes,
+    price,
+    albumId,
+    discount,
+    colors,
+    type,
+    description
+  } = req.body;
+  let dir = "assets/uploads/productImages/";
+  let productImages = [];
 
-  // if (!fs.existsSync(dir)) {
-  //   fs.mkdirSync(dir);
-  // }
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir);
+  }
 
-  // let arr = [].concat(req.files.file);
-  // arr.map(item => {
-  //   let filename = Date.now() + "_" + item.name;
-  //   fileWebPath = "/assets/uploads/productImages/" + filename;
-  //   item.mv(dir + filename);
-  //   productImages.push(fileWebPath);
-  // });
+  let arr = [].concat(req.files.file);
+  arr.map(item => {
+    let filename = Date.now() + "_" + item.name;
+    fileWebPath = "/assets/uploads/productImages/" + filename;
+    item.mv(dir + filename);
+    productImages.push(fileWebPath);
+  });
 
-  // if (albumId) {
-  //   Products.create({
-  //     productName: productName,
-  //     quantity: quantity,
-  //     price: price,
-  //     albumId: albumId,
-  //     userId: req.user.id,
-  //     images: productImages,
-  //     sizes: sizes,
-  //     productType: type,
-  //     colors: colors,
-  //     discount: discount,
-  //     description: description
-  //   })
-  //     .then(product =>
-  //       res.status(200).json({
-  //         success: true,
-  //         product: product,
-  //         message: "Product Added Successfully"
-  //       })
-  //     )
-  //     .catch(err =>
-  //       res
-  //         .status(400)
-  //         .json({ success: false, message: "Something went wrong" })
-  //     );
-  // } else {
+  if (albumId) {
+    Products.create({
+      productName: productName,
+      quantity: quantity,
+      price: price,
+      albumId: albumId,
+      userId: req.user.id,
+      images: productImages,
+      sizes: sizes,
+      productType: type,
+      colors: colors,
+      discount: discount,
+      description: description
+    })
+      .then(product =>
+        res.status(200).json({
+          success: true,
+          product: product,
+          message: "Product Added Successfully"
+        })
+      )
+      .catch(err =>
+        res
+          .status(400)
+          .json({ success: false, message: "Something went wrong" })
+      );
+  } else {
   
-  //   Products.create({
-  //     productName: productName,
-  //     color: colors,
-  //     quantity: quantity,
-  //     price: price,
-  //     userId: req.user.id,
-  //     images: productImages,
-  //     sizes: sizes,
-  //     productType: type,
-  //     colors: colors,
-  //     discount: discount,
-  //     description: description
-  //   })
-  //     .then(product =>
-  //       res.status(200).json({
-  //         success: true,
-  //         product: product,
-  //         message: "Product Added Successfully"
-  //       })
-  //     )
-  //     .catch(err =>
-  //       res
-  //         .status(400)
-  //         .json({ success: false, message: "Something went wrong" })
-  //     );
-  // }
+    Products.create({
+      productName: productName,
+      color: colors,
+      quantity: quantity,
+      price: price,
+      userId: req.user.id,
+      images: productImages,
+      sizes: sizes,
+      productType: type,
+      colors: colors,
+      discount: discount,
+      description: description
+    })
+      .then(product =>
+        res.status(200).json({
+          success: true,
+          product: product,
+          message: "Product Added Successfully"
+        })
+      )
+      .catch(err =>
+        res
+          .status(400)
+          .json({ success: false, message: "Something went wrong" })
+      );
+  }
 };
 
 exports.deleteProduct = (req, res) => {
