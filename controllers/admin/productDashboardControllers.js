@@ -24,8 +24,7 @@ exports.fetchPopularProducts = (req, res) => {
         }
       },
       { $sort: { noOfLikes: -1 } },
-      { $limit: 10 },
-      { $select: {}}
+      { $limit: 10 }
     ],
     (err, products) => {
       if (err) {
