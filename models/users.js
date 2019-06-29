@@ -142,18 +142,26 @@ const userSchema = new mongoose.Schema(
       default: null
     },
     notifications: {
-      isRead : {
+      isRead: {
         type: Boolean,
         default: false
       },
-      notification: [{
-        text: String,
-        date: Date,
-        notficationType: String,
-        contentId: String,
-        contentType: String
-      }]
+      notification: [
+        {
+          text: String,
+          date: Date,
+          notficationType: String,
+          contentId: String,
+          contentType: String
+        }
+      ]
     },
+    favoriteProducts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Products"
+      }
+    ],
     isAdmin: {
       type: Boolean,
       default: false

@@ -1,7 +1,7 @@
 const Products = require("../../models/products");
+const Users = require("../../models/users");
 const fs = require("fs");
 let { createNotification } = require("./notificationControllers");
-
 
 exports.addProduct = async (req, res) => {
   let {
@@ -59,7 +59,6 @@ exports.addProduct = async (req, res) => {
           .json({ success: false, message: "Something went wrong" })
       );
   } else {
-  
     Products.create({
       productName: productName,
       color: colors,
@@ -324,7 +323,13 @@ exports.addProductComment = (req, res) => {
         }
       })
       .then(product => {
-        createNotification(product.userId, "Comment Added on Product", "comment", product._id, "product");
+        createNotification(
+          product.userId,
+          "Comment Added on Product",
+          "comment",
+          product._id,
+          "product"
+        );
         Products.find({
           userId: product.userId,
           _id: { $ne: product._id },
@@ -385,7 +390,13 @@ exports.likeProduct = (req, res) => {
           message: "Product Unliked Successfully"
         });
       } else {
-        createNotification(product.userId, "Product Liked", "like", product._id, "product");
+        createNotification(
+          product.userId,
+          "Product Liked",
+          "like",
+          product._id,
+          "product"
+        );
         product.likes.push(req.user.id);
         product.save();
         res.status(200).json({
@@ -395,6 +406,44 @@ exports.likeProduct = (req, res) => {
         });
       }
     })
+    .catch(err =>
+      res.status(400).json({ success: false, message: "Something went wrong" })
+    );
+};
+
+exports.addToFavoriteProducts = (req, res) => {
+  Users.findByIdAndUpdate(
+    req.user.id,
+    {
+      $push: {
+        favoriteProducts: req.query.productId
+      }
+    },
+    { new: true }
+  )
+    .then(user =>
+      res.status(200).json({
+        success: true,
+        user: user.favoriteProducts,
+        message: "Added To Favorites Successfully"
+      })
+    )
+    .catch(err =>
+      res.status(400).json({ success: false, message: "Something went wrong" })
+    );
+};
+
+exports.fetchFavoriteProducts = (req, res) => {
+  Users.findById(req.user.id)
+    .lean()
+    .select("favoriteProducts")
+    .then(user =>
+      res.status(200).json({
+        success: true,
+        user: user.favoriteProducts,
+        message: "Favorite Products Fetched Successfully"
+      })
+    )
     .catch(err =>
       res.status(400).json({ success: false, message: "Something went wrong" })
     );
