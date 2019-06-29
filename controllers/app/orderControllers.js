@@ -45,7 +45,7 @@ exports.placeOrder = async (req, res) => {
             "New Order Placed",
             "order",
             order._id,
-            "order"
+            "designerOrder"
           );
           await C_Order.push({
             product: orderProduct.productId._id,
@@ -176,7 +176,7 @@ exports.cancelOrderByCustomer = (req, res) => {
         )
           .lean()
           .then(designerOrder => {
-            createNotification(designerOrder.designer, "Order has been cancelled", "order", designerOrder._id, "order");
+            createNotification(designerOrder.designer, "Order has been cancelled", "order", designerOrder._id, "designerOrder");
           })
           .catch(err =>
             res
