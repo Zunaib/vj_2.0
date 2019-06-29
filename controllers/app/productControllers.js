@@ -435,8 +435,9 @@ exports.addToFavoriteProducts = (req, res) => {
 
 exports.fetchFavoriteProducts = (req, res) => {
   Users.findById(req.user.id)
-    .lean()
     .select("favoriteProducts")
+    .populate("favoriteProducts")
+    .lean()
     .then(user =>
       res.status(200).json({
         success: true,

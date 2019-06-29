@@ -12,6 +12,8 @@ module.exports = app => {
     app.route("/api/deleteProductComment").delete(productControllers.deleteProductComment);
     app.route("/api/likeProduct").post(productControllers.likeProduct);
     app.route("/api/addToFavoriteProducts").get(productControllers.addToFavoriteProducts);
+    app.route("/api/fetchFavoriteProducts").get(productControllers.fetchFavoriteProducts);
+
 
     // app.route("/api/dislikeProduct").post(productControllers.dislikeProduct);
 
