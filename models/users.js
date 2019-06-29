@@ -135,6 +135,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: null
     },
+    isAdmin: {
+      type: Boolean,
+      default: false
+    },
     deletedAt: {
       type: Date,
       default: null

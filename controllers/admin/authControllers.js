@@ -1,4 +1,4 @@
-const Admins = require("../../models/admins");
+const Users = require("../../models/users");
 const bcrypt = require("bcryptjs");
 const { setToken, verifyToken } = require("../../config/auth");
 
@@ -6,12 +6,12 @@ exports.signup = async (req, res) => {
   let { password, email, userName, firstName, lastName } = req.body;
   let emailExist = false;
   let userNameExist = false;
-  await Admins.findOne({ email: email }, (err, isMatch) => {
+  await Users.findOne({ email: email }, (err, isMatch) => {
     if (isMatch) {
       emailExist = true;
     }
   });
-  await Admins.findOne({ userName: userName }, (err, isMatch) => {
+  await Users.findOne({ userName: userName }, (err, isMatch) => {
     if (isMatch) {
       userNameExist = true;
     }
@@ -24,12 +24,14 @@ exports.signup = async (req, res) => {
   } else {
     bcrypt.genSalt(10, (err, salt) => {
       bcrypt.hash(password, salt, (err, hashedPassword) => {
-        Admins.create({
+        Users.create({
           email: email,
           userName: userName,
           password: hashedPassword,
           firstName: firstName,
-          lastName, lastName
+          lastName,
+          lastName,
+          isAdmin: true
         })
           .then(user => {
             return res.status(200).json({
@@ -51,7 +53,7 @@ exports.signup = async (req, res) => {
 
 exports.login = (req, res) => {
   let { email, password } = req.body;
-  Admins.findOne({ $or: [{ email: email }, { userName: email }] })
+  Users.findOne({ $or: [{ email: email }, { userName: email }], isAdmin: true })
     .then(user => {
       bcrypt.compare(password, user.password, function(err, isMatch) {
         if (isMatch) {
@@ -70,10 +72,6 @@ exports.login = (req, res) => {
                 token: token,
                 success: true,
                 message: "Logged In",
-                userflags: {
-                  isCreator: user.isCreator,
-                  firstTimeLogin: user.firstTimeLogin
-                },
                 userId: user._id
               });
             }
