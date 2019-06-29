@@ -77,7 +77,11 @@ exports.fetchRevenuesAndLastWeekOrders = async (req, res) => {
     .lean()
     .then(orders => {
       let sum = 0;
-      orders.map(order => (sum += order.price));
+      orders.map(order => {
+        if (order.status == "Completed") {
+          sum += order.price;
+        }
+      });
       lastWeekRevenue = sum;
       lastWeekOrders = orders;
     })
@@ -92,7 +96,8 @@ exports.fetchRevenuesAndLastWeekOrders = async (req, res) => {
   await DesignerOrders.find({
     createdAt: {
       $gte: new Date(new Date() - 365 * 60 * 60 * 24 * 1000)
-    }
+    },
+    status: "Completed"
   })
     .sort({ createdAt: -1 })
     .lean()
@@ -197,7 +202,8 @@ exports.fetchMonthViseRevenue = async (req, res) => {
   await DesignerOrders.find({
     createdAt: {
       $gte: new Date(2019, 01, 01)
-    }
+    },
+    status: "Completed"
   }).then(async orders => {
     await Promise.all(
       orders.map(order => {
