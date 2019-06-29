@@ -28,17 +28,21 @@ exports.createNotification = (
 };
 
 exports.fetchNotifications = (req, res) => {
-  Users.findById(req.user.id)
+  Users.findByIdAndUpdate(
+    req.user.id,
+    {
+      "notifications.isRead": true
+    },
+    { new: true }
+  )
     .select("notifications")
-    .then(user => {
-      user.notifications.isRead = true;
-      user.save();
+    .then(user =>
       res.status(200).json({
         success: true,
         notifications: user.notifications,
         message: "Notifications Fetched Successfully"
-      });
-    })
+      })
+    )
     .catch(err =>
       res.status(400).json({ success: false, message: "Something went wrong" })
     );
