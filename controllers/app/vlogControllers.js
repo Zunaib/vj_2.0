@@ -186,13 +186,15 @@ exports.addVlogComment = (req, res) => {
           lastName: 1
         }
       })
-      .then(vlog =>
+      .then(vlog => {
+        createNotification(vlog.userId, "Comment Added on Vlog", "comment", vlog._id, "vlog");
+
         res.status(200).json({
           success: true,
           vlogs: vlog,
           message: "Comment Added Successfully"
-        })
-      )
+        });
+      })
       .catch(err =>
         res
           .status(400)
@@ -231,6 +233,7 @@ exports.likeVlog = (req, res) => {
       } else {
         vlog.likes.push(req.user.id);
         vlog.save();
+        createNotification(vlog.userId, "Vlog Liked", "like", vlog._id, "vlog");
         res.status(200).json({
           success: true,
           vlogs: vlog,

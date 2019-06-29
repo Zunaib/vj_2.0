@@ -1,5 +1,7 @@
 const Products = require("../../models/products");
 const fs = require("fs");
+let { createNotification } = require("./notificationControllers");
+
 
 exports.addProduct = async (req, res) => {
   let {
@@ -322,6 +324,7 @@ exports.addProductComment = (req, res) => {
         }
       })
       .then(product => {
+        createNotification(product.userId, "Comment Added on Product", "comment", product._id, "product");
         Products.find({
           userId: product.userId,
           _id: { $ne: product._id },
@@ -382,6 +385,7 @@ exports.likeProduct = (req, res) => {
           message: "Product Unliked Successfully"
         });
       } else {
+        createNotification(product.userId, "Product Liked", "like", product._id, "product");
         product.likes.push(req.user.id);
         product.save();
         res.status(200).json({
@@ -395,23 +399,3 @@ exports.likeProduct = (req, res) => {
       res.status(400).json({ success: false, message: "Something went wrong" })
     );
 };
-
-// exports.dislikeProduct = (req, res) => {
-//   Products.findById(req.body.productId)
-//     .then(product => {
-//       if (product.dislikes.indexOf(req.user.id) > -1) {
-//         res.status(400).json({ success: false, message: "Already Disliked" });
-//       } else {
-//         product.dislikes.push(req.user.id);
-//         product.save();
-//         res.status(200).json({
-//           success: true,
-//           products: product,
-//           message: "Product Disliked Successfully"
-//         });
-//       }
-//     })
-//     .catch(err =>
-//       res.status(400).json({ success: false, message: "Something went wrong" })
-//     );
-// };

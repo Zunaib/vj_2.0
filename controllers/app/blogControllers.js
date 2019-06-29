@@ -164,13 +164,14 @@ exports.addBlogComment = (req, res) => {
           lastName: 1
         }
       })
-      .then(blog =>
+      .then(blog => {
+        createNotification(blog.userId, "Comment Added on Blog", "comment", blog._id, "blog");
         res.status(200).json({
           success: true,
           blogs: blog,
           message: "Comment Added Successfully"
-        })
-      )
+        });
+      })
       .catch(err =>
         res
           .status(400)
@@ -209,6 +210,7 @@ exports.likeBlog = (req, res) => {
       } else {
         blog.likes.push(req.user.id);
         blog.save();
+        createNotification(blog.userId, "Blog Liked", "like", blog._id, "blog");
         res.status(200).json({
           success: true,
           blogs: blog,

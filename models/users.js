@@ -141,6 +141,19 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: null
     },
+    notifications: {
+      isRead : {
+        type: Boolean,
+        default: false
+      },
+      notification: [{
+        text: String,
+        date: Date,
+        notficationType: String,
+        contentId: String,
+        contentType: String
+      }]
+    },
     isAdmin: {
       type: Boolean,
       default: false

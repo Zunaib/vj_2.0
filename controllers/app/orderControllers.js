@@ -2,6 +2,7 @@ const CustomerOrders = require("../../models/customerOrders");
 const DesignerOrders = require("../../models/designerOrders");
 const Users = require("../../models/users");
 const Products = require("../../models/products");
+let { createNotification } = require("./notificationControllers");
 
 exports.placeOrder = async (req, res) => {
   let {
@@ -39,6 +40,13 @@ exports.placeOrder = async (req, res) => {
         paymentMethod: paymentMethod
       })
         .then(async order => {
+          createNotification(
+            orderProduct.productId.userId,
+            "New Order Placed",
+            "order",
+            order._id,
+            "order"
+          );
           await C_Order.push({
             product: orderProduct.productId._id,
             price: orderProduct.productId.price,
@@ -167,7 +175,9 @@ exports.cancelOrderByCustomer = (req, res) => {
           { new: true }
         )
           .lean()
-          .then(designerOrder => {})
+          .then(designerOrder => {
+            createNotification(designerOrder.designer, "Order has been cancelled", "order", designerOrder._id, "order");
+          })
           .catch(err =>
             res
               .status(400)
