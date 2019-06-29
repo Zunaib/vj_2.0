@@ -97,20 +97,16 @@ const userSchema = new mongoose.Schema(
     ],
     followings: [
       {
-        user: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Users"
-        }
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Users"
       }
     ],
     followers: [
       {
-        user: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Users"
-        }
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Users"
       }
-    ], 
+    ],
     designerDescription: {
       type: String,
       default: null

@@ -48,13 +48,10 @@ exports.addToCart = async (req, res) => {
 
 exports.removeFromCart = async (req, res) => {
   const { productId } = req.body;
-  await Users.findByIdAndUpdate(
-    req.user.id,
-    {
-      $pull: { cart: { productId: productId } }
-    },
-    { new: true }
-  )
+  await Users.findByIdAndUpdate(req.user.id, {
+    $pull: { cart: { productId: productId } }
+  }, { new: true })
+    .populate("cart.productId")
     .then(user =>
       res.status(200).json({
         cart: user.cart,
