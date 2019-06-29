@@ -21,8 +21,8 @@ exports.placeOrder = async (req, res) => {
       await DesignerOrders.create({
         product: orderProduct.productId._id,
         price: orderProduct.productId.price,
-        color: orderProduct.productId.color,
-        size: orderProduct.productId.size,
+        color: orderProduct.selectedColor,
+        size: orderProduct.selectedSize,
         discount: orderProduct.productId.discount,
         status: "Active",
         customer: req.user.id,
@@ -43,8 +43,8 @@ exports.placeOrder = async (req, res) => {
             product: orderProduct.productId._id,
             price: orderProduct.productId.price,
             discount: orderProduct.productId.discount,
-            color: orderProduct.productId.color,
-            size: orderProduct.productId.size,
+            color: orderProduct.selectedColor,
+            size: orderProduct.selectedSize,
             designerOrder: order._id
           });
           console.log("Designer Order created successfully");
@@ -53,7 +53,7 @@ exports.placeOrder = async (req, res) => {
     })
   );
 
-  console.log(C_Order);
+  // console.log(C_Order);
 
   //Here we will create the order of the customer
   await CustomerOrders.create({

@@ -50,11 +50,7 @@ exports.addToCart = async (req, res) => {
 };
 
 exports.removeFromCart = async (req, res) => {
-  // const { newCart } = req.body;
-  // console.log(req.body.productId);
-
   let incomingCart = req.body.productId;
-  // console.log(incomingCart);
   let cart = []
   await Promise.all(incomingCart.map(item => {
     let cartItem = {};
@@ -62,11 +58,8 @@ exports.removeFromCart = async (req, res) => {
     cartItem.selectedColor = item.selectedColor;
     cartItem.selectedSize = item.selectedSize;
     cart.push(cartItem);
-    console.log(cartItem);
-  })
+    })
   );
-
-  // console.log(cart);
 
   await Users.findByIdAndUpdate(
     req.user.id,
@@ -84,7 +77,7 @@ exports.removeFromCart = async (req, res) => {
       })
     )
     .catch(err =>
-      console.log(err)
+      res.status(400).json({ message: "Something went wrong", success: false })
     );
 };
 
