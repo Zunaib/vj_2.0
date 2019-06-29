@@ -3,54 +3,61 @@ const Products = require("../../models/products");
 // import { calculateTotal } from "../helpers/calculateTotal";
 
 exports.addToCart = async (req, res) => {
-  const { productId } = req.body;
+  const { productId, selectedSize, selectedColor } = req.body;
+  let cartItem = {
+    productId: productId,
+    selectedSize: selectedSize,
+    selectedColor: selectedColor
+  };
+  // await Users.findById(req.user.id)
+  //   .lean()
+  //   .then(user => {
+  // let { cart } = user;
+  // let alreadyExist = false;
+  // cart.map(item => {
+  //   if (item.productId == productId) {
+  //     alreadyExist = true;
+  //   }
+  // });
 
-  await Users.findById(req.user.id)
-    .lean()
+  // console.log("already exist:" + alreadyExist);
+
+  // if (alreadyExist) {
+  //   return res.status(500).json({
+  //     message: "Item already exist",
+  //     success: false
+  //   });
+  // } else {
+  Users.updateOne(
+    { _id: req.user.id },
+    {
+      $push: { cart: cartItem }
+    },
+    { new: true }
+  )
     .then(user => {
-      let { cart } = user;
-      let alreadyExist = false;
-      cart.map(item => {
-        if (item.productId == productId) {
-          alreadyExist = true;
-        }
+      return res.status(200).json({
+        cart: cart,
+        success: true,
+        message: "Added to Cart Successfully"
       });
-
-      // console.log("already exist:" + alreadyExist);
-
-      if (alreadyExist) {
-        return res.status(500).json({
-          message: "Item already exist",
-          success: false
-        });
-      } else {
-        Users.updateOne(
-          { _id: req.user.id },
-          {
-            $push: { cart: { productId } }
-          }
-        )
-          .then(user => {
-            return res.status(200).json({
-              cart: cart,
-              success: true,
-              message: "Added to Cart Successfully"
-            });
-          })
-          .catch(err =>
-            res
-              .status(400)
-              .json({ message: "Something went wrong", success: false })
-          );
-      }
-    });
+    })
+    .catch(err =>
+      res.status(400).json({ message: "Something went wrong", success: false })
+    );
+  // }
+  // });
 };
 
 exports.removeFromCart = async (req, res) => {
-  const { productId } = req.body;
-  await Users.findByIdAndUpdate(req.user.id, {
-    $pull: { cart: { productId: productId } }
-  }, { new: true })
+  const { newCart } = req.body;
+  await Users.findByIdAndUpdate(
+    req.user.id,
+    {
+      cart: { cart }
+    },
+    { new: true }
+  )
     .populate("cart.productId")
     .then(user =>
       res.status(200).json({

@@ -92,6 +92,12 @@ const userSchema = new mongoose.Schema(
         productId: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Products"
+        },
+        selectedSize: {
+          type: String
+        },
+        selectedColor: {
+          type: String
         }
       }
     ],
