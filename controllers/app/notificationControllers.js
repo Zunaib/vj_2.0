@@ -32,17 +32,10 @@ exports.fetchNotifications = (req, res) => {
     .select("notifications")
     .then(user => {
       user.notifications.isRead = true;
-      let notifications = user.notifications.sort((a, b) => {
-        let keyA = new Date(a.date);
-        let keyB = new Date(b.date);
-        if (keyA < keyB) return -1;
-        if (keyA > keyB) return 1;
-        return 0;
-      });
       user.save();
       res.status(200).json({
         success: true,
-        notifications: notifications,
+        notifications: user.notifications,
         message: "Notifications Fetched Successfully"
       });
     })
