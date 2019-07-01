@@ -222,7 +222,7 @@ exports.changeOrderStatus = (req, res) => {
           .lean()
           .then(
             designerOrder => {
-              this.fetchDesignerOrders();
+              this.fetchDesignerOrders(req, res);
             }
             // res.status(200).json({
             //   designerOrder: designerOrder,
@@ -240,7 +240,7 @@ exports.changeOrderStatus = (req, res) => {
           .lean()
           .then(
             designerOrder => {
-              this.fetchDesignerOrders();
+              this.fetchDesignerOrders(req, res);
             }
             // res.status(200).json({
             //   designerOrder: designerOrder,
