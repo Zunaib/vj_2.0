@@ -39,6 +39,3 @@ exports.passport_google_oauth20 = passport.use(
     }
   )
 );
-
-// Client ID 998902085437-l1e405ggc4bsfan9fges3neka9esdvm4.apps.googleusercontent.com
-// Client Secret hNhkbNL1q-D8_ZyMEO6cvODI

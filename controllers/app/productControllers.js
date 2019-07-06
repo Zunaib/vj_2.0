@@ -61,7 +61,6 @@ exports.addProduct = async (req, res) => {
   } else {
     Products.create({
       productName: productName,
-      color: colors,
       quantity: quantity,
       price: price,
       userId: req.user.id,
@@ -114,6 +113,8 @@ exports.updateProduct = (req, res) => {
     description,
     productImages
   } = req.body;
+  sizes = sizes.split(",");
+  colors = colors.split(",");
 
   let fileWebPath;
   let newProductImages = [];
@@ -148,7 +149,7 @@ exports.updateProduct = (req, res) => {
         price: price,
         sizes: sizes,
         discount: discount,
-        color: colors,
+        colors: colors,
         description: description,
         images: newProductImages
         // $set : {
@@ -177,7 +178,7 @@ exports.updateProduct = (req, res) => {
         price: price,
         sizes: sizes,
         discount: discount,
-        color: colors,
+        colors: colors,
         description: description,
         images: newProductImages
         // $set : {

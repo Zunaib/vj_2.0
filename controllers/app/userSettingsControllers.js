@@ -38,7 +38,11 @@ exports.changeSettings = async (req, res) => {
     city,
     zipcode,
     country,
-    phone
+    phone,
+    // designerDescription,
+    websiteLink,
+    pinterestLink,
+    behanceLink
   } = req.body;
 
   let fileWebPath;
@@ -70,7 +74,11 @@ exports.changeSettings = async (req, res) => {
     zipcode: zipcode,
     country: country,
     phone: phone,
-    displayPicture: fileWebPath
+    displayPicture: fileWebPath,
+    // designerDescription: designerDescription,
+    websiteLink: websiteLink,
+    pinterestLink: pinterestLink,
+    behanceLink: behanceLink
   })
     .then(user => {
       return res.status(200).json({

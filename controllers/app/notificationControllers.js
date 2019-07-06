@@ -28,10 +28,14 @@ exports.createNotification = (
 };
 
 exports.fetchNotifications = (req, res) => {
+  let isRead = false;
+  if (req.body.firstTime){
+    isRead = true;
+  }
   Users.findByIdAndUpdate(
     req.user.id,
     {
-      "notifications.isRead": true
+      "notifications.isRead": isRead
     },
     { new: true }
   )
