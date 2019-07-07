@@ -31,7 +31,8 @@ exports.signup = async (req, res) => {
           firstName: firstName,
           lastName,
           lastName,
-          isAdmin: true
+          isAdmin: true,
+          verfied: true
         })
           .then(user => {
             return res.status(200).json({
