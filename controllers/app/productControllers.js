@@ -102,7 +102,7 @@ exports.deleteProduct = (req, res) => {
 };
 
 exports.updateProduct = (req, res) => {
-  const {
+  let {
     productName,
     quantity,
     price,
