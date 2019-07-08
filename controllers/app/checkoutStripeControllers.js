@@ -2,12 +2,10 @@ const stripe = require("stripe")("sk_test_sLqySDO8sxRfgiWmEfBkz6GX00vXG9Mxo4");
 const uuid = require("uuid/v4");
 
 exports.checkoutViaCard = async (req, res) => {
-  console.log("Request:", req.body);
-
   let error;
   let status;
   try {
-    const { product, token } = req.body;
+    const { user, token } = req.query;
 
     const customer = await stripe.customers.create({
       email: token.email,
@@ -17,19 +15,17 @@ exports.checkoutViaCard = async (req, res) => {
     const idempotency_key = uuid();
     const charge = await stripe.charges.create(
       {
-        amount: product.price * 100,
-        currency: "usd",
+        amount: user.total * 100,
+        currency: "rs",
         customer: customer.id,
         receipt_email: token.email,
-        description: `Purchased the ${product.name}`,
         shipping: {
-          name: token.card.name,
+          name: user.firstName,
           address: {
-            line1: token.card.address_line1,
-            line2: token.card.address_line2,
-            city: token.card.address_city,
-            country: token.card.address_country,
-            postal_code: token.card.address_zip
+            line2: user.streetAddress,
+            city: user.city,
+            country: user.country,
+            postal_code: user.zipcode
           }
         }
       },
