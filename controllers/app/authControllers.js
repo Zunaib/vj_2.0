@@ -85,7 +85,7 @@ exports.confirmation = (req, res) => {
   let userId = user.user;
   Users.findByIdAndUpdate(userId, { verified: true }, { new: true })
     .then(user =>
-      res.redirect("http://localhost:3000/login")
+      res.redirect("http://localhost:3000/emailverified")
       // res.status(200).json({
       //   success: true,
       //   message: "User successfully verified"

@@ -1,9 +1,8 @@
 const designerOrders = require("../../models/designerOrders");
 
 exports.fetchAllOrders = (req, res) => {
-  let status = req.query.type || "";
   designerOrders
-    .find({status : status})
+    .find()
     .sort({ createdAt: -1 })
     .populate("customer", "firstName lastName")
     .populate("designer", "firstName lastName")
