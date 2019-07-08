@@ -413,25 +413,47 @@ exports.likeProduct = (req, res) => {
 };
 
 exports.addToFavoriteProducts = (req, res) => {
-  Users.findByIdAndUpdate(
-    req.user.id,
-    {
-      $push: {
-        favoriteProducts: req.query.productId
+  Users.findById(req.user.id)
+    .then(user => {
+      if (user.favoriteProducts.indexOf(req.query.productId) > -1){
+        user.favoriteProducts.pull(req.query.productId);
+        user.save();
+        res.status(200).json({
+          success: true,
+          user: user,
+          message: "Removed from favorites"
+        });
+      } else {
+        user.favoriteProducts.push(req.query.productId);
+        user.save();
+        res.status(200).json({
+          success: true,
+          user: user,
+          message: "Added to favorites Successfully"
+        });
       }
-    },
-    { new: true }
-  )
-    .then(user =>
-      res.status(200).json({
-        success: true,
-        user: user.favoriteProducts,
-        message: "Added To Favorites Successfully"
-      })
-    )
-    .catch(err =>
+    }).catch(err =>
       res.status(400).json({ success: false, message: "Something went wrong" })
-    );
+      );
+  // Users.findByIdAndUpdate(
+  //   req.user.id,
+  //   {
+  //     $push: {
+  //       favoriteProducts: req.query.productId
+  //     }
+  //   },
+  //   { new: true }
+  // )
+  //   .then(user =>
+  //     res.status(200).json({
+  //       success: true,
+  //       user: user.favoriteProducts,
+  //       message: "Added To Favorites Successfully"
+  //     })
+  //   )
+  //   .catch(err =>
+  //     res.status(400).json({ success: false, message: "Something went wrong" })
+  //   );
 };
 
 exports.fetchFavoriteProducts = (req, res) => {
