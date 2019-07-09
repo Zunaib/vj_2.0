@@ -62,24 +62,28 @@ exports.changeSettings = async (req, res) => {
     fileWebPath = "/assets/uploads/userDP/" + filename;
   }
 
-  await Users.findByIdAndUpdate(req.user.id, {
-    firstName: firstName,
-    lastName: lastName,
-    dateofbirth: dateofbirth,
-    gender: gender,
-    description: description,
-    province: province,
-    streetAddress: streetAddress,
-    city: city,
-    zipcode: zipcode,
-    country: country,
-    phone: phone,
-    displayPicture: fileWebPath,
-    // designerDescription: designerDescription,
-    websiteLink: websiteLink,
-    pinterestLink: pinterestLink,
-    behanceLink: behanceLink
-  })
+  await Users.findByIdAndUpdate(
+    req.user.id,
+    {
+      firstName: firstName,
+      lastName: lastName,
+      dateofbirth: dateofbirth,
+      gender: gender,
+      description: description,
+      province: province,
+      streetAddress: streetAddress,
+      city: city,
+      zipcode: zipcode,
+      country: country,
+      phone: phone,
+      displayPicture: fileWebPath,
+      // designerDescription: designerDescription,
+      websiteLink: websiteLink,
+      pinterestLink: pinterestLink,
+      behanceLink: behanceLink
+    },
+    { new: true }
+  )
     .then(user => {
       return res.status(200).json({
         success: true,
@@ -270,6 +274,10 @@ exports.changePassword = async (req, res) => {
       if (user.password === oldPassword) {
         user.password = newPassword;
         user.save();
+        res.status(200).json({
+          success: true,
+          message: "Password changed successfully"
+        });
       } else {
         res
           .status(422)
