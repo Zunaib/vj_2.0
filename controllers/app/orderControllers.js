@@ -222,6 +222,7 @@ exports.changeOrderStatus = (req, res) => {
           .lean()
           .then(
             designerOrder => {
+              createNotification(designerOrder.customer, "Your order is Cancelled", "order", designerOrder._id, "customerOrder");
               this.fetchDesignerOrders(req, res);
             }
             // res.status(200).json({
@@ -240,6 +241,7 @@ exports.changeOrderStatus = (req, res) => {
           .lean()
           .then(
             designerOrder => {
+              createNotification(designerOrder.customer, "Your order is Completed", "order", designerOrder._id, "customerOrder");
               this.fetchDesignerOrders(req, res);
             }
             // res.status(200).json({
