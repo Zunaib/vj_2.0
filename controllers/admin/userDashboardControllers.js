@@ -112,11 +112,11 @@ exports.fetchBlockedUsers = (req, res) => {
 
 exports.blockUser = (req, res) => {
   Users.findById(req.query.userId)
-    .then(user => {
+    .then(async user => {
       if (!user.deletedAt) {
         user.deletedAt = Date.now();
-        user.save();
-        this.fetchAllUsers();
+        await user.save();
+        this.fetchAllUsers(req, res);
         // res.status(200).json({
         //   success: true,
         //   user: user,
@@ -124,8 +124,8 @@ exports.blockUser = (req, res) => {
         // });
       } else {
         user.deletedAt = null;
-        user.save();
-        this.fetchAllUsers();
+        await user.save();
+        this.fetchAllUsers(req, res);
         // res.status(200).json({
         //   success: true,
         //   user: user,
