@@ -1,5 +1,6 @@
 const Blogs = require("../../models/blogs");
 const fs = require("fs");
+let { createNotification } = require("./notificationControllers");
 
 exports.createBlog = async (req, res) => {
   const { title, description, content } = req.body;

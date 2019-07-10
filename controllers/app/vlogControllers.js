@@ -1,5 +1,6 @@
 const Vlogs = require("../../models/vlogs");
 const fs = require("fs");
+let { createNotification } = require("./notificationControllers");
 
 exports.addVlog = async (req, res) => {
   const { title, description } = req.body;
@@ -167,6 +168,7 @@ exports.fetchSingleVlogDetails = (req, res) => {
 };
 
 exports.addVlogComment = (req, res) => {
+  // console.log('here')
   if (!req.body.comment) {
     res
       .status(400)
@@ -187,6 +189,7 @@ exports.addVlogComment = (req, res) => {
         }
       })
       .then(vlog => {
+        console.log(vlog)
         createNotification(vlog.userId, "Comment Added on Vlog", "comment", vlog._id, "vlog");
 
         res.status(200).json({
