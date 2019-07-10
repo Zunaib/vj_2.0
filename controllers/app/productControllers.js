@@ -264,6 +264,7 @@ exports.fetchSingleProductDetails = async (req, res) => {
         lastName: 1
       }
     })
+    .populate("userId")
     .then(product => {
       Products.find({
         userId: product.userId,
