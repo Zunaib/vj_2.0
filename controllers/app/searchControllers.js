@@ -20,7 +20,8 @@ exports.search = async (req, res) => {
       { email: regex },
       { userName: regex }
     ],
-    _id: { $ne: req.user.id }
+    _id: { $ne: req.user.id },
+    isAdmin: { $ne: true }
   })
     .select("firstName lastName email displayPicture createdAt")
     .sort({ firstName: -1 })
