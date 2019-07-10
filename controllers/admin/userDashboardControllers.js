@@ -116,19 +116,21 @@ exports.blockUser = (req, res) => {
       if (!user.deletedAt) {
         user.deletedAt = Date.now();
         user.save();
-        res.status(200).json({
-          success: true,
-          user: user,
-          message: "User Blocked Successfully"
-        });
+        this.fetchAllUsers();
+        // res.status(200).json({
+        //   success: true,
+        //   user: user,
+        //   message: "User Blocked Successfully"
+        // });
       } else {
         user.deletedAt = null;
         user.save();
-        res.status(200).json({
-          success: true,
-          user: user,
-          message: "User Unblocked Successfully"
-        });
+        this.fetchAllUsers();
+        // res.status(200).json({
+        //   success: true,
+        //   user: user,
+        //   message: "User Unblocked Successfully"
+        // });
       }
     })
     .catch(err =>
